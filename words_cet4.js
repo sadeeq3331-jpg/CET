@@ -1200,7 +1200,7 @@ window.CET4_WORDS = [
   { word: "extra", phonetic: "/ˈekstrə/", meaning: "额外的；另外收费的；额外的事物", pos: "a. & n.", headword: true, example: "Extra cheese." },
   { word: "extraordinary", phonetic: "/ɪkˈstrɔːrdnri/", meaning: "非凡的，特别的；离奇的", pos: "a.", headword: true, example: "Extraordinary talent." },
   { word: "extreme", phonetic: "/ɪkˈstriːm/", meaning: "极端的；尽头的；极端", pos: "a. & n.", headword: true, example: "Extreme heat." },
-  { word: "eye", phonetic: "/aɪ/", meaning: "眼睛；眼力；眼光；注视", pos: "n. & vt.", headword: true, example: "Open your eyes." }
+  { word: "eye", phonetic: "/aɪ/", meaning: "眼睛；眼力；眼光；注视", pos: "n. & vt.", headword: true, example: "Open your eyes." },
     // ========== F ==========
   { word: "fabric", phonetic: "/ˈfæbrɪk/", meaning: "织物，纺织品；结构", pos: "n.", headword: true, example: "Silk is a delicate fabric." },
   { word: "face", phonetic: "/feɪs/", meaning: "脸；表面；面对", pos: "n. & vt.", headword: true, example: "She has a beautiful face." },
