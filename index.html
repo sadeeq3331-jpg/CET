@@ -3,16 +3,16 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>English Master · Premium Test Prep</title>
+  <title>English Master · Premium Access</title>
   <!-- Cache control -->
   <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
   <meta http-equiv="Pragma" content="no-cache">
   <meta http-equiv="Expires" content="0">
-  <!-- Favicon -->
+  <!-- Favicon & Logo -->
   <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Ctext y='.9em' font-size='90'%3E📚%3C/text%3E%3C/svg%3E">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
   <style>
-    * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Inter', sans-serif; }
+    * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Inter', system-ui, sans-serif; }
     body {
       background: linear-gradient(145deg, #ecfdf5 0%, #d1fae5 100%);
       min-height: 100vh;
@@ -21,27 +21,16 @@
       justify-content: center;
       padding: 2rem;
     }
-    :root {
-      --bg-card: #ffffff;
-      --text-primary: #064e3b;
-      --text-secondary: #0d9488;
-      --border-light: #a7f3d0;
-      --accent: #0d9488;
-    }
     .container {
-      max-width: 1100px;
+      max-width: 1200px;
       width: 100%;
-      background: rgba(255,255,255,0.65);
-      backdrop-filter: blur(16px);
+      background: rgba(255,255,255,0.6);
+      backdrop-filter: blur(12px);
       border-radius: 3rem;
       padding: 3rem 2.5rem;
-      box-shadow: 0 30px 50px rgba(0,0,0,0.1);
+      box-shadow: 0 30px 50px rgba(0,20,40,0.15);
+      border: 1px solid rgba(255,255,255,0.6);
       text-align: center;
-      border: 1px solid rgba(255,255,255,0.5);
-    }
-    .logo {
-      font-size: 3.5rem;
-      margin-bottom: 0.5rem;
     }
     h1 {
       font-size: 3.2rem;
@@ -49,7 +38,7 @@
       -webkit-background-clip: text;
       background-clip: text;
       color: transparent;
-      margin-bottom: 0.5rem;
+      margin-bottom: 1rem;
     }
     .sub {
       color: #0d9488;
@@ -58,38 +47,41 @@
     }
     .card-grid {
       display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
       gap: 1.5rem;
-      margin: 2rem 0;
+      margin-top: 2rem;
     }
     .level-card {
       background: white;
       border-radius: 2rem;
-      padding: 2.5rem 1.5rem;
-      cursor: pointer;
+      padding: 2rem 1rem;
+      text-decoration: none;
       color: #064e3b;
-      box-shadow: 0 12px 28px rgba(0,30,50,0.08);
+      box-shadow: 0 12px 28px rgba(0,30,50,0.1);
       transition: 0.2s;
       border: 1px solid #a7f3d0;
+      cursor: pointer;
     }
     .level-card:hover {
       transform: translateY(-8px);
-      box-shadow: 0 25px 40px rgba(13,148,136,0.15);
+      box-shadow: 0 25px 40px rgba(6,78,59,0.2);
       border-color: #0d9488;
     }
-    .level-card h2 { font-size: 2.4rem; font-weight: 700; }
+    .level-card h2 {
+      font-size: 2.4rem;
+      font-weight: 600;
+      margin-bottom: 0.5rem;
+    }
     .level-card p {
       font-size: 1rem;
       background: #d1fae5;
       padding: 0.3rem 1rem;
       border-radius: 40px;
       display: inline-block;
-      margin-top: 0.8rem;
     }
-    .lock-icon { margin-top: 0.8rem; color: #e76f51; }
     .features {
       margin-top: 3rem;
-      color: #0d9488;
+      color: #4e6f86;
       display: flex;
       justify-content: center;
       gap: 2rem;
@@ -100,10 +92,12 @@
       padding: 0.5rem 1.5rem;
       border-radius: 40px;
       font-size: 1rem;
-      border: 1px solid #a7f3d0;
     }
-
-    /* ========== MODAL ========== */
+    .lock-icon {
+      margin-top: 0.5rem;
+      color: #e76f51;
+    }
+    /* Modal Styles */
     .modal-overlay {
       position: fixed;
       top: 0;
@@ -131,8 +125,13 @@
       width: 100%;
       padding: 2rem;
       box-shadow: 0 40px 60px rgba(0,0,0,0.2);
+      transform: scale(0.95);
+      transition: transform 0.2s;
       border: 1px solid rgba(13,148,136,0.2);
       color: #064e3b;
+    }
+    .modal-overlay.active .modal {
+      transform: scale(1);
     }
     .modal-header {
       display: flex;
@@ -174,14 +173,19 @@
       background: #d1fae5;
       color: #064e3b;
     }
-    .tab-panel { display: none; }
-    .tab-panel.active { display: block; }
-
-    .code-input-group { margin: 1.5rem 0; }
+    .tab-panel {
+      display: none;
+    }
+    .tab-panel.active {
+      display: block;
+    }
+    .code-input-group {
+      margin: 1.5rem 0;
+    }
     .code-input-group input {
       width: 100%;
       padding: 1rem 1.2rem;
-      border: 2px solid #dce7ef;
+      border: 2px solid #a7f3d0;
       border-radius: 60px;
       font-size: 1.1rem;
       text-align: center;
@@ -189,7 +193,9 @@
       letter-spacing: 1px;
       outline: none;
     }
-    .code-input-group input:focus { border-color: #0d9488; }
+    .code-input-group input:focus {
+      border-color: #0d9488;
+    }
     .error-msg {
       color: #e63946;
       font-size: 0.9rem;
@@ -213,7 +219,6 @@
       transform: translateY(-2px);
       box-shadow: 0 12px 24px rgba(6,78,59,0.3);
     }
-
     .price-tag {
       font-size: 2.2rem;
       font-weight: 800;
@@ -235,8 +240,11 @@
       padding: 0.7rem 1.2rem;
       border-radius: 60px;
     }
-    .contact-item i { width: 24px; color: #0d9488; }
-    .copy-btn {
+    .contact-item i {
+      width: 24px;
+      color: #0d9488;
+    }
+    .contact-item .copy-btn {
       margin-left: auto;
       background: none;
       border: none;
@@ -252,17 +260,7 @@
       margin: 1.2rem 0;
       color: #064e3b;
     }
-    .note {
-      margin-top: 1rem;
-      font-size: 0.85rem;
-      color: #e63946;
-      display: flex;
-      align-items: center;
-      gap: 0.5rem;
-      justify-content: center;
-    }
-    #premium-contact-container { margin-top: 2rem; }
-
+    /* Footer */
     .footer-links {
       margin-top: 2rem;
       padding-top: 1rem;
@@ -281,10 +279,9 @@
 </head>
 <body>
 <div class="container">
-  <div class="logo">📚</div>
-  <h1>English Master · Premium</h1>
+  <h1>📚 English Master · Premium</h1>
   <div class="sub">Full access to CET‑4 · CET‑6 · Postgrad English — one payment, forever</div>
-
+  
   <div class="card-grid">
     <div class="level-card" data-level="CET‑4" data-hub="cet4_hub.html">
       <h2>CET‑4</h2>
@@ -305,13 +302,13 @@
 
   <div class="features">
     <span>🔊 Pronunciation</span>
-    <span>📝 Writing Templates</span>
-    <span>📖 Translation Practice</span>
-    <span>🧠 Grammar Guide</span>
+    <span>❤️ Favorites</span>
+    <span>🐧 Quiz buddy</span>
+    <span>⌨️ Typing practice</span>
+    <span>📝 Example sentences</span>
   </div>
-
-  <!-- Premium contact container (injected by premium.js) -->
-  <div id="premium-contact-container"></div>
+  
+  <p style="margin-top: 2rem; color: #0d9488;">🔒 All content is premium — unlock with a one‑time code.</p>
 
   <!-- Footer Links -->
   <div class="footer-links">
@@ -320,7 +317,7 @@
   </div>
 </div>
 
-<!-- Modal (for payment gate) -->
+<!-- Modal -->
 <div class="modal-overlay" id="accessModal">
   <div class="modal">
     <div class="modal-header">
@@ -332,17 +329,17 @@
       <button class="tab-btn" data-tab="buy">🛒 Get Code (¥10)</button>
     </div>
     <div class="tab-panel active" id="codePanel">
-      <p>Already have a code? Enter it below.</p>
+      <p style="color: #064e3b;">Already have a code? Enter it below.</p>
       <div class="code-input-group">
         <input type="text" id="accessCodeInput" placeholder="ENG-XXXXXX" autocomplete="off">
         <div class="error-msg" id="codeError"></div>
       </div>
       <button class="btn" id="submitCodeBtn">Unlock & Continue</button>
-      <p style="font-size:0.8rem; margin-top:1rem; color:#6b8a9e;">Your code works for all levels.</p>
+      <p style="font-size: 0.8rem; margin-top: 1rem; color: #6b8a9e;">Your code works for all test levels.</p>
     </div>
     <div class="tab-panel" id="buyPanel">
       <div class="price-tag">¥10 RMB</div>
-      <p style="margin-bottom:1.2rem;">One‑time payment · Lifetime access</p>
+      <p style="margin-bottom: 1.2rem; color: #064e3b;">One‑time payment · Lifetime access</p>
       <div class="contact-methods">
         <div class="contact-item">
           <i class="far fa-envelope"></i>
@@ -365,133 +362,133 @@
         <i class="fab fa-alipay"></i>
         <i class="fab fa-paypal"></i>
       </div>
-      <p style="margin-bottom:1rem;">Send payment screenshot → I'll send you a <strong>one‑time code</strong>.</p>
-      <div class="note">
-        <i class="fas fa-exclamation-triangle"></i>
-        Each code works only once. If you lose access, contact me to reset it.
-      </div>
+      <p style="font-size: 0.9rem; color: #4e6f86;">Contact me with payment screenshot — you'll receive your personal code within minutes.</p>
     </div>
   </div>
 </div>
 
-<!-- Scripts -->
-<script src="premium.js"></script>
-
 <script>
   (function() {
-    const PREMIUM_KEY = "hsk_premium_active";
-
-    const modal = document.getElementById("accessModal");
-    const modalTitle = document.getElementById("modalLevelTitle");
-    const closeBtn = document.getElementById("closeModalBtn");
-    const levelCards = document.querySelectorAll(".level-card");
-    const tabBtns = document.querySelectorAll(".tab-btn");
-    const codePanel = document.getElementById("codePanel");
-    const buyPanel = document.getElementById("buyPanel");
-    const codeInput = document.getElementById("accessCodeInput");
-    const codeError = document.getElementById("codeError");
-    const submitBtn = document.getElementById("submitCodeBtn");
-
-    let currentHubUrl = "";
-
+    // ========== YOUR WORKING CODES ==========
+    const VALID_CODES = [
+      'ENG-ABC123',
+      'ENG-SADEEQ01',
+      'ENG-TEST001',
+      'LXSL',       // same as your HSK test code – works for CET too
+      'ABDULLAH'
+    ];
+    
+    const PREMIUM_KEY = 'hsk_premium_active';
+    
+    // DOM elements
+    const modal = document.getElementById('accessModal');
+    const modalTitle = document.getElementById('modalLevelTitle');
+    const closeBtn = document.getElementById('closeModalBtn');
+    const levelCards = document.querySelectorAll('.level-card');
+    const tabBtns = document.querySelectorAll('.tab-btn');
+    const codePanel = document.getElementById('codePanel');
+    const buyPanel = document.getElementById('buyPanel');
+    const codeInput = document.getElementById('accessCodeInput');
+    const codeError = document.getElementById('codeError');
+    const submitBtn = document.getElementById('submitCodeBtn');
+    
+    let currentHubUrl = '';
+    
+    // ========== MODAL CONTROL ==========
     function openModal(level, hubUrl) {
-      modalTitle.textContent = level + " Access";
+      modalTitle.textContent = level + ' · Premium Access';
       currentHubUrl = hubUrl;
-      modal.classList.add("active");
-      codeInput.value = "";
-      codeError.textContent = "";
-      document.querySelectorAll(".tab-btn").forEach(b => b.classList.remove("active"));
-      document.querySelector('[data-tab="code"]').classList.add("active");
-      codePanel.classList.add("active");
-      buyPanel.classList.remove("active");
+      modal.classList.add('active');
+      codeInput.value = '';
+      codeError.textContent = '';
+      // Reset to code tab
+      document.querySelectorAll('.tab-btn').forEach(btn => btn.classList.remove('active'));
+      document.querySelector('[data-tab="code"]').classList.add('active');
+      codePanel.classList.add('active');
+      buyPanel.classList.remove('active');
     }
-
+    
     function closeModal() {
-      modal.classList.remove("active");
+      modal.classList.remove('active');
     }
-
+    
     levelCards.forEach(card => {
-      card.addEventListener("click", () => {
-        const hubUrl = card.dataset.hub;
+      card.addEventListener('click', () => {
         const level = card.dataset.level;
-        if (localStorage.getItem(PREMIUM_KEY) === "true") {
-          window.location.href = hubUrl;
+        const hub = card.dataset.hub;
+        // Check if already premium
+        if (localStorage.getItem(PREMIUM_KEY) === 'true') {
+          window.location.href = hub;
         } else {
-          openModal(level, hubUrl);
+          openModal(level, hub);
         }
       });
     });
-
-    closeBtn.addEventListener("click", closeModal);
-    modal.addEventListener("click", e => {
+    
+    closeBtn.addEventListener('click', closeModal);
+    modal.addEventListener('click', (e) => {
       if (e.target === modal) closeModal();
     });
-
+    
+    // ========== TABS ==========
     tabBtns.forEach(btn => {
-      btn.addEventListener("click", () => {
+      btn.addEventListener('click', () => {
         const tab = btn.dataset.tab;
-        tabBtns.forEach(b => b.classList.remove("active"));
-        btn.classList.add("active");
-        if (tab === "code") {
-          codePanel.classList.add("active");
-          buyPanel.classList.remove("active");
+        tabBtns.forEach(b => b.classList.remove('active'));
+        btn.classList.add('active');
+        if (tab === 'code') {
+          codePanel.classList.add('active');
+          buyPanel.classList.remove('active');
         } else {
-          codePanel.classList.remove("active");
-          buyPanel.classList.add("active");
+          codePanel.classList.remove('active');
+          buyPanel.classList.add('active');
         }
       });
     });
-
-    document.querySelectorAll(".copy-btn").forEach(btn => {
-      btn.addEventListener("click", e => {
+    
+    // ========== COPY FUNCTION ==========
+    document.querySelectorAll('.copy-btn').forEach(btn => {
+      btn.addEventListener('click', (e) => {
         e.stopPropagation();
         const text = btn.dataset.copy;
         navigator.clipboard.writeText(text).then(() => {
-          alert("Copied: " + text);
+          alert('Copied: ' + text);
         }).catch(() => {
-          prompt("Copy manually:", text);
+          prompt('Copy manually:', text);
         });
       });
     });
-
-    submitBtn.addEventListener("click", async () => {
+    
+    // ========== CODE VALIDATION & REDIRECT ==========
+    function isValidCode(code) {
+      return VALID_CODES.includes(code.toUpperCase());
+    }
+    
+    submitBtn.addEventListener('click', () => {
       const code = codeInput.value.trim().toUpperCase();
-      if (!code) {
-        codeError.textContent = "Please enter a code.";
-        return;
-      }
-      // Use the validation function from premium.js (global)
-      if (typeof window.validateCode === "function") {
-        const valid = await window.validateCode(code);
-        if (valid) {
-          localStorage.setItem(PREMIUM_KEY, "true");
-          localStorage.setItem("hsk_premium_code", code);
-          if (currentHubUrl) {
-            window.location.href = currentHubUrl;
-          } else {
-            alert("✅ Code accepted! Enjoy full access.");
-            closeModal();
-          }
+      if (isValidCode(code)) {
+        localStorage.setItem(PREMIUM_KEY, 'true');
+        localStorage.setItem('hsk_premium_code', code);
+        if (currentHubUrl) {
+          window.location.href = currentHubUrl;
         } else {
-          codeError.textContent = "Invalid or already used code.";
+          alert('Premium unlocked! You can now access all content.');
+          closeModal();
         }
       } else {
-        codeError.textContent = "System loading, please wait...";
-        // Retry after a short delay if premium.js hasn't fully loaded
-        setTimeout(() => {
-          if (typeof window.validateCode === "function") {
-            submitBtn.click();
-          }
-        }, 500);
+        codeError.textContent = 'Invalid code. Please check or purchase a new one.';
       }
     });
-
-    codeInput.addEventListener("keypress", e => {
-      if (e.key === "Enter") submitBtn.click();
+    
+    codeInput.addEventListener('keypress', (e) => {
+      if (e.key === 'Enter') {
+        submitBtn.click();
+      }
     });
-
-    document.addEventListener("keydown", e => {
-      if (e.key === "Escape" && modal.classList.contains("active")) {
+    
+    // Escape key closes modal
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape' && modal.classList.contains('active')) {
         closeModal();
       }
     });
