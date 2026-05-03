@@ -177,7 +177,6 @@
     .tab-panel { display: none; }
     .tab-panel.active { display: block; }
 
-    /* Code input */
     .code-input-group { margin: 1.5rem 0; }
     .code-input-group input {
       width: 100%;
@@ -215,7 +214,6 @@
       box-shadow: 0 12px 24px rgba(6,78,59,0.3);
     }
 
-    /* Purchase panel */
     .price-tag {
       font-size: 2.2rem;
       font-weight: 800;
@@ -265,7 +263,6 @@
     }
     #premium-contact-container { margin-top: 2rem; }
 
-    /* Footer */
     .footer-links {
       margin-top: 2rem;
       padding-top: 1rem;
@@ -345,7 +342,7 @@
     </div>
     <div class="tab-panel" id="buyPanel">
       <div class="price-tag">¥10 RMB</div>
-      <p style="margin-bottom:1.2rem;">One‑time payment · Lifetime access to all content</p>
+      <p style="margin-bottom:1.2rem;">One‑time payment · Lifetime access</p>
       <div class="contact-methods">
         <div class="contact-item">
           <i class="far fa-envelope"></i>
@@ -379,7 +376,6 @@
 
 <!-- Scripts -->
 <script src="premium.js"></script>
-<script src="premium-check.js"></script>
 
 <script>
   (function() {
@@ -408,7 +404,6 @@
       modal.classList.add("active");
       codeInput.value = "";
       codeError.textContent = "";
-      // Reset to code tab
       document.querySelectorAll(".tab-btn").forEach(b => b.classList.remove("active"));
       document.querySelector('[data-tab="code"]').classList.add("active");
       codePanel.classList.add("active");
@@ -502,12 +497,10 @@
       }
     });
 
-    // Allow Enter key to submit
     codeInput.addEventListener("keypress", e => {
       if (e.key === "Enter") submitBtn.click();
     });
 
-    // Escape key
     document.addEventListener("keydown", e => {
       if (e.key === "Escape" && modal.classList.contains("active")) {
         closeModal();
