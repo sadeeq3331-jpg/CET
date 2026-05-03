@@ -4,11 +4,9 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>English Master · Premium Access</title>
-  <!-- Cache control -->
   <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
   <meta http-equiv="Pragma" content="no-cache">
   <meta http-equiv="Expires" content="0">
-  <!-- Favicon & Logo -->
   <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Ctext y='.9em' font-size='90'%3E📚%3C/text%3E%3C/svg%3E">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
   <style>
@@ -260,7 +258,6 @@
       margin: 1.2rem 0;
       color: #064e3b;
     }
-    /* Footer */
     .footer-links {
       margin-top: 2rem;
       padding-top: 1rem;
@@ -310,7 +307,6 @@
   
   <p style="margin-top: 2rem; color: #0d9488;">🔒 All content is premium — unlock with a one‑time code.</p>
 
-  <!-- Footer Links -->
   <div class="footer-links">
     <a href="privacy.html"><i class="fas fa-shield-alt"></i> Privacy Policy</a>
     <a href="terms.html"><i class="fas fa-file-contract"></i> Terms of Service</a>
@@ -369,18 +365,22 @@
 
 <script>
   (function() {
-    // ========== YOUR WORKING CODES ==========
-    const VALID_CODES = [
-      'ENG-ABC123',
-      'ENG-SADEEQ01',
-      'ENG-TEST001',
-      'LXSL',       // same as your HSK test code – works for CET too
-      'ABDULLAH'
-    ];
-    
+    // ========== JSONBIN.IO CONFIGURATION ==========
+    const BIN_ID = "69f794a6856a682189a0ae0c";
+    const MASTER_KEY = "$2a$10$OV7m1X11camle5ENh1AA5uFzDjzsDgKYKIz7bOuOLU/sBVocEALge";
+    const API_URL = `https://api.jsonbin.io/v3/b/${BIN_ID}`;
+
+    // Fallback codes (if JSONBin is unreachable)
+    const FALLBACK_CODES = {
+      "ENG-ABC123": 1,
+      "ENG-SADEEQ01": 1,
+      "ENG-TEST001": 1,
+      "LXSL": 1,
+      "ABDULLAH": 1
+    };
+
     const PREMIUM_KEY = 'hsk_premium_active';
     
-    // DOM elements
     const modal = document.getElementById('accessModal');
     const modalTitle = document.getElementById('modalLevelTitle');
     const closeBtn = document.getElementById('closeModalBtn');
@@ -393,44 +393,37 @@
     const submitBtn = document.getElementById('submitCodeBtn');
     
     let currentHubUrl = '';
-    
-    // ========== MODAL CONTROL ==========
+
     function openModal(level, hubUrl) {
       modalTitle.textContent = level + ' · Premium Access';
       currentHubUrl = hubUrl;
       modal.classList.add('active');
       codeInput.value = '';
       codeError.textContent = '';
-      // Reset to code tab
-      document.querySelectorAll('.tab-btn').forEach(btn => btn.classList.remove('active'));
+      document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
       document.querySelector('[data-tab="code"]').classList.add('active');
       codePanel.classList.add('active');
       buyPanel.classList.remove('active');
     }
-    
+
     function closeModal() {
       modal.classList.remove('active');
     }
-    
+
     levelCards.forEach(card => {
       card.addEventListener('click', () => {
-        const level = card.dataset.level;
         const hub = card.dataset.hub;
-        // Check if already premium
         if (localStorage.getItem(PREMIUM_KEY) === 'true') {
           window.location.href = hub;
         } else {
-          openModal(level, hub);
+          openModal(card.dataset.level, hub);
         }
       });
     });
-    
+
     closeBtn.addEventListener('click', closeModal);
-    modal.addEventListener('click', (e) => {
-      if (e.target === modal) closeModal();
-    });
-    
-    // ========== TABS ==========
+    modal.addEventListener('click', (e) => { if (e.target === modal) closeModal(); });
+
     tabBtns.forEach(btn => {
       btn.addEventListener('click', () => {
         const tab = btn.dataset.tab;
@@ -445,53 +438,76 @@
         }
       });
     });
-    
-    // ========== COPY FUNCTION ==========
+
     document.querySelectorAll('.copy-btn').forEach(btn => {
       btn.addEventListener('click', (e) => {
         e.stopPropagation();
-        const text = btn.dataset.copy;
-        navigator.clipboard.writeText(text).then(() => {
-          alert('Copied: ' + text);
-        }).catch(() => {
-          prompt('Copy manually:', text);
-        });
+        navigator.clipboard.writeText(btn.dataset.copy).then(() => alert('Copied!'));
       });
     });
-    
-    // ========== CODE VALIDATION & REDIRECT ==========
-    function isValidCode(code) {
-      return VALID_CODES.includes(code.toUpperCase());
+
+    // ========== JSONBIN.IO VALIDATION ==========
+    async function validateCodeWithJsonBin(code) {
+      try {
+        // read current bin
+        const readRes = await fetch(API_URL, {
+          headers: { 'X-Master-Key': MASTER_KEY }
+        });
+        if (!readRes.ok) throw new Error('Read failed');
+        const data = await readRes.json();
+        const codes = data.record;
+
+        if (!codes[code] || codes[code] <= 0) return false;
+
+        // decrease remaining
+        codes[code] -= 1;
+
+        // update bin
+        const updateRes = await fetch(API_URL, {
+          method: 'PUT',
+          headers: {
+            'X-Master-Key': MASTER_KEY,
+            'Content-Type': 'application/json'
+          },
+          body: JSON.stringify(codes)
+        });
+        if (!updateRes.ok) throw new Error('Update failed');
+        return true;
+      } catch (err) {
+        console.warn('JSONBin offline – using local fallback', err);
+        return validateCodeLocally(code);
+      }
     }
-    
-    submitBtn.addEventListener('click', () => {
+
+    function validateCodeLocally(code) {
+      let used = JSON.parse(localStorage.getItem('cet_used_codes') || '{}');
+      if (used[code]) return false;
+      if (!FALLBACK_CODES[code] || FALLBACK_CODES[code] <= 0) return false;
+      used[code] = true;
+      localStorage.setItem('cet_used_codes', JSON.stringify(used));
+      return true;
+    }
+
+    submitBtn.addEventListener('click', async () => {
       const code = codeInput.value.trim().toUpperCase();
-      if (isValidCode(code)) {
+      if (!code) { codeError.textContent = 'Please enter a code.'; return; }
+      const valid = await validateCodeWithJsonBin(code);
+      if (valid) {
         localStorage.setItem(PREMIUM_KEY, 'true');
         localStorage.setItem('hsk_premium_code', code);
         if (currentHubUrl) {
           window.location.href = currentHubUrl;
         } else {
-          alert('Premium unlocked! You can now access all content.');
+          alert('✅ Premium unlocked!');
           closeModal();
         }
       } else {
-        codeError.textContent = 'Invalid code. Please check or purchase a new one.';
+        codeError.textContent = 'Invalid or already used code.';
       }
     });
-    
-    codeInput.addEventListener('keypress', (e) => {
-      if (e.key === 'Enter') {
-        submitBtn.click();
-      }
-    });
-    
-    // Escape key closes modal
-    document.addEventListener('keydown', (e) => {
-      if (e.key === 'Escape' && modal.classList.contains('active')) {
-        closeModal();
-      }
-    });
+
+    codeInput.addEventListener('keypress', e => { if (e.key === 'Enter') submitBtn.click(); });
+    document.addEventListener('keydown', e => { if (e.key === 'Escape' && modal.classList.contains('active')) closeModal(); });
   })();
 </script>
 </body>
