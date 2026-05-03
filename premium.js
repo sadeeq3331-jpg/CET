@@ -1,6 +1,13 @@
-// ==================== PREMIUM SYSTEM (Google Sheets backend) ====================
+// ==================== PREMIUM SYSTEM (Google Sheets + fallback) ====================
 (function() {
-  const API_ENDPOINT = "https://script.google.com/macros/s/AKfycby1cUnwm4JePge-cH8-Et3HPLGm2xdycpi_VGaAVy6tUNiP4plKvTjVIa1vzBBFQnC1iQ/exec";  // ← CHANGE THIS
+  const API_ENDPOINT = "https://script.google.com/macros/s/AKfycby1cUnwm4JePge-cH8-Et3HPLGm2xdycpi_VGaAVy6tUNiP4plKvTjVIa1vzBBFQnC1iQ/exec";
+
+  // Fallback codes – used if the Google script is down or unreachable.
+  const FALLBACK_CODES = [
+    "ENG-ABC123",
+    "ENG-SADEEQ01",
+    "ENG-TEST001"
+  ];
 
   const CONTACT = {
     email: "sadeeq3331@gmail.com",
@@ -17,14 +24,14 @@
     if (!container) return;
     container.innerHTML = `
       <div style="margin:2rem 0; padding:1.5rem; background:var(--bg-card,#fff); border-radius:1.5rem; border:2px solid var(--accent,#0d9488); text-align:center;">
-        <h3 style="color:var(--accent);"><i class="fas fa-crown" style="color:#ffd700;"></i> Remove Ads – Only ${CONTACT.price}</h3>
+        <h3 style="color:var(--accent);"><i class="fas fa-crown" style="color:#ffd700;"></i> Get Full Access – Only ${CONTACT.price}</h3>
         <p style="margin-bottom:1rem;">Contact me for a <strong>one‑time</strong> access code.</p>
         <div style="display:flex; flex-wrap:wrap; gap:1rem; justify-content:center;">
           <a href="mailto:${CONTACT.email}" style="text-decoration:none; color:var(--text-primary);"><i class="far fa-envelope"></i> ${CONTACT.email}</a>
           <a href="tel:+86${CONTACT.phone}" style="text-decoration:none; color:var(--text-primary);"><i class="fas fa-phone-alt"></i> ${CONTACT.phone}</a>
           <span onclick="window.copyWeChat()" style="cursor:pointer;"><i class="fab fa-weixin"></i> WeChat: ${CONTACT.wechat}</span>
         </div>
-        <p style="margin-top:1rem; font-size:0.85rem;"><i class="fas fa-exclamation-triangle"></i> Each code works <strong>once only</strong>. If you lose access, contact me to reset it.</p>
+        <p style="margin-top:1rem; font-size:0.85rem;"><i class="fas fa-exclamation-triangle"></i> Each code works <strong>once only</strong>. Contact me to reset it.</p>
       </div>
     `;
   }
@@ -35,7 +42,7 @@
 
     const btn = document.createElement("button");
     btn.id = "premiumUnlockBtn";
-    btn.innerHTML = '<i class="fas fa-crown"></i> Unlock Ad‑Free';
+    btn.innerHTML = '<i class="fas fa-crown"></i> Unlock Full Access';
     btn.className = "premium-unlock-btn";
     document.body.appendChild(btn);
 
@@ -54,12 +61,12 @@
     `;
     document.body.appendChild(modal);
 
-    // Add styles (abbreviated for space – you can copy the style block from earlier)
+    // Add styles
     const style = document.createElement("style");
     style.textContent = `
       .premium-unlock-btn { position:fixed; bottom:80px; right:20px; z-index:1000; background:linear-gradient(135deg,#f6d365,#fda085); color:#1e1b4b; border:none; border-radius:40px; padding:0.6rem 1.2rem; font-weight:600; cursor:pointer; display:flex; align-items:center; gap:8px; }
       .modal-overlay { display:none; position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.6); z-index:2000; align-items:center; justify-content:center; }
-      .modal-content { background:white; padding:2rem; border-radius:2rem; max-width:400px; width:90%; }
+      .modal-content { background:white; padding:2rem; border-radius:2rem; max-width:400px; width:90%; text-align:center; }
       .code-input { width:100%; padding:0.9rem; border-radius:3rem; border:2px solid #ccc; margin:1rem 0; }
       .error-message { color:#e53e3e; }
       .modal-btn { padding:0.8rem; border-radius:3rem; border:none; cursor:pointer; }
@@ -95,15 +102,16 @@
         localStorage.setItem(PREMIUM_KEY, "true");
         modal.style.display = "none";
         applyPremiumState();
-        alert("✅ Code accepted! Enjoy ad‑free access.");
+        alert("✅ Code accepted! Enjoy full access.");
       } else {
         errorEl.textContent = "Invalid or already used code.";
       }
     });
   }
 
-  // ========== VALIDATE CODE VIA GOOGLE SHEETS ==========
+  // ========== VALIDATE CODE (Google Sheets + fallback) ==========
   window.validateCode = async function(code) {
+    // Try Google Sheets first
     try {
       const response = await fetch(API_ENDPOINT, {
         method: "POST",
@@ -111,17 +119,19 @@
         headers: { "Content-Type": "application/json" }
       });
       const data = await response.json();
-      return data.success === true;
+      if (data.success === true) return true;
+      if (data.success === false) return false; // sheet answered, code invalid
     } catch (e) {
-      console.error("Code validation error", e);
-      return false;
+      console.warn("Google Sheets unreachable, using fallback codes.", e);
     }
+    // Fallback
+    return FALLBACK_CODES.includes(code);
   };
 
-  // ========== REMOVE ADS ==========
+  // ========== REMOVE ADS (none on your site, but kept for consistency) ==========
   function removeAds() {
     document.body.classList.add("premium-active");
-    document.querySelectorAll(".adsbygoogle,.ad-container,ins.adsbygoogle,[id*='ad']").forEach(el => el.style.display = "none");
+    document.querySelectorAll(".adsbygoogle,.ad-container,ins.adsbygoogle").forEach(el => el.style.display = "none");
   }
 
   function applyPremiumState() {
