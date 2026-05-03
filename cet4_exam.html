@@ -1,5 +1,205 @@
 <!DOCTYPE html>
-<html>
-<!-- CET-4 exam structure: Writing, Listening, Reading, Translation.
-     Timers, audio (TTS), and scoring. -->
-     ...
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>CET‑4 · Full Mock Exam</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+  <style>
+    /* same teal theme, exam styles */
+    * { margin:0; padding:0; box-sizing: border-box; font-family: 'Inter', sans-serif; }
+    body.light { background: linear-gradient(145deg, #ecfdf5, #d1fae5); --bg-card: #fff; --text-primary: #064e3b; --accent: #0d9488; }
+    body { padding:1.5rem; display:flex; flex-direction: column; align-items: center; }
+    .container { max-width: 950px; width:100%; background: rgba(255,255,255,0.7); backdrop-filter: blur(12px); border-radius:2rem; padding:1.5rem; }
+    h1 { text-align: center; background: linear-gradient(135deg, #064e3b, #0d9488); -webkit-background-clip: text; color: transparent; }
+    .timer { text-align: right; font-size:1.2rem; color: #0d9488; font-weight: bold; }
+    .pause-btn { background: none; border: 1px solid #0d9488; padding:0.4rem 1rem; border-radius:2rem; cursor:pointer; }
+    .section-header { font-size: 1.5rem; margin:0.5rem 0; color: #064e3b; }
+    .question { background: white; border-radius:1rem; padding:1rem; margin-bottom:1rem; border:1px solid #a7f3d0; }
+    .options { margin-left:1rem; }
+    .option { margin:0.3rem 0; }
+    .nav-bar { display:flex; flex-wrap:wrap; gap:0.2rem; justify-content: center; margin:1rem 0; }
+    .nav-btn { width:2rem; height:2rem; border-radius:50%; border:1px solid #a7f3d0; background: white; cursor:pointer; }
+    .nav-btn.answered { background: #0d9488; color: white; }
+    .nav-btn.current { border-width:3px; }
+    .btn { background: #0d9488; color: white; border: none; padding:0.5rem 1.5rem; border-radius:2rem; cursor:pointer; }
+    .back-btn { display: inline-block; margin-top:1rem; background: #0d9488; color: white; padding:0.5rem 1rem; border-radius:2rem; text-decoration:none; }
+    .hidden { display:none !important; }
+    .essay-area { width:100%; height: 150px; border-radius:1rem; border:1px solid #a7f3d0; padding:0.5rem; }
+    .word-count { text-align: right; font-size:0.8rem; }
+  </style>
+</head>
+<body class="light">
+<div class="container">
+  <h1>📝 CET‑4 Full Mock Exam</h1>
+  <div id="startScreen">
+    <p style="margin:1rem 0;">Official CET‑4 format (145 min):</p>
+    <ul style="margin-left:2rem;">
+      <li>Writing – 30 min</li>
+      <li>Listening – 25 min</li>
+      <li>Reading – 40 min</li>
+      <li>Translation – 30 min</li>
+    </ul>
+    <button id="startBtn" class="btn">Start Exam</button>
+  </div>
+  <div id="examArea" class="hidden">
+    <div class="timer" id="timer">Writing: 30:00</div>
+    <button id="pauseBtn" class="pause-btn"><i class="fas fa-pause"></i> Pause</button>
+    <div id="sectionHeader" class="section-header">✍️ Writing (1/1)</div>
+    <div id="questionContainer"></div>
+    <div class="nav-bar" id="navBar"></div>
+    <div style="text-align:center"><span id="progressInfo"></span></div>
+    <div style="display:flex; justify-content:center; gap:1rem;">
+      <button id="prevBtn" class="btn">Previous</button>
+      <button id="nextBtn" class="btn">Next</button>
+    </div>
+  </div>
+  <div id="resultArea" class="hidden"></div>
+  <a href="cet4_hub.html" class="back-btn">← Back to Hub</a>
+</div>
+<script>
+  // ==================== EXAM DATA ====================
+  const writingTask = { prompt: "Write an essay on the topic: \"The Importance of Reducing Plastic Waste\". You should write at least 120 words but no more than 180 words.", time: 30 * 60 };
+  const listeningQuestions = [
+    { type:"news", audioText:"A recent study shows that reading for just 30 minutes a day can significantly reduce stress levels. Researchers found that it lowered heart rate and eased muscle tension.", question:"What is the main topic of the news report?", options:["A. A new book","B. A study about reading and stress","C. Exercise benefits","D. Heart disease"], correct:1 },
+    { type:"news", audioText:"The city council announced plans to build a new subway line to ease traffic congestion. Construction is expected to start next year.", question:"What did the city council announce?", options:["A. A new park","B. A new subway line","C. Road repairs","D. Higher taxes"], correct:1 },
+    { type:"news", audioText:"The famous actress donated one million yuan to a children's hospital. She said she wanted to help more kids get better medical care.", question:"What did the actress do?", options:["A. Opened a hospital","B. Donated money","C. Acted in a movie","D. Visited a school"], correct:1 },
+    { type:"news", audioText:"Due to heavy rain, several flights have been delayed at the airport. Passengers are advised to check the latest updates.", question:"What caused the flight delays?", options:["A. Snow","B. Heavy rain","C. Technical problem","D. Strike"], correct:1 },
+    { type:"news", audioText:"A new survey indicates that more young people prefer to work remotely rather than in an office. The main reason is flexibility.", question:"Why do young people prefer remote work?", options:["A. Higher salary","B. More vacation","C. Flexibility","D. Better equipment"], correct:2 },
+    { type:"conversation", audioText:"M: Hi, Jane. You look tired. W: I stayed up late finishing a report. M: You should get more sleep. W: I know, but the deadline was this morning.", question:"Why is the woman tired?", options:["A. She went to a party","B. She finished a report late","C. She exercised too much","D. She watched TV"], correct:1 },
+    { type:"conversation", audioText:"W: Have you been to the new Italian restaurant? M: Not yet. Is it good? W: The pasta is amazing, but it's a bit pricey.", question:"What does the woman say about the restaurant?", options:["A. It's cheap","B. The pasta is amazing","C. It's closed","D. She didn't like it"], correct:1 },
+    { type:"conversation", audioText:"M: I'm thinking of buying a new laptop. W: You should get one with a solid-state drive. It's much faster.", question:"What does the woman recommend?", options:["A. A cheaper laptop","B. A laptop with an SSD","C. A desktop computer","D. A tablet"], correct:1 },
+    { type:"passage", audioText:"Good morning, everyone. Today we'll discuss climate change. First, the causes: mainly greenhouse gases from burning fossil fuels. Second, the effects: rising sea levels and extreme weather. Finally, what we can do: use renewable energy and plant trees. I'll now pass the microphone to Dr. Smith.", question:"What is the main topic of the talk?", options:["A. Fossil fuels","B. Climate change","C. Renewable energy","D. Tree planting"], correct:1 },
+    { type:"passage", audioText:"The library will be closed next weekend for renovation. All books must be returned by Friday. You can still access online resources.", question:"When will the library be closed?", options:["A. This Friday","B. Next weekend","C. Next Monday","D. This Sunday"], correct:1 }
+  ];
+  const readingQuestions = [
+    { passage:"Global warming is a long-term rise in the average temperature of the Earth's climate system. It is caused mainly by human activities, such as burning fossil fuels and deforestation. The effects include melting ice caps, rising sea levels, and more frequent extreme weather events.", question:"What is the main cause of global warming?", options:["A. Natural disasters","B. Human activities","C. Volcanic eruptions","D. Solar changes"], correct:1 },
+    { passage:"Jane started her own business last year. At first, she struggled with funding and marketing. However, she didn't give up. She took online courses in management and gradually improved her sales. Now her company is profitable.", question:"What can we learn about Jane?", options:["A. She gave up easily","B. She never took any courses","C. She overcame difficulties and succeeded","D. She closed her business"], correct:2 },
+    { passage:"According to a new policy, all new cars sold in the city must be electric by 2030. The government will provide subsidies to buyers and also build more charging stations.", question:"What does the new policy require?", options:["A. Fewer cars","B. All new cars must be electric","C. Higher taxes on cars","D. No more charging stations"], correct:1 }
+  ];
+  const translationTask = { chinese: "中国正在大力发展可再生能源，以减少对化石燃料的依赖。许多城市已经建成了大型太阳能发电站和风力发电场。此外，政府还鼓励人们使用电动汽车，并为此提供了补贴。", time: 30*60 };
+
+  // ==================== EXAM LOGIC ====================
+  let state = {
+    section: 'writing',
+    currentQuestionIndex: 0,
+    answers: { writing: '', listening:[], reading:[], translation:'' },
+    timers: { writing:30*60, listening:25*60, reading:40*60, translation:30*60 },
+    timerInterval: null,
+    paused: false
+  };
+
+  const startScreen = document.getElementById('startScreen');
+  const examArea = document.getElementById('examArea');
+  const resultArea = document.getElementById('resultArea');
+  const timerEl = document.getElementById('timer');
+  const sectionHeader = document.getElementById('sectionHeader');
+  const questionContainer = document.getElementById('questionContainer');
+  const progressInfo = document.getElementById('progressInfo');
+  const navBar = document.getElementById('navBar');
+  const startBtn = document.getElementById('startBtn');
+  const prevBtn = document.getElementById('prevBtn');
+  const nextBtn = document.getElementById('nextBtn');
+  const pauseBtn = document.getElementById('pauseBtn');
+
+  function formatTime(s) { return Math.floor(s/60)+":"+String(s%60).padStart(2,'0'); }
+  function speak(text) { if(text) { window.speechSynthesis.cancel(); const u = new SpeechSynthesisUtterance(text); u.lang='en-US'; u.rate=0.9; speechSynthesis.speak(u); } }
+
+  function render() {
+    if (state.section === 'writing') {
+      sectionHeader.textContent = '✍️ Writing';
+      questionContainer.innerHTML = `<div class="question"><strong>Essay Prompt:</strong><p>${writingTask.prompt}</p><textarea id="essayInput" class="essay-area" rows="8" style="width:100%;">${state.answers.writing}</textarea><p class="word-count" id="wordCount">0 words</p></div>`;
+      const ta = document.getElementById('essayInput');
+      ta.addEventListener('input', () => document.getElementById('wordCount').textContent = ta.value.split(/\s+/).filter(w=>w.length).length + ' words');
+      navBar.innerHTML = '<button class="nav-btn current">1</button>';
+    } else if (state.section === 'listening') {
+      const q = listeningQuestions[state.currentQuestionIndex];
+      sectionHeader.textContent = `🎧 Listening (${state.currentQuestionIndex+1}/${listeningQuestions.length})`;
+      questionContainer.innerHTML = `<div class="question"><strong>${state.currentQuestionIndex+1}.</strong> <button id="playAudioBtn" class="btn"><i class="fas fa-play"></i> Listen</button><div class="options">${q.options.map((o,i)=>`<label class="option"><input type="radio" name="q" value="${i}" ${state.answers.listening[state.currentQuestionIndex]===i?'checked':''}> ${o}</label>`).join('')}</div></div>`;
+      document.getElementById('playAudioBtn').addEventListener('click', ()=> speak(q.audioText));
+      setTimeout(()=> speak(q.audioText), 300);
+    } else if (state.section === 'reading') {
+      const q = readingQuestions[state.currentQuestionIndex];
+      sectionHeader.textContent = `📖 Reading (${state.currentQuestionIndex+1}/${readingQuestions.length})`;
+      questionContainer.innerHTML = `<div class="question"><strong>${state.currentQuestionIndex+1}.</strong> ${q.passage}<div>${q.question}</div><div class="options">${q.options.map((o,i)=>`<label class="option"><input type="radio" name="q" value="${i}" ${state.answers.reading[state.currentQuestionIndex]===i?'checked':''}> ${o}</label>`).join('')}</div></div>`;
+    } else if (state.section === 'translation') {
+      sectionHeader.textContent = '🌐 Translation';
+      questionContainer.innerHTML = `<div class="question"><strong>Translate the following Chinese into English:</strong><p>${translationTask.chinese}</p><textarea id="translationInput" class="essay-area" rows="6" style="width:100%;">${state.answers.translation}</textarea></div>`;
+    }
+    renderNavBar();
+    progressInfo.textContent = state.section==='writing'? '1/1' : `${state.currentQuestionIndex+1}/${state.section==='listening'?listeningQuestions.length:readingQuestions.length}`;
+  }
+
+  function renderNavBar() {
+    let html = '';
+    if (state.section==='listening') {
+      for(let i=0; i<listeningQuestions.length; i++) {
+        html += `<button class="nav-btn ${i===state.currentQuestionIndex?'current':''} ${state.answers.listening[i]!==undefined?'answered':''}" data-index="${i}">${i+1}</button>`;
+      }
+    } else if (state.section==='reading') {
+      for(let i=0; i<readingQuestions.length; i++) {
+        html += `<button class="nav-btn ${i===state.currentQuestionIndex?'current':''} ${state.answers.reading[i]!==undefined?'answered':''}" data-index="${i}">${i+1}</button>`;
+      }
+    }
+    navBar.innerHTML = html;
+    document.querySelectorAll('.nav-btn').forEach(b => b.addEventListener('click', ()=> { state.currentQuestionIndex = parseInt(b.dataset.index); render(); }));
+  }
+
+  function nextSection() {
+    clearInterval(state.timerInterval);
+    if (state.section === 'writing') {
+      state.section = 'listening'; state.currentQuestionIndex = 0; startTimer('listening'); render();
+    } else if (state.section === 'listening') {
+      state.section = 'reading'; state.currentQuestionIndex = 0; startTimer('reading'); render();
+    } else if (state.section === 'reading') {
+      state.section = 'translation'; state.currentQuestionIndex = 0; startTimer('translation'); render();
+    } else {
+      finishExam();
+    }
+  }
+
+  function startTimer(section) {
+    clearInterval(state.timerInterval);
+    const key = section==='writing'? 'writing' : section==='listening'? 'listening' : section==='reading'? 'reading' : 'translation';
+    state.timerInterval = setInterval(() => {
+      if (state.paused) return;
+      if (state.timers[key] > 0) {
+        state.timers[key]--;
+        timerEl.textContent = `${section}: ${formatTime(state.timers[key])}`;
+        if (state.timers[key] <= 0) nextSection();
+      }
+    }, 1000);
+  }
+
+  function finishExam() {
+    clearInterval(state.timerInterval);
+    examArea.classList.add('hidden');
+    resultArea.classList.remove('hidden');
+    // simple scoring
+    let listeningScore = state.answers.listening.filter((a,i)=> a === listeningQuestions[i].correct).length;
+    let readingScore = state.answers.reading.filter((a,i)=> a === readingQuestions[i].correct).length;
+    resultArea.innerHTML = `<div style="text-align:center"><h2>Exam Submitted</h2><p>Listening: ${listeningScore}/${listeningQuestions.length}</p><p>Reading: ${readingScore}/${readingQuestions.length}</p><p>Writing/Translation: Manual review</p><button class="btn" onclick="location.reload()">Retake</button></div>`;
+  }
+
+  // event listeners
+  startBtn.addEventListener('click', ()=>{ startScreen.classList.add('hidden'); examArea.classList.remove('hidden'); startTimer('writing'); render(); });
+  nextBtn.addEventListener('click', ()=>{
+    if (state.section==='writing') { state.answers.writing = document.getElementById('essayInput')?.value || ''; nextSection(); }
+    else if (state.section==='listening') {
+      const selected = document.querySelector('input[name="q"]:checked');
+      if (selected) { state.answers.listening[state.currentQuestionIndex] = parseInt(selected.value); }
+      if (state.currentQuestionIndex < listeningQuestions.length-1) { state.currentQuestionIndex++; render(); } else { nextSection(); }
+    } else if (state.section==='reading') {
+      const selected = document.querySelector('input[name="q"]:checked');
+      if (selected) { state.answers.reading[state.currentQuestionIndex] = parseInt(selected.value); }
+      if (state.currentQuestionIndex < readingQuestions.length-1) { state.currentQuestionIndex++; render(); } else { nextSection(); }
+    } else if (state.section==='translation') {
+      state.answers.translation = document.getElementById('translationInput')?.value || '';
+      finishExam();
+    }
+  });
+  prevBtn.addEventListener('click', ()=>{ if (state.currentQuestionIndex>0) { state.currentQuestionIndex--; render(); } });
+  pauseBtn.addEventListener('click', function(){ state.paused = !state.paused; this.innerHTML = state.paused ? '<i class="fas fa-play"></i>' : '<i class="fas fa-pause"></i>'; });
+</script>
+</body>
+</html>
