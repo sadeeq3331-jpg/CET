@@ -1,6 +1,6 @@
 // ==================== PREMIUM SYSTEM (Google Sheets backend) ====================
 (function() {
-  const API_ENDPOINT = "https://docs.google.com/spreadsheets/d/1rqgFtq_ABgEFwb8wVUBBWgP59GtILCvmR2kkfTDohiQ/edit?usp=sharing";  // ← CHANGE THIS
+  const API_ENDPOINT = "https://script.google.com/macros/s/AKfycby1cUnwm4JePge-cH8-Et3HPLGm2xdycpi_VGaAVy6tUNiP4plKvTjVIa1vzBBFQnC1iQ/exec";  // ← CHANGE THIS
 
   const CONTACT = {
     email: "sadeeq3331@gmail.com",
