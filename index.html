@@ -8,7 +8,8 @@
   <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
   <meta http-equiv="Pragma" content="no-cache">
   <meta http-equiv="Expires" content="0">
-
+  <!-- Favicon (same as HSK) -->
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Ctext y='.9em' font-size='90'%3E📚%3C/text%3E%3C/svg%3E">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
   <style>
     * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Inter', sans-serif; }
@@ -19,6 +20,13 @@
       align-items: center;
       justify-content: center;
       padding: 2rem;
+    }
+    :root {
+      --bg-card: #ffffff;
+      --text-primary: #064e3b;
+      --text-secondary: #0d9488;
+      --border-light: #a7f3d0;
+      --accent: #0d9488;
     }
     .container {
       max-width: 1100px;
@@ -31,12 +39,9 @@
       text-align: center;
       border: 1px solid rgba(255,255,255,0.5);
     }
-    :root {
-      --bg-card: #ffffff;
-      --text-primary: #064e3b;
-      --text-secondary: #0d9488;
-      --border-light: #a7f3d0;
-      --accent: #0d9488;
+    .logo {
+      font-size: 3.5rem;
+      margin-bottom: 0.5rem;
     }
     h1 {
       font-size: 3.2rem;
@@ -46,7 +51,11 @@
       color: transparent;
       margin-bottom: 0.5rem;
     }
-    .sub { color: #0d9488; font-size: 1.2rem; margin-bottom: 2.5rem; }
+    .sub {
+      color: #0d9488;
+      font-size: 1.2rem;
+      margin-bottom: 2.5rem;
+    }
     .card-grid {
       display: grid;
       grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
@@ -69,7 +78,14 @@
       border-color: #0d9488;
     }
     .level-card h2 { font-size: 2.4rem; font-weight: 700; }
-    .level-card p { font-size: 1rem; background: #d1fae5; padding: 0.3rem 1rem; border-radius: 40px; display: inline-block; margin-top: 0.8rem; }
+    .level-card p {
+      font-size: 1rem;
+      background: #d1fae5;
+      padding: 0.3rem 1rem;
+      border-radius: 40px;
+      display: inline-block;
+      margin-top: 0.8rem;
+    }
     .lock-icon { margin-top: 0.8rem; color: #e76f51; }
     .features {
       margin-top: 3rem;
@@ -86,52 +102,190 @@
       font-size: 1rem;
       border: 1px solid #a7f3d0;
     }
-    /* Modal styles */
+
+    /* ========== MODAL ========== */
     .modal-overlay {
-      position: fixed; top: 0; left: 0; width: 100%; height: 100%;
-      background: rgba(0,0,0,0.3); backdrop-filter: blur(6px);
-      display: flex; align-items: center; justify-content: center;
-      z-index: 10000; visibility: hidden; opacity: 0; transition: 0.2s;
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(0,0,0,0.3);
+      backdrop-filter: blur(6px);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      z-index: 10000;
+      visibility: hidden;
+      opacity: 0;
+      transition: 0.2s;
     }
-    .modal-overlay.active { visibility: visible; opacity: 1; }
+    .modal-overlay.active {
+      visibility: visible;
+      opacity: 1;
+    }
     .modal {
-      background: white; border-radius: 2.5rem; max-width: 460px; width: 100%;
-      padding: 2rem; box-shadow: 0 40px 60px rgba(0,0,0,0.2);
+      background: white;
+      border-radius: 2.5rem;
+      max-width: 460px;
+      width: 100%;
+      padding: 2rem;
+      box-shadow: 0 40px 60px rgba(0,0,0,0.2);
       border: 1px solid rgba(13,148,136,0.2);
+      color: #064e3b;
     }
-    .modal-header { display: flex; justify-content: space-between; margin-bottom: 1.5rem; }
-    .modal-header h3 { font-size: 1.8rem; color: #064e3b; }
-    .close-modal { background: none; border: none; font-size: 1.8rem; cursor: pointer; color: #6b8a9e; }
-    .modal-tabs { display: flex; gap: 0.5rem; margin-bottom: 1.8rem; border-bottom: 1px solid #dce7ef; padding-bottom: 0.5rem; }
-    .tab-btn { background: none; border: none; padding: 0.5rem 1.2rem; font-weight: 600; color: #6b8a9e; cursor: pointer; border-radius: 40px; }
-    .tab-btn.active { background: #d1fae5; color: #064e3b; }
+    .modal-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 1.5rem;
+    }
+    .modal-header h3 {
+      font-size: 1.8rem;
+      color: #064e3b;
+      font-weight: 700;
+    }
+    .close-modal {
+      background: none;
+      border: none;
+      font-size: 1.8rem;
+      cursor: pointer;
+      color: #6b8a9e;
+    }
+    .modal-tabs {
+      display: flex;
+      gap: 0.5rem;
+      margin-bottom: 1.8rem;
+      border-bottom: 1px solid #dce7ef;
+      padding-bottom: 0.5rem;
+    }
+    .tab-btn {
+      background: none;
+      border: none;
+      padding: 0.5rem 1.2rem;
+      font-size: 1rem;
+      font-weight: 600;
+      color: #6b8a9e;
+      cursor: pointer;
+      border-radius: 40px;
+      transition: 0.2s;
+    }
+    .tab-btn.active {
+      background: #d1fae5;
+      color: #064e3b;
+    }
     .tab-panel { display: none; }
     .tab-panel.active { display: block; }
+
+    /* Code input */
     .code-input-group { margin: 1.5rem 0; }
     .code-input-group input {
-      width: 100%; padding: 1rem 1.2rem; border: 2px solid #dce7ef;
-      border-radius: 60px; font-size: 1.1rem; text-align: center;
-      text-transform: uppercase; outline: none;
+      width: 100%;
+      padding: 1rem 1.2rem;
+      border: 2px solid #dce7ef;
+      border-radius: 60px;
+      font-size: 1.1rem;
+      text-align: center;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      outline: none;
     }
-    .error-msg { color: #e63946; font-size: 0.9rem; margin-top: 0.4rem; min-height: 1.2rem; }
+    .code-input-group input:focus { border-color: #0d9488; }
+    .error-msg {
+      color: #e63946;
+      font-size: 0.9rem;
+      margin-top: 0.4rem;
+      min-height: 1.2rem;
+    }
     .btn {
       background: linear-gradient(135deg, #064e3b, #0d9488);
-      border: none; color: white; font-weight: 600; padding: 1rem; border-radius: 60px;
-      width: 100%; font-size: 1.1rem; cursor: pointer; box-shadow: 0 8px 18px rgba(6,78,59,0.2);
+      border: none;
+      color: white;
+      font-weight: 600;
+      padding: 1rem 1.5rem;
+      border-radius: 60px;
+      width: 100%;
+      font-size: 1.1rem;
+      cursor: pointer;
+      transition: 0.2s;
+      box-shadow: 0 8px 18px rgba(6,78,59,0.2);
     }
-    .price-tag { font-size: 2.2rem; font-weight: 800; color: #e76f51; text-align: center; margin: 0.8rem 0; }
-    .contact-methods { display: flex; flex-direction: column; gap: 0.8rem; margin: 1.5rem 0; }
-    .contact-item { display: flex; align-items: center; gap: 0.8rem; background: #f2f7fa; padding: 0.7rem 1.2rem; border-radius: 60px; }
+    .btn:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 12px 24px rgba(6,78,59,0.3);
+    }
+
+    /* Purchase panel */
+    .price-tag {
+      font-size: 2.2rem;
+      font-weight: 800;
+      color: #e76f51;
+      text-align: center;
+      margin: 0.8rem 0;
+    }
+    .contact-methods {
+      display: flex;
+      flex-direction: column;
+      gap: 0.8rem;
+      margin: 1.5rem 0;
+    }
+    .contact-item {
+      display: flex;
+      align-items: center;
+      gap: 0.8rem;
+      background: #f2f7fa;
+      padding: 0.7rem 1.2rem;
+      border-radius: 60px;
+    }
     .contact-item i { width: 24px; color: #0d9488; }
-    .copy-btn { margin-left: auto; background: none; border: none; color: #6b8a9e; cursor: pointer; font-size: 1.2rem; }
-    .payment-icons { display: flex; gap: 1.5rem; justify-content: center; font-size: 2rem; margin: 1.2rem 0; color: #064e3b; }
-    .note { margin-top: 1rem; font-size: 0.85rem; color: #e63946; display: flex; align-items: center; gap: 0.5rem; justify-content: center; }
+    .copy-btn {
+      margin-left: auto;
+      background: none;
+      border: none;
+      color: #6b8a9e;
+      cursor: pointer;
+      font-size: 1.2rem;
+    }
+    .payment-icons {
+      display: flex;
+      gap: 1.5rem;
+      justify-content: center;
+      font-size: 2rem;
+      margin: 1.2rem 0;
+      color: #064e3b;
+    }
+    .note {
+      margin-top: 1rem;
+      font-size: 0.85rem;
+      color: #e63946;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      justify-content: center;
+    }
     #premium-contact-container { margin-top: 2rem; }
+
+    /* Footer */
+    .footer-links {
+      margin-top: 2rem;
+      padding-top: 1rem;
+      border-top: 1px solid #a7f3d0;
+      display: flex;
+      justify-content: center;
+      gap: 1.5rem;
+      flex-wrap: wrap;
+    }
+    .footer-links a {
+      color: #6b8a9e;
+      text-decoration: none;
+      font-size: 0.85rem;
+    }
   </style>
 </head>
 <body>
 <div class="container">
-  <h1>🇬🇧 English Master · Premium</h1>
+  <div class="logo">📚</div>
+  <h1>English Master · Premium</h1>
   <div class="sub">Full access to CET‑4 · CET‑6 · Postgrad English — one payment, forever</div>
 
   <div class="card-grid">
@@ -161,9 +315,15 @@
 
   <!-- Premium contact container (injected by premium.js) -->
   <div id="premium-contact-container"></div>
+
+  <!-- Footer Links -->
+  <div class="footer-links">
+    <a href="privacy.html"><i class="fas fa-shield-alt"></i> Privacy Policy</a>
+    <a href="terms.html"><i class="fas fa-file-contract"></i> Terms of Service</a>
+  </div>
 </div>
 
-<!-- Modal -->
+<!-- Modal (for payment gate) -->
 <div class="modal-overlay" id="accessModal">
   <div class="modal">
     <div class="modal-header">
@@ -181,27 +341,51 @@
         <div class="error-msg" id="codeError"></div>
       </div>
       <button class="btn" id="submitCodeBtn">Unlock & Continue</button>
+      <p style="font-size:0.8rem; margin-top:1rem; color:#6b8a9e;">Your code works for all levels.</p>
     </div>
     <div class="tab-panel" id="buyPanel">
       <div class="price-tag">¥10 RMB</div>
-      <p>One‑time payment · Lifetime access</p>
+      <p style="margin-bottom:1.2rem;">One‑time payment · Lifetime access to all content</p>
       <div class="contact-methods">
-        <div class="contact-item"><i class="far fa-envelope"></i><span>sadeeq3331@gmail.com</span><button class="copy-btn" data-copy="sadeeq3331@gmail.com"><i class="far fa-copy"></i></button></div>
-        <div class="contact-item"><i class="fab fa-weixin"></i><span>Sadeeq331</span><button class="copy-btn" data-copy="Sadeeq331"><i class="far fa-copy"></i></button></div>
-        <div class="contact-item"><i class="fas fa-phone-alt"></i><span>+86 155 7884 0796</span><button class="copy-btn" data-copy="15578840796"><i class="far fa-copy"></i></button></div>
+        <div class="contact-item">
+          <i class="far fa-envelope"></i>
+          <span>sadeeq3331@gmail.com</span>
+          <button class="copy-btn" data-copy="sadeeq3331@gmail.com"><i class="far fa-copy"></i></button>
+        </div>
+        <div class="contact-item">
+          <i class="fab fa-weixin"></i>
+          <span>Sadeeq331</span>
+          <button class="copy-btn" data-copy="Sadeeq331"><i class="far fa-copy"></i></button>
+        </div>
+        <div class="contact-item">
+          <i class="fas fa-phone-alt"></i>
+          <span>+86 155 7884 0796</span>
+          <button class="copy-btn" data-copy="15578840796"><i class="far fa-copy"></i></button>
+        </div>
       </div>
-      <div class="payment-icons"><i class="fab fa-weixin"></i><i class="fab fa-alipay"></i><i class="fab fa-paypal"></i></div>
+      <div class="payment-icons">
+        <i class="fab fa-weixin"></i>
+        <i class="fab fa-alipay"></i>
+        <i class="fab fa-paypal"></i>
+      </div>
       <p style="margin-bottom:1rem;">Send payment screenshot → I'll send you a <strong>one‑time code</strong>.</p>
-      <div class="note"><i class="fas fa-exclamation-triangle"></i> Each code works only once. If you lose access, contact me to reset it.</div>
+      <div class="note">
+        <i class="fas fa-exclamation-triangle"></i>
+        Each code works only once. If you lose access, contact me to reset it.
+      </div>
     </div>
   </div>
 </div>
 
+<!-- Scripts -->
+<script src="premium.js"></script>
+<script src="premium-check.js"></script>
+
 <script>
   (function() {
-    // ---------- GOOGLE SHEETS API ENDPOINT (for code validation) ----------
-    const API_ENDPOINT = "https://script.google.com/macros/s/AKfycbwYFJh0G8t7VXt5Y9qgL8Yb5C9vGQfN3D4J5LlR7T2fzQ/exec"; // ← replace with your real URL
-    const PREMIUM_KEY = "hsk_premium_active";   // same key as your other pages
+    // ========== CONFIGURATION ==========
+    const PREMIUM_KEY = "hsk_premium_active";
+    const API_ENDPOINT = "https://script.google.com/macros/s/YOUR_SCRIPT_ID/exec"; // ← replace with your real URL
 
     // DOM elements
     const modal = document.getElementById("accessModal");
@@ -217,14 +401,14 @@
 
     let currentHubUrl = "";
 
-    // ---------- MODAL CONTROL ----------
+    // ========== MODAL CONTROL ==========
     function openModal(level, hubUrl) {
       modalTitle.textContent = level + " Access";
       currentHubUrl = hubUrl;
       modal.classList.add("active");
       codeInput.value = "";
       codeError.textContent = "";
-      // Reset tabs to code entry
+      // Reset to code tab
       document.querySelectorAll(".tab-btn").forEach(b => b.classList.remove("active"));
       document.querySelector('[data-tab="code"]').classList.add("active");
       codePanel.classList.add("active");
@@ -235,13 +419,11 @@
       modal.classList.remove("active");
     }
 
-    // ---------- LEVEL CARD CLICK HANDLERS ----------
     levelCards.forEach(card => {
       card.addEventListener("click", () => {
         const hubUrl = card.dataset.hub;
         const level = card.dataset.level;
         if (localStorage.getItem(PREMIUM_KEY) === "true") {
-          // Already premium, go directly to hub
           window.location.href = hubUrl;
         } else {
           openModal(level, hubUrl);
@@ -249,13 +431,12 @@
       });
     });
 
-    // ---------- CLOSE MODAL ----------
     closeBtn.addEventListener("click", closeModal);
     modal.addEventListener("click", e => {
       if (e.target === modal) closeModal();
     });
 
-    // ---------- TAB SWITCHING ----------
+    // ========== TABS ==========
     tabBtns.forEach(btn => {
       btn.addEventListener("click", () => {
         const tab = btn.dataset.tab;
@@ -271,7 +452,7 @@
       });
     });
 
-    // ---------- COPY BUTTONS ----------
+    // ========== COPY BUTTONS ==========
     document.querySelectorAll(".copy-btn").forEach(btn => {
       btn.addEventListener("click", e => {
         e.stopPropagation();
@@ -284,7 +465,7 @@
       });
     });
 
-    // ---------- CODE VALIDATION (via Google Sheets) ----------
+    // ========== CODE VALIDATION (Google Sheets) ==========
     async function validateCode(code) {
       try {
         const response = await fetch(API_ENDPOINT, {
@@ -313,7 +494,7 @@
         if (currentHubUrl) {
           window.location.href = currentHubUrl;
         } else {
-          alert("✅ Code accepted! You can now access all content.");
+          alert("✅ Code accepted! Enjoy full access.");
           closeModal();
         }
       } else {
@@ -326,7 +507,7 @@
       if (e.key === "Enter") submitBtn.click();
     });
 
-    // Escape key closes modal
+    // Escape key
     document.addEventListener("keydown", e => {
       if (e.key === "Escape" && modal.classList.contains("active")) {
         closeModal();
@@ -334,8 +515,5 @@
     });
   })();
 </script>
-
-<!-- premium.js for unlock button & contact injection on other pages (optional here) -->
-<script src="premium.js"></script>
 </body>
 </html>
