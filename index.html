@@ -8,7 +8,7 @@
   <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
   <meta http-equiv="Pragma" content="no-cache">
   <meta http-equiv="Expires" content="0">
-  <!-- Favicon (same as HSK) -->
+  <!-- Favicon -->
   <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Ctext y='.9em' font-size='90'%3E📚%3C/text%3E%3C/svg%3E">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
   <style>
@@ -379,11 +379,8 @@
 
 <script>
   (function() {
-    // ========== CONFIGURATION ==========
     const PREMIUM_KEY = "hsk_premium_active";
-    const API_ENDPOINT = "https://script.google.com/macros/s/AKfycby1cUnwm4JePge-cH8-Et3HPLGm2xdycpi_VGaAVy6tUNiP4plKvTjVIa1vzBBFQnC1iQ/exec"; // ← replace with your real URL
 
-    // DOM elements
     const modal = document.getElementById("accessModal");
     const modalTitle = document.getElementById("modalLevelTitle");
     const closeBtn = document.getElementById("closeModalBtn");
@@ -397,7 +394,6 @@
 
     let currentHubUrl = "";
 
-    // ========== MODAL CONTROL ==========
     function openModal(level, hubUrl) {
       modalTitle.textContent = level + " Access";
       currentHubUrl = hubUrl;
@@ -431,7 +427,6 @@
       if (e.target === modal) closeModal();
     });
 
-    // ========== TABS ==========
     tabBtns.forEach(btn => {
       btn.addEventListener("click", () => {
         const tab = btn.dataset.tab;
@@ -447,7 +442,6 @@
       });
     });
 
-    // ========== COPY BUTTONS ==========
     document.querySelectorAll(".copy-btn").forEach(btn => {
       btn.addEventListener("click", e => {
         e.stopPropagation();
@@ -460,40 +454,35 @@
       });
     });
 
-    // ========== CODE VALIDATION (Google Sheets) ==========
-    async function validateCode(code) {
-      try {
-        const response = await fetch(API_ENDPOINT, {
-          method: "POST",
-          body: JSON.stringify({ code: code.toUpperCase() }),
-          headers: { "Content-Type": "application/json" }
-        });
-        const result = await response.json();
-        return result.success === true;
-      } catch (e) {
-        console.error("Validation error", e);
-        return false;
-      }
-    }
-
     submitBtn.addEventListener("click", async () => {
       const code = codeInput.value.trim().toUpperCase();
       if (!code) {
         codeError.textContent = "Please enter a code.";
         return;
       }
-      const valid = await validateCode(code);
-      if (valid) {
-        localStorage.setItem(PREMIUM_KEY, "true");
-        localStorage.setItem("hsk_premium_code", code);
-        if (currentHubUrl) {
-          window.location.href = currentHubUrl;
+      // Use the validation function from premium.js (global)
+      if (typeof window.validateCode === "function") {
+        const valid = await window.validateCode(code);
+        if (valid) {
+          localStorage.setItem(PREMIUM_KEY, "true");
+          localStorage.setItem("hsk_premium_code", code);
+          if (currentHubUrl) {
+            window.location.href = currentHubUrl;
+          } else {
+            alert("✅ Code accepted! Enjoy full access.");
+            closeModal();
+          }
         } else {
-          alert("✅ Code accepted! Enjoy full access.");
-          closeModal();
+          codeError.textContent = "Invalid or already used code.";
         }
       } else {
-        codeError.textContent = "Invalid or already used code.";
+        codeError.textContent = "System loading, please wait...";
+        // Retry after a short delay if premium.js hasn't fully loaded
+        setTimeout(() => {
+          if (typeof window.validateCode === "function") {
+            submitBtn.click();
+          }
+        }, 500);
       }
     });
 
