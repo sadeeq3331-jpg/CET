@@ -1,22 +1,32 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
   <meta charset="UTF-8">
-  <title>CET‑4 Learning Hub</title>
+  <title>CET‑4 · Learning Hub</title>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
   <style>
-    /* same theme as above */
+    /* same teal theme as index */
+    * { margin:0; padding:0; box-sizing:border-box; font-family: 'Inter', sans-serif; }
+    body { background: linear-gradient(145deg, #ecfdf5, #d1fae5); display: flex; align-items: center; justify-content: center; min-height: 100vh; padding: 2rem; }
+    .container { max-width: 1200px; background: rgba(255,255,255,0.7); backdrop-filter: blur(16px); border-radius: 3rem; padding: 2.5rem; text-align: center; }
+    h1 { font-size: 2.8rem; background: linear-gradient(135deg, #064e3b, #0d9488); -webkit-background-clip: text; color: transparent; }
+    .card-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(170px,1fr)); gap: 1.2rem; margin-top: 2rem; }
+    .card { background: white; border-radius: 1.5rem; padding: 1.5rem 1rem; text-decoration: none; color: #064e3b; border: 1px solid #a7f3d0; transition: 0.2s; }
+    .card:hover { transform: translateY(-6px); border-color: #0d9488; }
+    .card i { font-size: 2.2rem; color: #0d9488; }
+    .exam-note { margin-top: 2rem; color: #0d9488; }
   </style>
 </head>
 <body>
 <div class="container">
   <h1>📖 CET‑4 Learning Hub</h1>
   <div class="card-grid">
-    <a class="card" href="cet4_vocab.html">📚 Vocabulary</a>
-    <a class="card" href="cet4_grammar.html">📐 Grammar</a>
-    <a class="card" href="cet4_exam.html">📝 Mock Exam</a>
+    <a class="card" href="cet4_vocab.html"><i class="fas fa-book-open"></i><h2>Vocabulary</h2></a>
+    <a class="card" href="cet4_grammar.html"><i class="fas fa-language"></i><h2>Grammar</h2></a>
+    <a class="card" href="cet4_exam.html"><i class="fas fa-clipboard-list"></i><h2>Mock Exam</h2></a>
   </div>
   <div id="premium-contact-container"></div>
+  <div class="exam-note">⏱️ Full CET‑4 simulation · 145 min</div>
 </div>
 <script src="premium-check.js"></script>
 <script src="premium.js"></script>
