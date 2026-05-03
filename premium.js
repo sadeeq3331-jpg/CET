@@ -1,6 +1,6 @@
 // ==================== PREMIUM SYSTEM (Google Sheets backend) ====================
 (function() {
-  const API_ENDPOINT = "YOUR_GOOGLE_APPS_SCRIPT_URL";  // ← CHANGE THIS
+  const API_ENDPOINT = "AKfycbyj2jtdkhCZhgUvl2-F19OC9nB7Br6GS9uRp8NvoHLz";  // ← CHANGE THIS
 
   const CONTACT = {
     email: "sadeeq3331@gmail.com",
