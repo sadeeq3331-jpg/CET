@@ -1886,7 +1886,7 @@ window.CET4_WORDS = [
   { word: "matter", phonetic: "/ˈmætər/", meaning: "物质；事情；问题；有关系；要紧", pos: "n. & vi.", headword: true, example: "What's the matter?" },
   { word: "mature", phonetic: "/məˈtʃʊr/", meaning: "成熟的；成年的；使成熟", pos: "a. & vt. & vi.", headword: true, example: "A mature attitude." },
   { word: "maximum", phonetic: "/ˈmæksɪməm/", meaning: "最大量；最大的；最大限度", pos: "n. & a.", headword: true, example: "Maximum speed." },
-  { word: "may", phonetic: "/meɪ/", meaning: "可能；可以；祝"， pos: "aux.v.", headword: true, example: "May I come in?" },
+  { word: "may", phonetic: "/meɪ/", meaning: "可能；可以；祝", pos: "aux.v.", headword: true, example: "May I come in?" },
   { word: "May", phonetic: "/meɪ/", meaning: "五月", pos: "n.", headword: true, example: "May Day." },
   { word: "maybe", phonetic: "/ˈmeɪbi/", meaning: "大概，或许；也许", pos: "ad.", headword: true, example: "Maybe tomorrow." },
   { word: "mayor", phonetic: "/meər/", meaning: "市长", pos: "n.", headword: true, example: "The mayor gave a speech." },
@@ -1997,7 +1997,7 @@ window.CET4_WORDS = [
   { word: "my", phonetic: "/maɪ/", meaning: "我的", pos: "pron.", headword: true, example: "My name is." },
   { word: "myself", phonetic: "/maɪˈself/", meaning: "我自己；我亲自", pos: "pron.", derivedFrom: "my", example: "I hurt myself." },
   { word: "mysterious", phonetic: "/mɪˈstɪriəs/", meaning: "神秘的；难以理解；诡秘的", pos: "a.", derivedFrom: "mystery", example: "A mysterious stranger." },
-  { word: "mystery", phonetic: "/ˈmɪstəri/", meaning: "神秘的事物；秘密；推理作品", pos: "n.", headword: true, example: "Unsolved mystery." }
+  { word: "mystery", phonetic: "/ˈmɪstəri/", meaning: "神秘的事物；秘密；推理作品", pos: "n.", headword: true, example: "Unsolved mystery." },
     // ========== N ==========
   { word: "nail", phonetic: "/neɪl/", meaning: "钉子；指甲；钉牢；抓住", pos: "n. & vt.", headword: true, example: "Hammer a nail." },
   { word: "name", phonetic: "/neɪm/", meaning: "名字；名誉；命名；提名", pos: "n. & vt.", headword: true, example: "What's your name?" },
@@ -2808,7 +2808,7 @@ window.CET4_WORDS = [
   { word: "swim", phonetic: "/swɪm/", meaning: "游泳；漂浮；眩晕", pos: "vi. & n.", headword: true, example: "Go swimming." },
   { word: "swing", phonetic: "/swɪŋ/", meaning: "摇摆；秋千；摆动；转向", pos: "vi. & vt. & n.", headword: true, example: "Swing your arms." },
   { word: "symbol", phonetic: "/ˈsɪmbl/", meaning: "符号；象征；标志；代表性的人(物)", pos: "n.", headword: true, example: "A status symbol." },
-  { word: "system", phonetic: "/ˈsɪstəm/", meaning: "系统；制度；体制；方法", pos: "n.", headword: true, example: "Solar system." }
+  { word: "system", phonetic: "/ˈsɪstəm/", meaning: "系统；制度；体制；方法", pos: "n.", headword: true, example: "Solar system." },
     // ========== T ==========
   { word: "table", phonetic: "/ˈteɪbl/", meaning: "桌子；表格；将…列入议事日程", pos: "n. & vt.", headword: true, example: "Dinner table." },
   { word: "tail", phonetic: "/teɪl/", meaning: "尾巴；尾部；跟踪；变少", pos: "n. & vt. & vi.", headword: true, example: "The dog wagged its tail." },
