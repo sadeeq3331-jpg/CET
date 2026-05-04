@@ -3,1285 +3,674 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>CET‑4 · Full Mock Exam | Official Format</title>
+    <title>CET‑4 · Full Mock Exam (Official Format)</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <style>
         :root {
             --bg: #ecfdf5;
-            --bg-card: #fff;
-            --text-primary: #064e3b;
-            --text-secondary: #115e59;
+            --card: #fff;
+            --text: #064e3b;
+            --text2: #115e59;
             --accent: #0d9488;
             --accent-light: #5eead4;
-            --accent-soft: #ccfbf1;
+            --soft: #ccfbf1;
             --border: #a7f3d0;
             --danger: #e11d48;
             --warning: #f59e0b;
             --shadow: 0 4px 24px rgba(13, 148, 136, 0.10);
-            --radius-lg: 1.5rem;
             --radius: 1rem;
-            --radius-sm: 0.6rem;
-            --transition: 0.25s ease;
         }
-
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
-
+        * { margin:0; padding:0; box-sizing:border-box; }
         body {
-            font-family: 'Segoe UI', 'Inter', 'PingFang SC', 'Microsoft YaHei', system-ui, sans-serif;
-            background: linear-gradient(160deg, #ecfdf5 0%, #d1fae5 40%, #ccfbf1 100%);
+            font-family: 'Segoe UI', 'Inter', 'PingFang SC', 'Microsoft YaHei', sans-serif;
+            background: linear-gradient(160deg, #ecfdf5, #d1fae5, #ccfbf1);
             min-height: 100vh;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            padding: 1.5rem;
-            color: var(--text-primary);
-            -webkit-font-smoothing: antialiased;
+            display: flex; flex-direction: column; align-items: center;
+            padding: 1.5rem; color: var(--text);
         }
-
         .container {
-            max-width: 960px;
-            width: 100%;
-            background: rgba(255, 255, 255, 0.65);
-            backdrop-filter: blur(18px);
-            -webkit-backdrop-filter: blur(18px);
-            border-radius: var(--radius-lg);
-            padding: 2rem 1.8rem;
-            box-shadow: var(--shadow);
-            border: 1px solid rgba(167, 243, 208, 0.5);
-            transition: var(--transition);
+            max-width: 960px; width:100%;
+            background: rgba(255,255,255,0.65);
+            backdrop-filter: blur(16px); border-radius:1.8rem;
+            padding: 2rem 1.8rem; box-shadow: var(--shadow);
+            border:1px solid rgba(167,243,208,0.5);
         }
-
         h1 {
-            text-align: center;
-            font-size: 1.9rem;
-            font-weight: 700;
-            background: linear-gradient(135deg, #064e3b 0%, #0d9488 60%, #14b8a6 100%);
-            -webkit-background-clip: text;
-            background-clip: text;
-            -webkit-text-fill-color: transparent;
-            margin-bottom: 0.6rem;
-            letter-spacing: -0.02em;
+            text-align: center; font-size:1.9rem; font-weight:700;
+            background: linear-gradient(135deg, #064e3b, #0d9488);
+            -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+            background-clip: text; margin-bottom:0.4rem;
         }
-
-        .subtitle {
-            text-align: center;
-            color: var(--text-secondary);
-            font-size: 0.9rem;
-            margin-bottom: 1.2rem;
-            letter-spacing: 0.02em;
-            opacity: 0.8;
-        }
-
-        /* ── Start Screen ────────────────────── */
-        #startScreen {
-            text-align: center;
-            padding: 1rem 0;
-        }
-        #startScreen .exam-info {
-            background: var(--accent-soft);
-            border-radius: var(--radius);
-            padding: 1.5rem 2rem;
-            margin: 1.2rem auto;
-            max-width: 500px;
-            text-align: left;
-            border: 1px solid var(--border);
-        }
-        #startScreen .exam-info h3 {
-            color: var(--text-primary);
-            margin-bottom: 0.8rem;
-            font-size: 1.15rem;
-        }
-        #startScreen .exam-info ul {
-            list-style: none;
-            padding: 0;
-        }
-        #startScreen .exam-info ul li {
-            padding: 0.5rem 0;
-            border-bottom: 1px dashed var(--border);
-            display: flex;
-            align-items: center;
-            gap: 0.6rem;
-            font-size: 0.95rem;
-        }
-        #startScreen .exam-info ul li:last-child {
-            border-bottom: none;
-        }
-        #startScreen .exam-info ul li i {
-            color: var(--accent);
-            width: 1.3rem;
-            text-align: center;
-        }
-        .start-icon {
-            font-size: 4rem;
-            margin-bottom: 0.5rem;
-            display: block;
-        }
-
-        /* ── Timer Bar ──────────────────────── */
-        .timer-row {
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            flex-wrap: wrap;
-            gap: 0.8rem;
-            margin-bottom: 1rem;
-            background: var(--accent-soft);
-            border-radius: 3rem;
-            padding: 0.6rem 1.2rem;
-            border: 1px solid var(--border);
-        }
-        .timer-display {
-            font-size: 1.25rem;
-            font-weight: 700;
-            color: var(--text-primary);
-            display: flex;
-            align-items: center;
-            gap: 0.5rem;
-            transition: color 0.4s;
-        }
-        .timer-display.warning {
-            color: var(--danger);
-            animation: pulse 1s infinite;
-        }
-        @keyframes pulse {
-            0%,
-            100% {
-                opacity: 1;
-            }
-            50% {
-                opacity: 0.5;
-            }
-        }
-        .pause-btn {
-            background: white;
-            border: 1.5px solid var(--accent);
-            padding: 0.4rem 1.1rem;
-            border-radius: 2rem;
-            cursor: pointer;
-            font-weight: 600;
-            color: var(--accent);
-            transition: var(--transition);
-            font-size: 0.9rem;
-            display: flex;
-            align-items: center;
-            gap: 0.35rem;
-        }
-        .pause-btn:hover {
-            background: var(--accent);
-            color: #fff;
-        }
-        .pause-btn.paused-state {
-            background: var(--warning);
-            border-color: var(--warning);
-            color: #fff;
-        }
-
-        /* ── Section Header ─────────────────── */
-        .section-header {
-            font-size: 1.35rem;
-            font-weight: 700;
-            margin: 0.8rem 0;
-            color: var(--text-primary);
-            display: flex;
-            align-items: center;
-            gap: 0.5rem;
-        }
-        .section-badge {
-            display: inline-block;
-            background: var(--accent);
-            color: #fff;
-            font-size: 0.75rem;
-            padding: 0.2rem 0.7rem;
-            border-radius: 2rem;
-            font-weight: 600;
-            letter-spacing: 0.03em;
-        }
-
-        /* ── Question Card ──────────────────── */
-        .question-card {
-            background: white;
-            border-radius: var(--radius);
-            padding: 1.3rem 1.4rem;
-            margin-bottom: 1rem;
-            border: 1px solid var(--border);
-            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.03);
-            transition: var(--transition);
-            line-height: 1.65;
-        }
-        .question-card:hover {
-            border-color: var(--accent);
-            box-shadow: 0 4px 18px rgba(13, 148, 136, 0.08);
-        }
-        .question-card .q-number {
-            font-weight: 700;
-            color: var(--accent);
-            font-size: 1rem;
-            margin-bottom: 0.4rem;
-            display: block;
-        }
-        .question-card .passage-text {
-            background: #f9fefb;
-            border-left: 4px solid var(--accent-light);
-            padding: 0.8rem 1rem;
-            border-radius: 0 var(--radius-sm) var(--radius-sm) 0;
-            margin: 0.5rem 0 0.8rem;
-            font-size: 0.93rem;
-            color: var(--text-secondary);
-            line-height: 1.7;
-        }
-        .question-card .q-prompt {
-            font-weight: 600;
-            margin: 0.6rem 0 0.5rem;
-            color: var(--text-primary);
-        }
-        .options {
-            margin-left: 0.3rem;
-            display: flex;
-            flex-direction: column;
-            gap: 0.35rem;
-        }
-        .option {
-            display: flex;
-            align-items: center;
-            gap: 0.55rem;
-            padding: 0.45rem 0.7rem;
-            border-radius: var(--radius-sm);
-            cursor: pointer;
-            transition: var(--transition);
-            font-size: 0.94rem;
-            border: 1.5px solid transparent;
-        }
-        .option:hover {
-            background: var(--accent-soft);
-            border-color: var(--accent-light);
-        }
-        .option input[type="radio"] {
-            accent-color: var(--accent);
-            width: 1rem;
-            height: 1rem;
-            cursor: pointer;
-        }
-        .option:has(input:checked) {
-            background: #e6fffa;
-            border-color: var(--accent);
-            font-weight: 600;
-        }
-
-        /* ── Essay & Translation Areas ──────── */
-        .essay-area,
-        .translation-area {
-            width: 100%;
-            border-radius: var(--radius);
-            border: 2px solid var(--border);
-            padding: 0.9rem 1rem;
-            font-size: 0.95rem;
-            line-height: 1.7;
-            resize: vertical;
-            font-family: inherit;
-            transition: var(--transition);
-            background: #fafffe;
-            color: var(--text-primary);
-        }
-        .essay-area:focus,
-        .translation-area:focus {
-            outline: none;
-            border-color: var(--accent);
-            box-shadow: 0 0 0 3px rgba(13, 148, 136, 0.08);
-        }
-        .word-count {
-            text-align: right;
-            font-size: 0.82rem;
-            color: var(--text-secondary);
-            margin-top: 0.25rem;
-        }
-        .word-count.out-of-range {
-            color: var(--danger);
-            font-weight: 600;
-        }
-
-        /* ── Navigation ─────────────────────── */
-        .nav-bar {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 0.35rem;
-            justify-content: center;
-            margin: 1rem 0;
-        }
-        .nav-btn {
-            width: 2.2rem;
-            height: 2.2rem;
-            border-radius: 50%;
-            border: 2px solid var(--border);
-            background: white;
-            cursor: pointer;
-            font-weight: 600;
-            font-size: 0.85rem;
-            transition: var(--transition);
-            color: var(--text-secondary);
-        }
-        .nav-btn:hover {
-            border-color: var(--accent);
-            background: var(--accent-soft);
-        }
-        .nav-btn.answered {
-            background: var(--accent);
-            color: white;
-            border-color: var(--accent);
-        }
-        .nav-btn.current {
-            border-width: 3px;
-            border-color: #064e3b;
-            box-shadow: 0 0 0 4px rgba(13, 148, 136, 0.18);
-            transform: scale(1.08);
-        }
-        .nav-btn.skipped {
-            border-style: dashed;
-            border-color: #f59e0b;
-            color: #f59e0b;
-        }
-
-        .btn-row {
-            display: flex;
-            justify-content: center;
-            gap: 1rem;
-            flex-wrap: wrap;
-            margin-top: 0.5rem;
-        }
+        .subtitle { text-align:center; color:var(--text2); font-size:0.9rem; margin-bottom:1rem; }
+        .hidden { display:none !important; }
         .btn {
-            background: var(--accent);
-            color: white;
-            border: none;
-            padding: 0.6rem 1.6rem;
-            border-radius: 2.5rem;
-            cursor: pointer;
-            font-weight: 600;
-            font-size: 0.95rem;
-            transition: var(--transition);
-            display: inline-flex;
-            align-items: center;
-            gap: 0.4rem;
-            letter-spacing: 0.02em;
-            box-shadow: 0 2px 10px rgba(13, 148, 136, 0.2);
+            background: var(--accent); color:#fff; border:none;
+            padding:0.6rem 1.8rem; border-radius:2.5rem; cursor:pointer;
+            font-weight:600; font-size:0.95rem; transition:0.25s;
+            display:inline-flex; align-items:center; gap:0.4rem;
+            box-shadow: 0 2px 10px rgba(13,148,136,0.2);
         }
-        .btn:hover {
-            background: #0f766e;
-            box-shadow: 0 4px 16px rgba(13, 148, 136, 0.3);
-            transform: translateY(-1px);
-        }
-        .btn:active {
-            transform: translateY(0);
-            box-shadow: 0 2px 6px rgba(13, 148, 136, 0.2);
-        }
+        .btn:hover { background:#0f766e; transform:translateY(-1px); }
         .btn.secondary {
-            background: white;
-            color: var(--accent);
-            border: 2px solid var(--accent);
-            box-shadow: none;
+            background:#fff; color:var(--accent); border:2px solid var(--accent);
+            box-shadow:none;
         }
-        .btn.secondary:hover {
-            background: var(--accent-soft);
-            box-shadow: none;
+        .btn.secondary:hover { background:var(--soft); }
+        .btn:disabled { opacity:0.4; cursor:not-allowed; }
+        .timer-row {
+            display:flex; align-items:center; justify-content:space-between;
+            background:var(--soft); border-radius:3rem; padding:0.6rem 1.2rem;
+            border:1px solid var(--border); margin-bottom:1rem;
         }
-        .btn:disabled {
-            opacity: 0.4;
-            cursor: not-allowed;
-            pointer-events: none;
+        .timer-display { font-size:1.25rem; font-weight:700; color:var(--text); }
+        .pause-btn {
+            background:#fff; border:1.5px solid var(--accent); padding:0.4rem 1.1rem;
+            border-radius:2rem; cursor:pointer; font-weight:600; color:var(--accent);
+            transition:0.25s;
         }
-
-        .progress-info {
-            text-align: center;
-            font-size: 0.85rem;
-            color: var(--text-secondary);
-            margin: 0.3rem 0;
-            font-weight: 500;
+        .pause-btn:hover, .pause-btn.paused-state { background:var(--accent); color:#fff; }
+        .section-header { font-size:1.35rem; font-weight:700; margin:0.8rem 0; }
+        .question-card {
+            background:#fff; border-radius:var(--radius); padding:1.3rem 1.4rem;
+            margin-bottom:1rem; border:1px solid var(--border);
+            box-shadow:0 2px 10px rgba(0,0,0,0.03);
         }
-
-        /* ── Result Area ────────────────────── */
-        #resultArea {
-            text-align: center;
-            padding: 2rem 1rem;
+        .options { display:flex; flex-direction:column; gap:0.35rem; margin:0.5rem 0; }
+        .option {
+            display:flex; align-items:center; gap:0.5rem; padding:0.4rem 0.7rem;
+            border-radius:0.6rem; cursor:pointer; border:1.5px solid transparent;
+            transition:0.2s;
         }
-        #resultArea h2 {
-            font-size: 1.6rem;
-            color: var(--text-primary);
-            margin-bottom: 0.8rem;
+        .option:hover { background:var(--soft); }
+        .option input[type="radio"] { accent-color:var(--accent); }
+        .option:has(input:checked) { background:#e6fffa; border-color:var(--accent); font-weight:600; }
+        .essay-area, .trans-area {
+            width:100%; border-radius:var(--radius); border:2px solid var(--border);
+            padding:0.9rem 1rem; font-size:0.95rem; line-height:1.7;
+            resize:vertical; font-family:inherit; background:#fafffe;
         }
-        .score-card {
-            background: white;
-            border-radius: var(--radius);
-            padding: 1.5rem;
-            display: inline-block;
-            margin: 0.8rem auto;
-            border: 2px solid var(--accent-light);
-            box-shadow: var(--shadow);
+        .essay-area:focus, .trans-area:focus { outline:none; border-color:var(--accent); }
+        .word-count { text-align:right; font-size:0.82rem; color:var(--text2); }
+        .nav-bar { display:flex; flex-wrap:wrap; gap:0.3rem; justify-content:center; margin:1rem 0; }
+        .nav-btn {
+            width:2.1rem; height:2.1rem; border-radius:50%; border:2px solid var(--border);
+            background:#fff; cursor:pointer; font-weight:600; font-size:0.8rem;
         }
-        .score-card .big-score {
-            font-size: 3rem;
-            font-weight: 800;
-            color: var(--accent);
+        .nav-btn.answered { background:var(--accent); color:#fff; }
+        .nav-btn.current { border-color:#064e3b; box-shadow:0 0 0 4px rgba(13,148,136,0.2); }
+        .reading-part-nav { display:flex; gap:0.5rem; justify-content:center; margin-bottom:1rem; }
+        .reading-part-nav button {
+            padding:0.4rem 1rem; border-radius:2rem; border:1px solid var(--border);
+            background:#fff; cursor:pointer; font-weight:600; font-size:0.85rem;
         }
-        .score-breakdown {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 1rem;
-            justify-content: center;
-            margin: 1rem 0;
-        }
-        .score-item {
-            background: var(--accent-soft);
-            border-radius: var(--radius-sm);
-            padding: 0.8rem 1.2rem;
-            border: 1px solid var(--border);
-            min-width: 100px;
-        }
-        .score-item .label {
-            font-size: 0.8rem;
-            color: var(--text-secondary);
-            text-transform: uppercase;
-            letter-spacing: 0.04em;
-        }
-        .score-item .value {
-            font-size: 1.5rem;
-            font-weight: 700;
-            color: var(--text-primary);
-        }
-
-        /* ── Utility ────────────────────────── */
-        .hidden {
-            display: none !important;
-        }
-        .back-link {
-            display: inline-block;
-            margin-top: 1.2rem;
-            color: var(--accent);
-            text-decoration: none;
-            font-weight: 600;
-            font-size: 0.9rem;
-            transition: var(--transition);
-        }
-        .back-link:hover {
-            color: #064e3b;
-            text-decoration: underline;
-        }
-        .text-center {
-            text-align: center;
-        }
-
-        /* ── Responsive ─────────────────────── */
-        @media (max-width: 640px) {
-            body {
-                padding: 0.6rem;
-            }
-            .container {
-                padding: 1.2rem 0.9rem;
-                border-radius: 1.2rem;
-            }
-            h1 {
-                font-size: 1.4rem;
-            }
-            .timer-display {
-                font-size: 1rem;
-            }
-            .btn {
-                padding: 0.5rem 1.1rem;
-                font-size: 0.85rem;
-            }
-            .nav-btn {
-                width: 1.8rem;
-                height: 1.8rem;
-                font-size: 0.75rem;
-            }
-        }
+        .reading-part-nav button.active { background:var(--accent); color:#fff; }
+        .banked-cloze select { width:auto; min-width:80px; padding:0.2rem; border-radius:0.4rem; margin:0 0.2rem; }
+        .progress-info { text-align:center; font-size:0.85rem; color:var(--text2); }
+        .back-link { color:var(--accent); text-decoration:none; font-weight:600; }
     </style>
 </head>
 <body>
-    <div class="container">
-        <h1>📝 CET‑4 Full Mock Exam</h1>
-        <p class="subtitle">College English Test Band 4 · Official Format Simulation</p>
+<div class="container">
+    <h1>📝 CET‑4 Full Mock Exam</h1>
+    <p class="subtitle">Official Format · Writing → Listening (25Q) → Reading (30Q) → Translation</p>
 
-        <!-- ─── START SCREEN ─────────────────── -->
-        <div id="startScreen">
-            <span class="start-icon">🎓</span>
-            <div class="exam-info">
-                <h3><i class="fas fa-clipboard-list"></i> Exam Structure (125 min total)</h3>
-                <ul>
-                    <li><i class="fas fa-pen-fancy"></i> <strong>Writing</strong> — 30 min · Essay (120–180 words)</li>
-                    <li><i class="fas fa-headphones"></i> <strong>Listening</strong> — 25 min · 10 questions</li>
-                    <li><i class="fas fa-book-open"></i> <strong>Reading</strong> — 40 min · 10 questions</li>
-                    <li><i class="fas fa-language"></i> <strong>Translation</strong> — 30 min · Chinese → English</li>
+    <div id="startScreen">
+        <div style="text-align:center; padding:1rem;">
+            <i class="fas fa-graduation-cap" style="font-size:3rem; color:var(--accent);"></i>
+            <div style="background:var(--soft); border-radius:1rem; padding:1.5rem; margin:1rem auto; max-width:450px; text-align:left;">
+                <h3><i class="fas fa-list-ul"></i> Exam Structure (125 min)</h3>
+                <ul style="list-style:none; padding:0;">
+                    <li style="padding:0.5rem 0; border-bottom:1px dashed var(--border);"><i class="fas fa-pen"></i> <strong>Writing</strong> – 30 min · 1 essay</li>
+                    <li style="padding:0.5rem 0; border-bottom:1px dashed var(--border);"><i class="fas fa-headphones"></i> <strong>Listening</strong> – 25 min · 25 questions</li>
+                    <li style="padding:0.5rem 0; border-bottom:1px dashed var(--border);"><i class="fas fa-book-open"></i> <strong>Reading</strong> – 40 min · 30 questions</li>
+                    <li style="padding:0.5rem 0;"><i class="fas fa-language"></i> <strong>Translation</strong> – 30 min · Chinese→English</li>
                 </ul>
             </div>
-            <p style="margin:0.8rem 0;color:var(--text-secondary);font-size:0.9rem;">
-                <i class="fas fa-info-circle"></i> Once started, the timer runs continuously per section.<br>You may pause, but the clock stops only while paused.
-            </p>
-            <button id="startBtn" class="btn" style="font-size:1.1rem;padding:0.7rem 2.5rem;">
-                <i class="fas fa-play"></i> Start Exam
-            </button>
-        </div>
-
-        <!-- ─── EXAM AREA ────────────────────── -->
-        <div id="examArea" class="hidden">
-            <div class="timer-row">
-                <span class="timer-display" id="timerDisplay">
-                    <i class="fas fa-clock"></i> <span id="timerLabel">Writing</span>: <span id="timerValue">30:00</span>
-                </span>
-                <button id="pauseBtn" class="pause-btn">
-                    <i class="fas fa-pause"></i> Pause
-                </button>
-            </div>
-            <div class="section-header" id="sectionHeader">
-                <span class="section-badge" id="sectionBadge">Part 1</span> <span id="sectionTitle">✍️ Writing</span>
-            </div>
-            <div id="questionContainer"></div>
-            <div class="nav-bar" id="navBar"></div>
-            <p class="progress-info" id="progressInfo"></p>
-            <div class="btn-row">
-                <button id="prevBtn" class="btn secondary"><i class="fas fa-chevron-left"></i> Previous</button>
-                <button id="nextBtn" class="btn">Next <i class="fas fa-chevron-right"></i></button>
-            </div>
-            <p class="text-center" style="margin-top:0.8rem;font-size:0.8rem;color:var(--text-secondary);">
-                <i class="fas fa-lightbulb"></i> Tip: Use the numbered dots to jump between questions.
-            </p>
-        </div>
-
-        <!-- ─── RESULT AREA ──────────────────── -->
-        <div id="resultArea" class="hidden"></div>
-
-        <!-- ─── BACK LINK ────────────────────── -->
-        <div class="text-center">
-            <a href="cet4_hub.html" class="back-link">← Back to CET‑4 Hub</a>
+            <button id="startBtn" class="btn"><i class="fas fa-play"></i> Start Exam</button>
         </div>
     </div>
 
-    <script>
-        (function() {
-            // ==================== EXAM DATA ====================
-            const writingTask = {
-                prompt: "Write an essay on the topic: <strong>\"The Importance of Reducing Plastic Waste\"</strong>. You should write at least <strong>120 words</strong> but no more than <strong>180 words</strong>. Support your argument with reasons and examples.",
-                time: 30 * 60
-            };
+    <div id="examArea" class="hidden">
+        <div class="timer-row">
+            <span class="timer-display" id="timerDisplay"><span id="timerLabel">Writing</span>: <span id="timerValue">30:00</span></span>
+            <button id="pauseBtn" class="pause-btn"><i class="fas fa-pause"></i> Pause</button>
+        </div>
+        <div class="section-header" id="sectionHeader"></div>
+        <div id="questionContainer"></div>
+        <div id="readingPartNav" class="reading-part-nav hidden"></div>
+        <div class="nav-bar" id="navBar"></div>
+        <p class="progress-info" id="progressInfo"></p>
+        <div style="display:flex; justify-content:center; gap:1rem; flex-wrap:wrap;">
+            <button id="prevBtn" class="btn secondary"><i class="fas fa-chevron-left"></i> Previous</button>
+            <button id="nextBtn" class="btn">Next <i class="fas fa-chevron-right"></i></button>
+        </div>
+    </div>
 
-            const listeningQuestions = [
-                // News Reports (Q1–Q3)
-                {
-                    type: 'news',
-                    audioText: 'A recent study published in the journal Science shows that reading for just 30 minutes a day can significantly reduce stress levels. Researchers found that regular reading lowered heart rate and eased muscle tension by up to 68 percent.',
-                    question: 'What is the main finding of the study?',
-                    options: ['A. Reading 30 minutes daily reduces stress', 'B. Reading causes heart problems',
-                        'C. Exercise is better than reading', 'D. Stress increases heart rate'
-                    ],
-                    correct: 0
-                }, {
-                    type: 'news',
-                    audioText: 'The city council has announced plans to build a new subway line connecting the eastern suburbs to the downtown area. The project is expected to cost two billion yuan and will be completed within five years.',
-                    question: 'What did the city council announce?',
-                    options: ['A. A new park project', 'B. A new subway line', 'C. Road repair plans',
-                        'D. Higher transportation taxes'
-                    ],
-                    correct: 1
-                }, {
-                    type: 'news',
-                    audioText: 'A famous actress donated one million yuan to a children\'s hospital yesterday. She said she wanted to help more kids access quality medical care and encouraged others to contribute as well.',
-                    question: 'What did the actress do?',
-                    options: ['A. Opened a new hospital', 'B. Donated one million yuan', 'C. Acted in a charity movie',
-                        'D. Visited a school'
-                    ],
-                    correct: 1
-                },
-                // Conversations (Q4–Q7)
-                {
-                    type: 'conversation',
-                    audioText: 'Man: Hi Jane, you look exhausted. Woman: I stayed up until 3 a.m. finishing a report. Man: You really should get more sleep. Woman: I know, but the deadline was this morning and I had no choice.',
-                    question: 'Why is the woman tired?',
-                    options: ['A. She attended a late party', 'B. She finished a report late at night',
-                        'C. She was watching TV', 'D. She was traveling'
-                    ],
-                    correct: 1
-                }, {
-                    type: 'conversation',
-                    audioText: 'Woman: Have you tried the new Italian restaurant on Main Street? Man: Not yet. Is it any good? Woman: The pasta is absolutely amazing, but I have to warn you, it is a bit pricey.',
-                    question: 'What does the woman say about the restaurant?',
-                    options: ['A. It is very cheap', 'B. The pasta is amazing but expensive',
-                        'C. The restaurant is closed', 'D. She did not enjoy the food'
-                    ],
-                    correct: 1
-                }, {
-                    type: 'conversation',
-                    audioText: 'Man: I am thinking of buying a new laptop for school. Woman: You should definitely get one with a solid-state drive. It is so much faster than a regular hard drive. Man: That sounds like a good idea. Is it worth the extra cost? Woman: Absolutely.',
-                    question: 'What does the woman recommend?',
-                    options: ['A. A cheaper laptop', 'B. A laptop with an SSD', 'C. A desktop computer',
-                        'D. A tablet instead'
-                    ],
-                    correct: 1
-                }, {
-                    type: 'conversation',
-                    audioText: 'Woman: The weather forecast says it will rain all weekend. Man: Oh no, I was planning to go hiking. Woman: Maybe you could go to the museum instead. There is a new art exhibition. Man: That is not a bad idea actually.',
-                    question: 'What will the man probably do?',
-                    options: ['A. Go hiking anyway', 'B. Visit a museum', 'C. Stay home and sleep',
-                        'D. Watch a movie'
-                    ],
-                    correct: 1
-                },
-                // Passages (Q8–Q10)
-                {
-                    type: 'passage',
-                    audioText: 'Good morning everyone. Today we will discuss climate change. First, the main causes: greenhouse gases from burning fossil fuels and deforestation. Second, the effects: rising sea levels, melting ice caps, and more frequent extreme weather events. Finally, solutions: switching to renewable energy, planting trees, and reducing our carbon footprint. I will now take your questions.',
-                    question: 'What is the main topic of this talk?',
-                    options: ['A. Fossil fuel production', 'B. Climate change causes and solutions',
-                        'C. Renewable energy technology', 'D. Tree planting techniques'
-                    ],
-                    correct: 1
-                }, {
-                    type: 'passage',
-                    audioText: 'Attention all students: The university library will be closed next weekend for renovation work. All borrowed books must be returned by this Friday at 5 p.m. Online resources and e-books will still be accessible through the library website during the closure.',
-                    question: 'When will the library be closed?',
-                    options: ['A. This Friday', 'B. Next weekend', 'C. Next Monday', 'D. This Sunday'
-                    ],
-                    correct: 1
-                }, {
-                    type: 'passage',
-                    audioText: 'A new survey reveals that over 60 percent of young professionals now prefer remote work over traditional office jobs. The main reasons cited include flexible schedules, no commuting time, and a better work-life balance. However, some respondents mentioned feeling isolated and missing team collaboration.',
-                    question: 'What is the main reason young people prefer remote work?',
-                    options: ['A. Higher salaries', 'B. More vacation days', 'C. Flexibility and no commuting',
-                        'D. Better office equipment'
-                    ],
-                    correct: 2
-                }
-            ];
+    <div id="resultArea" class="hidden"></div>
+    <div style="text-align:center; margin-top:1rem;"><a href="cet4_hub.html" class="back-link">← Back to CET‑4 Hub</a></div>
+</div>
 
-            const readingQuestions = [
-                // Q1–Q3: Shorter passages
-                {
-                    passage: 'Global warming is a long-term rise in the average temperature of the Earth\'s climate system. It is caused mainly by human activities, such as burning fossil fuels and deforestation. The effects include melting ice caps, rising sea levels, and more frequent extreme weather events.',
-                    question: 'What is the primary cause of global warming according to the passage?',
-                    options: ['A. Natural climate cycles', 'B. Human activities', 'C. Volcanic eruptions',
-                        'D. Changes in solar radiation'
-                    ],
-                    correct: 1
-                }, {
-                    passage: 'Jane started her own bakery business two years ago. At first, she struggled with funding and finding customers. However, she never gave up. She took online marketing courses and gradually improved her sales through social media promotion. Today, her bakery is profitable and employs five people.',
-                    question: 'What can we learn about Jane from the passage?',
-                    options: ['A. She gave up after initial struggles', 'B. She overcame difficulties and succeeded',
-                        'C. She never took any training courses', 'D. She closed her business after two years'
-                    ],
-                    correct: 1
-                }, {
-                    passage: 'According to a new government policy, all new cars sold in the city must be electric by the year 2030. The government plans to provide financial subsidies to car buyers and will also invest heavily in building more charging stations across the city.',
-                    question: 'What does the new policy require?',
-                    options: ['A. Fewer cars on the road', 'B. All new cars must be electric by 2030',
-                        'C. Higher taxes on gasoline cars', 'D. No more charging stations'
-                    ],
-                    correct: 1
-                },
-                // Q4–Q6: Medium passages
-                {
-                    passage: 'Sleep is essential for maintaining good health. Studies have shown that adults need between seven and nine hours of sleep per night. Lack of sleep can lead to serious health problems, including weakened immune function, weight gain, and an increased risk of heart disease. Despite this, many people sacrifice sleep to meet work deadlines or spend time on electronic devices.',
-                    question: 'According to the passage, how many hours of sleep do adults need?',
-                    options: ['A. Five to six hours', 'B. Seven to nine hours', 'C. Ten to twelve hours',
-                        'D. At least six hours'
-                    ],
-                    correct: 1
-                }, {
-                    passage: 'The concept of a "sharing economy" has grown rapidly in recent years. Companies like Airbnb and Uber allow people to share their homes and cars with strangers for a fee. Proponents argue that this model reduces waste and makes better use of existing resources. Critics, however, point out issues with regulation, safety, and the impact on traditional industries.',
-                    question: 'What is a criticism of the sharing economy mentioned in the passage?',
-                    options: ['A. It creates too much waste', 'B. It has regulatory and safety issues',
-                        'C. It only benefits large corporations', 'D. It reduces the use of resources'
-                    ],
-                    correct: 1
-                }, {
-                    passage: 'Artificial intelligence is transforming the healthcare industry. AI-powered systems can now analyze medical images with accuracy comparable to experienced doctors. In some cases, these systems have detected early signs of diseases that human eyes might miss. However, experts emphasize that AI should complement rather than replace human medical professionals.',
-                    question: 'What is the experts\' view on AI in healthcare?',
-                    options: ['A. AI should replace all doctors', 'B. AI should complement human professionals',
-                        'C. AI is not accurate enough for medical use', 'D. AI has no role in healthcare'
-                    ],
-                    correct: 1
-                },
-                // Q7–Q10: Longer / inference-based passages
-                {
-                    passage: 'A team of researchers at Stanford University has developed a new type of battery that can charge in under five minutes. This breakthrough could revolutionize the electric vehicle industry, as long charging times have been one of the main barriers to widespread adoption. The scientists used a novel material that allows ions to move more quickly within the battery cell.',
-                    question: 'What is the significance of the new battery technology?',
-                    options: ['A. It is cheaper to produce', 'B. It charges very quickly',
-                        'C. It lasts longer than traditional batteries', 'D. It uses no electricity'
-                    ],
-                    correct: 1
-                }, {
-                    passage: 'Cultural differences can significantly affect business negotiations. For instance, in some cultures, building personal relationships is seen as a prerequisite for successful business deals, while in others, directness and efficiency are valued above all else. Understanding these differences can help international companies avoid misunderstandings and build stronger partnerships.',
-                    question: 'What is the main point of this passage?',
-                    options: ['A. Business negotiations are always difficult', 'B. Cultural awareness is important in business',
-                        'C. Personal relationships are unimportant in business',
-                        'D. International companies should avoid negotiations'
-                    ],
-                    correct: 1
-                }, {
-                    passage: 'Plastic pollution has become one of the most pressing environmental issues of our time. Every year, millions of tons of plastic waste end up in the oceans, harming marine life and entering the food chain. Several countries have introduced bans on single-use plastics, but experts argue that more comprehensive global action is needed to address the problem effectively.',
-                    question: 'What do experts believe is necessary to tackle plastic pollution?',
-                    options: ['A. Banning all plastic products', 'B. More comprehensive global action',
-                        'C. Focusing only on ocean cleanup', 'D. Reducing food consumption'
-                    ],
-                    correct: 1
-                }, {
-                    passage: 'The traditional nine-to-five work schedule is increasingly being questioned. Many companies now offer flexible working hours, allowing employees to start and finish their workday at times that suit their personal lives. Research suggests that such flexibility can boost productivity, reduce stress, and improve employee retention rates.',
-                    question: 'What is one benefit of flexible working hours mentioned in the passage?',
-                    options: ['A. Lower salaries for employees', 'B. Increased productivity',
-                        'C. More office space required', 'D. Longer commuting times'
-                    ],
-                    correct: 1
-                }
-            ];
+<script>
+(function(){
+// ==================== DATA ====================
+const writingTask = {
+    prompt: "Write an essay on the topic: \"The Importance of Reducing Plastic Waste\". You should write at least 120 words but no more than 180 words.",
+    time: 30*60
+};
 
-            const translationTask = {
-                chinese: '中国正在大力发展可再生能源，以减少对化石燃料的依赖。许多城市已经建成了大型太阳能发电站和风力发电场。此外，政府还鼓励人们使用电动汽车，并为此提供了补贴。',
-                reference: 'China is vigorously developing renewable energy to reduce its dependence on fossil fuels. Many cities have already built large-scale solar power stations and wind farms. In addition, the government encourages people to use electric vehicles and has provided subsidies for this purpose.',
-                time: 30 * 60
-            };
+// Listening: 25 questions
+const listeningQuestions = [
+    // News reports (1-7)
+    { type:'news', audioText:'A study shows reading 30 minutes daily lowers stress by 68%.', question:'What does the study suggest?', options:['A. Reading reduces stress','B. Reading causes stress','C. Exercise is better','D. Stress is harmful'], correct:0 },
+    { type:'news', audioText:'City officials plan a new subway line to ease traffic.', question:'What is planned?', options:['A. A new park','B. A new subway line','C. Road repairs','D. Higher taxes'], correct:1 },
+    { type:'news', audioText:'An actress donated one million yuan to a children\'s hospital.', question:'What did the actress do?', options:['A. Opened a hospital','B. Donated money','C. Acted in a film','D. Visited a school'], correct:1 },
+    { type:'news', audioText:'Heavy rain caused flight delays at the airport.', question:'What caused the delays?', options:['A. Snow','B. Heavy rain','C. Technical problem','D. Strike'], correct:1 },
+    { type:'news', audioText:'A survey reveals young people prefer remote work for flexibility.', question:'Why do they prefer remote work?', options:['A. Higher salary','B. More vacation','C. Flexibility','D. Better equipment'], correct:2 },
+    { type:'news', audioText:'Drinking moderate coffee may lower heart disease risk, a study finds.', question:'What may coffee help with?', options:['A. Sleep','B. Heart health','C. Weight loss','D. Memory'], correct:1 },
+    { type:'news', audioText:'A tech company launched a foldable smartphone with improved camera.', question:'What did the company launch?', options:['A. A tablet','B. A laptop','C. A foldable phone','D. A smartwatch'], correct:2 },
+    // Long conversations (8-15)
+    { type:'conv', audioText:'M: Weekend plans? W: I\'m going to a jazz concert. M: Tickets? W: 80 yuan, but worth it.', question:'What is the woman doing?', options:['A. Watching a movie','B. Going to a concert','C. Studying','D. Traveling'], correct:1 },
+    { type:'conv', audioText:'M: 80 yuan is a bit much. W: I saved for it. You could come too.', question:'What does the woman suggest?', options:['A. He stay home','B. He buy her ticket','C. He join her','D. He find a cheaper event'], correct:2 },
+    { type:'conv', audioText:'W: The concert starts at 8. M: Let\'s meet at 7:30 outside.', question:'When will they meet?', options:['A. 7:00','B. 7:30','C. 8:00','D. 8:30'], correct:1 },
+    { type:'conv', audioText:'M: I heard the band is amazing live. W: Yes, I\'m excited!', question:'How does the woman feel?', options:['A. Bored','B. Upset','C. Excited','D. Nervous'], correct:2 },
+    { type:'conv', audioText:'W: I\'d like to book a room. M: Single or double? W: Single, with a sea view if possible.', question:'What does the woman want?', options:['A. A double room','B. A single room with sea view','C. A suite','D. A cheap room'], correct:1 },
+    { type:'conv', audioText:'M: The sea-view rooms are 500 yuan per night. W: A bit expensive. Any discount?', question:'What is the woman concerned about?', options:['A. Location','B. Price','C. Breakfast','D. Parking'], correct:1 },
+    { type:'conv', audioText:'M: We have a 10% discount for stays over 3 nights. W: I\'ll stay 3 nights then.', question:'How many nights will she stay?', options:['A. 1','B. 2','C. 3','D. 4'], correct:2 },
+    { type:'conv', audioText:'W: Is breakfast included? M: Yes, buffet from 7 to 9.', question:'What is included?', options:['A. Lunch','B. Dinner','C. Breakfast','D. Gym access'], correct:2 },
+    // Passages (16-25)
+    { type:'passage', audioText:'The Great Wall stretches over 13,000 miles. It was built to protect ancient China. Today it\'s a UNESCO site.', question:'Why was the Great Wall built?', options:['A. For farming','B. For protection','C. For trade','D. For tourism'], correct:1 },
+    { type:'passage', audioText:'Construction started 2,000 years ago. Many dynasties added sections.', question:'When did construction start?', options:['A. 500 years ago','B. 1,000 years ago','C. 2,000 years ago','D. 500 BC'], correct:2 },
+    { type:'passage', audioText:'The Wall attracts millions of visitors annually, boosting local economy.', question:'What does the Wall boost?', options:['A. Education','B. Agriculture','C. Local economy','D. Technology'], correct:2 },
+    { type:'passage', audioText:'Attention: A lecture on AI will be held in Room 301 at 2 pm. Dr. Lee from MIT will speak.', question:'What is the topic?', options:['A. Art','B. AI','C. History','D. Music'], correct:1 },
+    { type:'passage', audioText:'The lecture is open to all students. No registration needed.', question:'Who can attend?', options:['A. Only graduates','B. All students','C. Faculty only','D. Registered guests'], correct:1 },
+    { type:'passage', audioText:'Dr. Lee will demonstrate a new AI chatbot and answer questions.', question:'What will Dr. Lee do?', options:['A. Sell a product','B. Demonstrate a chatbot','C. Show a film','D. Debate'], correct:1 },
+    { type:'passage', audioText:'Emma started a green business at 22. She sells reusable bags made from recycled plastic.', question:'What does Emma sell?', options:['A. Clothes','B. Reusable bags','C. Electronics','D. Food'], correct:1 },
+    { type:'passage', audioText:'She faced many challenges but persisted. Now her products are in 20 stores.', question:'How many stores carry her products?', options:['A. 5','B. 10','C. 20','D. 50'], correct:2 },
+    { type:'passage', audioText:'Emma hopes to expand to international markets next year.', question:'What is her future plan?', options:['A. Close the business','B. Go back to school','C. Expand internationally','D. Change products'], correct:2 },
+    { type:'passage', audioText:'She advises young entrepreneurs to stay focused and never give up.', question:'What is her advice?', options:['A. Get rich quick','B. Never give up','C. Avoid risks','D. Follow trends'], correct:1 }
+];
 
-            // ==================== STATE ====================
-            const state = {
-                section: 'writing', // 'writing' | 'listening' | 'reading' | 'translation'
-                currentQuestionIndex: 0,
-                answers: {
-                    writing: '',
-                    listening: new Array(listeningQuestions.length).fill(undefined),
-                    reading: new Array(readingQuestions.length).fill(undefined),
-                    translation: ''
-                },
-                timers: {
-                    writing: writingTask.time,
-                    listening: 25 * 60,
-                    reading: 40 * 60,
-                    translation: translationTask.time
-                },
-                timerInterval: null,
-                paused: false,
-                examFinished: false
-            };
+// Reading data
+const readingData = {
+    // Banked cloze: passage with blanks, word bank
+    bankedCloze: {
+        passage: "Learning a second language provides many (1)___. It improves cognitive skills, enhances memory, and can even delay the onset of dementia. Bilingual individuals often show better (2)___ and problem-solving abilities. Moreover, knowing another language opens up (3)___ opportunities in the global job market. Studies suggest that language learning increases (4)___ matter density in the brain. Despite these benefits, many people find it (5)___ to start due to lack of time. However, even 15 minutes of daily practice can yield (6)___ progress. The key is (7)___ and regular exposure. Immersion, through travel or media, can (8)___ the learning process. In today's interconnected world, multilingualism is no longer just a (9)___ but a necessity. So, choose a language and begin your journey toward becoming a more (10)___ global citizen.",
+        wordBank: [
+            "A. advantages", "B. flexibility", "C. career", "D. gray", "E. challenging",
+            "F. significant", "G. consistency", "H. accelerate", "I. luxury", "J. competent",
+            "K. nervous", "L. artificial", "M. decline", "N. rarely", "O. identical"
+        ],
+        correct: [0, 1, 2, 3, 4, 5, 6, 7, 8, 9] // indices for A(0), B(1), C(2)... J(9)
+    },
+    // Matching: paragraphs A-G, statements choose paragraph
+    matching: {
+        passage: `[A] Electric vehicles (EVs) are becoming increasingly popular worldwide. Governments are offering subsidies to encourage consumers to switch from gasoline cars.
+[B] However, charging infrastructure remains a major hurdle. Many cities lack sufficient public charging stations, causing range anxiety among potential buyers.
+[C] Battery technology has improved dramatically. Modern EVs can travel over 300 miles on a single charge, and charging times are decreasing.
+[D] Environmental benefits are a key selling point. EVs produce zero tailpipe emissions, which helps reduce air pollution in urban areas.
+[E] Critics point out that the production of EV batteries still has a significant environmental footprint, especially in mining lithium and cobalt.
+[F] Despite these concerns, major automakers have pledged to phase out internal combustion engines within the next two decades.
+[G] The transition to electric mobility is not just about cars. Electric buses, bikes, and scooters are also growing in popularity, especially in densely populated cities.`,
+        statements: [
+            "1. The lack of charging stations worries EV buyers.",
+            "2. Governments provide financial incentives for EV purchases.",
+            "3. EV battery manufacturing has negative environmental effects.",
+            "4. Modern EVs can travel a long distance on one charge.",
+            "5. Many car companies plan to stop making gasoline vehicles.",
+            "6. Electric two-wheelers are also becoming more common.",
+            "7. Zero emissions from EVs improve city air quality.",
+            "8. Concerns about mining materials for batteries are acknowledged.",
+            "9. Charging time for EVs is getting shorter.",
+            "10. Subsidies help people afford electric cars."
+        ],
+        correctParagraphs: ['B','A','E','C','F','G','D','E','C','A'] // letters
+    },
+    // Careful reading passages
+    passages: [
+        {
+            text: "Climate change is already affecting global agriculture. Rising temperatures and changing rainfall patterns have reduced crop yields in many regions. Wheat and corn production in tropical areas could decline by up to 30% by 2050. At the same time, some cooler regions may see longer growing seasons. Adaptation strategies, such as developing heat-resistant crops and improving irrigation, are essential to ensure food security.",
+            questions: [
+                { q: "What is the main topic of the passage?", opts: ["A. Tourism", "B. Climate change and farming", "C. Technology", "D. Population growth"], correct:1 },
+                { q: "By how much could wheat production drop in tropical areas?", opts: ["A. 10%", "B. 20%", "C. 30%", "D. 40%"], correct:2 },
+                { q: "What might benefit cooler regions?", opts: ["A. Shorter seasons", "B. More rainfall", "C. Longer growing seasons", "D. Less sunshine"], correct:2 },
+                { q: "Which is mentioned as an adaptation strategy?", opts: ["A. Using less fertilizer", "B. Heat-resistant crops", "C. Planting trees", "D. Reducing farmland"], correct:1 },
+                { q: "The passage suggests adaptation is needed for ...", opts: ["A. entertainment", "B. transportation", "C. food security", "D. education"], correct:2 }
+            ]
+        },
+        {
+            text: "Social media has transformed how we communicate, but it also impacts mental health. Studies show excessive use can lead to anxiety, depression, and low self-esteem, especially among teenagers. Constant comparison with others' curated lives creates unrealistic expectations. However, mindful usage—such as limiting screen time and focusing on genuine connections—can mitigate these negative effects.",
+            questions: [
+                { q: "What is the negative effect of social media mentioned?", opts: ["A. Improved sleep", "B. Anxiety", "C. Better grades", "D. Higher income"], correct:1 },
+                { q: "Who is particularly affected?", opts: ["A. Elderly", "B. Children under 10", "C. Teenagers", "D. Working adults"], correct:2 },
+                { q: "What causes unrealistic expectations?", opts: ["A. News", "B. Advertisements", "C. Comparison with others", "D. Educational content"], correct:2 },
+                { q: "How can negative effects be reduced?", opts: ["A. By quitting social media", "B. By limiting screen time", "C. By posting more", "D. By changing platforms"], correct:1 },
+                { q: "The author's tone is ...", opts: ["A. Humorous", "B. Cautious and informative", "C. Angry", "D. Indifferent"], correct:1 }
+            ]
+        }
+    ]
+};
 
-            // ==================== DOM REFS ====================
-            const $ = (sel) => document.querySelector(sel);
-            const $$ = (sel) => document.querySelectorAll(sel);
+const translationTask = {
+    chinese: "中国正在大力发展可再生能源，以减少对化石燃料的依赖。许多城市已经建成了大型太阳能发电站和风力发电场。此外，政府还鼓励人们使用电动汽车，并为此提供了补贴。",
+    time: 30*60
+};
 
-            const startScreen = $('#startScreen');
-            const examArea = $('#examArea');
-            const resultArea = $('#resultArea');
-            const timerDisplay = $('#timerDisplay');
-            const timerLabel = $('#timerLabel');
-            const timerValue = $('#timerValue');
-            const sectionBadge = $('#sectionBadge');
-            const sectionTitle = $('#sectionTitle');
-            const questionContainer = $('#questionContainer');
-            const progressInfo = $('#progressInfo');
-            const navBar = $('#navBar');
-            const startBtn = $('#startBtn');
-            const prevBtn = $('#prevBtn');
-            const nextBtn = $('#nextBtn');
-            const pauseBtn = $('#pauseBtn');
+// ==================== STATE ====================
+const state = {
+    section: 'writing',
+    currentQuestionIndex: 0, // for listening / reading passages sub-pages
+    readingPart: 0, // 0:BankedCloze, 1:Matching, 2:Passage1, 3:Passage2
+    answers: {
+        writing: '',
+        listening: new Array(25).fill(undefined),
+        reading: {
+            bankedCloze: new Array(10).fill(null),
+            matching: new Array(10).fill(null),
+            passage1: new Array(5).fill(undefined),
+            passage2: new Array(5).fill(undefined)
+        },
+        translation: ''
+    },
+    timers: {
+        writing: 30*60,
+        listening: 25*60,
+        reading: 40*60,
+        translation: 30*60
+    },
+    timerInterval: null,
+    paused: false,
+    examFinished: false
+};
 
-            // ==================== HELPERS ====================
-            function formatTime(seconds) {
-                const m = Math.floor(seconds / 60);
-                const s = seconds % 60;
-                return m + ':' + String(s).padStart(2, '0');
+const $ = s => document.querySelector(s);
+const $$ = s => document.querySelectorAll(s);
+
+const startScreen = $('#startScreen');
+const examArea = $('#examArea');
+const resultArea = $('#resultArea');
+const timerLabel = $('#timerLabel');
+const timerValue = $('#timerValue');
+const sectionHeader = $('#sectionHeader');
+const questionContainer = $('#questionContainer');
+const readingPartNav = $('#readingPartNav');
+const navBar = $('#navBar');
+const progressInfo = $('#progressInfo');
+const pauseBtn = $('#pauseBtn');
+const prevBtn = $('#prevBtn');
+const nextBtn = $('#nextBtn');
+
+function formatTime(s) { const m = Math.floor(s/60); return m+':'+String(s%60).padStart(2,'0'); }
+function speak(text) { if(!text) return; speechSynthesis.cancel(); const u = new SpeechSynthesisUtterance(text); u.lang='en-US'; u.rate=0.9; speechSynthesis.speak(u); }
+function escapeHTML(s) { const d = document.createElement('div'); d.textContent = s; return d.innerHTML; }
+
+function updateTimerUI() {
+    const sec = state.timers[state.section];
+    timerLabel.textContent = state.section.charAt(0).toUpperCase()+state.section.slice(1);
+    timerValue.textContent = formatTime(sec);
+    if(sec <= 300 && sec>0) timerValue.style.color = 'var(--danger)';
+    else timerValue.style.color = 'var(--text)';
+}
+
+function saveCurrentAnswer() {
+    if(state.section==='writing'){
+        const ta = $('#essayInput'); if(ta) state.answers.writing = ta.value;
+    } else if(state.section==='listening'){
+        const sel = document.querySelector('input[name="listQ"]:checked');
+        if(sel) state.answers.listening[state.currentQuestionIndex] = parseInt(sel.value);
+    } else if(state.section==='reading'){
+        if(state.readingPart===0){
+            // banked cloze: 10 selects
+            for(let i=0;i<10;i++){
+                const sel = document.getElementById(`banked${i}`);
+                if(sel) state.answers.reading.bankedCloze[i] = sel.value !== "" ? parseInt(sel.value) : null;
             }
-
-            function speak(text) {
-                if (!text) return;
-                window.speechSynthesis.cancel();
-                const utterance = new SpeechSynthesisUtterance(text);
-                utterance.lang = 'en-US';
-                utterance.rate = 0.9;
-                utterance.pitch = 1;
-                speechSynthesis.speak(utterance);
+        } else if(state.readingPart===1){
+            // matching
+            for(let i=0;i<10;i++){
+                const sel = document.querySelector(`input[name="match${i}"]:checked`);
+                state.answers.reading.matching[i] = sel ? sel.value : null;
             }
-
-            function getSectionLabel(section) {
-                const map = { writing: 'Writing', listening: 'Listening', reading: 'Reading',
-                translation: 'Translation' };
-                return map[section] || section;
+        } else if(state.readingPart===2 || state.readingPart===3){
+            const arr = state.readingPart===2 ? state.answers.reading.passage1 : state.answers.reading.passage2;
+            for(let i=0;i<5;i++){
+                const sel = document.querySelector(`input[name="passQ${i}"]:checked`);
+                if(sel) arr[i] = parseInt(sel.value);
             }
+        }
+    } else if(state.section==='translation'){
+        const ta = $('#transInput'); if(ta) state.answers.translation = ta.value;
+    }
+}
 
-            function getTotalQuestions(section) {
-                if (section === 'listening') return listeningQuestions.length;
-                if (section === 'reading') return readingQuestions.length;
-                return 1;
-            }
+function render() {
+    updateTimerUI();
+    if(state.section==='writing') renderWriting();
+    else if(state.section==='listening') renderListening();
+    else if(state.section==='reading') renderReading();
+    else if(state.section==='translation') renderTranslation();
+    updateNavAndButtons();
+}
 
-            function getAnswerArray(section) {
-                if (section === 'listening') return state.answers.listening;
-                if (section === 'reading') return state.answers.reading;
-                return null;
-            }
+function renderWriting(){
+    sectionHeader.innerHTML = '✍️ Writing (Part I)';
+    questionContainer.innerHTML = `
+    <div class="question-card">
+      <strong>Essay Prompt:</strong> ${writingTask.prompt}
+      <textarea id="essayInput" class="essay-area" rows="10">${escapeHTML(state.answers.writing)}</textarea>
+      <p class="word-count" id="wc">0 words</p>
+    </div>`;
+    const ta = $('#essayInput');
+    const wc = $('#wc');
+    ta.addEventListener('input', ()=>{
+        const cnt = ta.value.split(/\s+/).filter(w=>w.length).length;
+        wc.textContent = cnt + ' word'+(cnt!==1?'s':'');
+        state.answers.writing = ta.value;
+    });
+    readingPartNav.classList.add('hidden');
+    navBar.innerHTML = '';
+    progressInfo.textContent = 'Essay (120-180 words)';
+    prevBtn.disabled = true;
+    nextBtn.innerHTML = 'Submit Writing & Continue <i class="fas fa-arrow-right"></i>';
+}
 
-            // ==================== RENDER ====================
-            function render() {
-                updateTimerDisplay();
-                updatePrevNextButtons();
+function renderListening(){
+    sectionHeader.innerHTML = `🎧 Listening (Part II)`;
+    const q = listeningQuestions[state.currentQuestionIndex];
+    const ans = state.answers.listening[state.currentQuestionIndex];
+    questionContainer.innerHTML = `
+    <div class="question-card">
+      <span style="font-weight:700;">Q${state.currentQuestionIndex+1}/25</span> 
+      <button id="playBtn" class="btn secondary" style="margin:0.5rem 0;"><i class="fas fa-volume-up"></i> Listen</button>
+      <p>${q.question}</p>
+      <div class="options">
+        ${q.options.map((opt,i)=>`
+          <label class="option">
+            <input type="radio" name="listQ" value="${i}" ${ans===i?'checked':''}> ${opt}
+          </label>`).join('')}
+      </div>
+    </div>`;
+    $('#playBtn').addEventListener('click', ()=> speak(q.audioText));
+    setTimeout(()=> speak(q.audioText), 400);
+    document.querySelectorAll('input[name="listQ"]').forEach(r=> r.addEventListener('change', ()=>{
+        state.answers.listening[state.currentQuestionIndex] = parseInt(r.value);
+        renderNavBar();
+    }));
+    readingPartNav.classList.add('hidden');
+    renderNavBar();
+    progressInfo.textContent = `Question ${state.currentQuestionIndex+1} of 25`;
+}
 
-                if (state.section === 'writing') {
-                    renderWriting();
-                } else if (state.section === 'listening') {
-                    renderListening();
-                } else if (state.section === 'reading') {
-                    renderReading();
-                } else if (state.section === 'translation') {
-                    renderTranslation();
-                }
-                renderNavBar();
-                updateProgressInfo();
-            }
+function renderReading(){
+    sectionHeader.innerHTML = '📖 Reading (Part III)';
+    readingPartNav.classList.remove('hidden');
+    readingPartNav.innerHTML = `
+        <button data-part="0" class="${state.readingPart===0?'active':''}">Banked Cloze</button>
+        <button data-part="1" class="${state.readingPart===1?'active':''}">Matching</button>
+        <button data-part="2" class="${state.readingPart===2?'active':''}">Passage 1</button>
+        <button data-part="3" class="${state.readingPart===3?'active':''}">Passage 2</button>
+    `;
+    readingPartNav.querySelectorAll('button').forEach(btn=>{
+        btn.addEventListener('click', ()=>{
+            saveCurrentAnswer();
+            state.readingPart = parseInt(btn.dataset.part);
+            renderReadingContent();
+            updateNavAndButtons();
+        });
+    });
+    renderReadingContent();
+    navBar.innerHTML = ''; // no number nav for reading parts
+}
 
-            function updateTimerDisplay() {
-                const sec = state.timers[state.section];
-                timerLabel.textContent = getSectionLabel(state.section);
-                timerValue.textContent = formatTime(sec);
-                if (sec <= 300 && sec > 0) {
-                    timerDisplay.classList.add('warning');
-                } else {
-                    timerDisplay.classList.remove('warning');
-                }
-                if (sec <= 0 && !state.examFinished) {
-                    timerDisplay.classList.add('warning');
-                }
-            }
+function renderReadingContent(){
+    if(state.readingPart===0){
+        const data = readingData.bankedCloze;
+        let passageHtml = data.passage;
+        for(let i=0;i<10;i++){
+            const selected = state.answers.reading.bankedCloze[i];
+            let opts = data.wordBank.map((w,idx)=>`<option value="${idx}" ${selected===idx?'selected':''}>${w}</option>`).join('');
+            passageHtml = passageHtml.replace(`(${i+1})___`, `(<select id="banked${i}" style="margin:0 2px;">${opts}</select>)`);
+        }
+        questionContainer.innerHTML = `
+        <div class="question-card">
+          <h4>Part A: Banked Cloze</h4>
+          <p>Fill in each blank with a word from the bank (A-O).</p>
+          <div style="line-height:2;">${passageHtml}</div>
+          <div style="margin-top:1rem; font-size:0.9rem;">
+            ${data.wordBank.map((w,i)=>`${String.fromCharCode(65+i)}. ${w} `).join(' · ')}
+          </div>
+        </div>`;
+        document.querySelectorAll('select[id^="banked"]').forEach(sel=>{
+            sel.addEventListener('change', ()=> saveCurrentAnswer());
+        });
+        progressInfo.textContent = 'Banked Cloze (10 blanks)';
+    } else if(state.readingPart===1){
+        const data = readingData.matching;
+        let html = `<div class="question-card"><h4>Part B: Matching</h4><p>Match each statement to the paragraph (A-G).</p>`;
+        html += `<div style="white-space:pre-line; background:#f9fefb; padding:0.8rem; border-radius:0.5rem; margin:0.5rem 0;">${data.passage}</div>`;
+        data.statements.forEach((st,i)=>{
+            const ans = state.answers.reading.matching[i];
+            html += `<div style="margin:0.4rem 0;"><strong>${st}</strong><br>`;
+            ['A','B','C','D','E','F','G'].forEach(letter=>{
+                html += `<label style="margin-right:1rem;"><input type="radio" name="match${i}" value="${letter}" ${ans===letter?'checked':''}> ${letter}</label>`;
+            });
+            html += `</div>`;
+        });
+        html += `</div>`;
+        questionContainer.innerHTML = html;
+        document.querySelectorAll('input[type=radio][name^="match"]').forEach(r=> r.addEventListener('change', ()=> saveCurrentAnswer()));
+        progressInfo.textContent = 'Matching (10 statements)';
+    } else {
+        const pIdx = state.readingPart-2;
+        const passage = readingData.passages[pIdx];
+        const ansArr = pIdx===0 ? state.answers.reading.passage1 : state.answers.reading.passage2;
+        let html = `<div class="question-card"><h4>Passage ${pIdx+1}</h4><p style="white-space:pre-line;">${passage.text}</p>`;
+        passage.questions.forEach((q,i)=>{
+            html += `<p style="font-weight:600;">${i+1}. ${q.q}</p><div class="options">`;
+            q.opts.forEach((opt,oi)=>{
+                html += `<label class="option"><input type="radio" name="passQ${i}" value="${oi}" ${ansArr[i]===oi?'checked':''}> ${opt}</label>`;
+            });
+            html += `</div>`;
+        });
+        html += `</div>`;
+        questionContainer.innerHTML = html;
+        document.querySelectorAll('input[type=radio][name^="passQ"]').forEach(r=> r.addEventListener('change', ()=> saveCurrentAnswer()));
+        progressInfo.textContent = `Passage ${pIdx+1} (5 questions)`;
+    }
+}
 
-            function updatePrevNextButtons() {
-                const total = getTotalQuestions(state.section);
-                if (total <= 1) {
-                    prevBtn.disabled = true;
-                    // For single-item sections, Next acts as "Submit & Continue"
-                    if (state.section === 'writing') {
-                        nextBtn.innerHTML = 'Submit Writing & Continue <i class="fas fa-arrow-right"></i>';
-                    } else if (state.section === 'translation') {
-                        nextBtn.innerHTML = 'Submit Translation & Finish <i class="fas fa-check"></i>';
-                    }
-                } else {
-                    prevBtn.disabled = state.currentQuestionIndex === 0;
-                    if (state.currentQuestionIndex >= total - 1) {
-                        nextBtn.innerHTML =
-                            'Finish Section <i class="fas fa-arrow-right"></i>';
-                    } else {
-                        nextBtn.innerHTML = 'Next <i class="fas fa-chevron-right"></i>';
-                    }
-                }
-                // Update section badge
-                const badgeMap = { writing: 'Part 1', listening: 'Part 2', reading: 'Part 3', translation: 'Part 4' };
-                sectionBadge.textContent = badgeMap[state.section] || '';
-                const titleMap = { writing: '✍️ Writing', listening: '🎧 Listening Comprehension',
-                    reading: '📖 Reading Comprehension', translation: '🌐 Translation (Chinese → English)' };
-                sectionTitle.textContent = titleMap[state.section] || '';
-            }
+function renderTranslation(){
+    sectionHeader.innerHTML = '🌐 Translation (Part IV)';
+    questionContainer.innerHTML = `
+    <div class="question-card">
+      <strong>Translate the following Chinese into English:</strong>
+      <p style="background:#f0fdf4; padding:0.8rem; border-radius:0.5rem;">${translationTask.chinese}</p>
+      <textarea id="transInput" class="trans-area" rows="6">${escapeHTML(state.answers.translation)}</textarea>
+      <p class="word-count" id="twc">0 words</p>
+    </div>`;
+    const ta = $('#transInput');
+    ta.addEventListener('input', ()=>{
+        const cnt = ta.value.split(/\s+/).filter(w=>w.length).length;
+        $('#twc').textContent = cnt + ' word'+(cnt!==1?'s':'');
+        state.answers.translation = ta.value;
+    });
+    readingPartNav.classList.add('hidden');
+    navBar.innerHTML = '';
+    progressInfo.textContent = 'Translation passage';
+    prevBtn.disabled = true;
+    nextBtn.innerHTML = 'Submit Translation & Finish <i class="fas fa-check"></i>';
+}
 
-            function updateProgressInfo() {
-                const total = getTotalQuestions(state.section);
-                if (total <= 1) {
-                    progressInfo.textContent = state.section === 'writing' ? '1 essay prompt' :
-                        '1 translation passage';
-                } else {
-                    progressInfo.textContent = `Question ${state.currentQuestionIndex + 1} of ${total}`;
-                }
-            }
+function updateNavAndButtons(){
+    if(state.section==='writing'){
+        prevBtn.disabled = true;
+        nextBtn.innerHTML = 'Submit Writing & Continue <i class="fas fa-arrow-right"></i>';
+    } else if(state.section==='listening'){
+        prevBtn.disabled = state.currentQuestionIndex === 0;
+        nextBtn.innerHTML = state.currentQuestionIndex < 24 ? 'Next <i class="fas fa-chevron-right"></i>' : 'Finish Listening <i class="fas fa-arrow-right"></i>';
+    } else if(state.section==='reading'){
+        prevBtn.disabled = true; // reading uses part navigation, not question index
+        if(state.readingPart < 3){
+            nextBtn.innerHTML = 'Next Part <i class="fas fa-arrow-right"></i>';
+            nextBtn.disabled = false;
+        } else {
+            nextBtn.innerHTML = 'Finish Reading <i class="fas fa-arrow-right"></i>';
+            nextBtn.disabled = false;
+        }
+    } else if(state.section==='translation'){
+        prevBtn.disabled = true;
+        nextBtn.innerHTML = 'Submit Translation & Finish <i class="fas fa-check"></i>';
+    }
+}
 
-            function renderWriting() {
-                questionContainer.innerHTML = `
-                <div class="question-card">
-                  <span class="q-number">📝 Essay Prompt</span>
-                  <p style="margin:0.5rem 0;line-height:1.7;">${writingTask.prompt}</p>
-                  <textarea id="essayInput" class="essay-area" rows="10" placeholder="Start writing your essay here... (120–180 words)">${escapeHTML(state.answers.writing)}</textarea>
-                  <p class="word-count" id="wordCount">0 words</p>
-                </div>`;
-                const ta = $('#essayInput');
-                const wc = $('#wordCount');
-                const updateWC = () => {
-                    const words = ta.value.split(/\s+/).filter(w => w.length > 0);
-                    const count = words.length;
-                    wc.textContent = count + ' word' + (count !== 1 ? 's' : '');
-                    if (count > 0 && (count < 120 || count > 180)) {
-                        wc.classList.add('out-of-range');
-                    } else if (count === 0) {
-                        wc.classList.remove('out-of-range');
-                    } else {
-                        wc.classList.remove('out-of-range');
-                    }
-                };
-                ta.addEventListener('input', updateWC);
-                updateWC();
-                // Save on input
-                ta.addEventListener('input', () => {
-                    state.answers.writing = ta.value;
-                });
-            }
+function renderNavBar(){
+    if(state.section==='listening'){
+        let html = '';
+        for(let i=0;i<25;i++){
+            html += `<button class="nav-btn ${i===state.currentQuestionIndex?'current':''} ${state.answers.listening[i]!==undefined?'answered':''}" data-idx="${i}">${i+1}</button>`;
+        }
+        navBar.innerHTML = html;
+        navBar.querySelectorAll('.nav-btn').forEach(b=> b.addEventListener('click', ()=>{
+            saveCurrentAnswer();
+            state.currentQuestionIndex = parseInt(b.dataset.idx);
+            render();
+        }));
+    } else {
+        navBar.innerHTML = '';
+    }
+}
 
-            function renderListening() {
-                const q = listeningQuestions[state.currentQuestionIndex];
-                const existingAnswer = state.answers.listening[state.currentQuestionIndex];
-                questionContainer.innerHTML = `
-                <div class="question-card">
-                  <span class="q-number">🎧 Question ${state.currentQuestionIndex + 1} of ${listeningQuestions.length}</span>
-                  <span style="font-size:0.8rem;color:var(--text-secondary);text-transform:uppercase;letter-spacing:0.04em;">[${q.type}]</span>
-                  <button id="playAudioBtn" class="btn secondary" style="margin:0.5rem 0;">
-                    <i class="fas fa-volume-up"></i> Listen to Audio
-                  </button>
-                  <p class="q-prompt">${q.question}</p>
-                  <div class="options">
-                    ${q.options.map((opt, i) => `
-                      <label class="option">
-                        <input type="radio" name="listeningQ" value="${i}" ${existingAnswer === i ? 'checked' : ''}>
-                        ${escapeHTML(opt)}
-                      </label>
-                    `).join('')}
-                  </div>
-                </div>`;
-                // Bind play button
-                const playBtn = $('#playAudioBtn');
-                if (playBtn) {
-                    playBtn.addEventListener('click', () => speak(q.audioText));
-                }
-                // Auto-play once
-                setTimeout(() => speak(q.audioText), 400);
-                // Save on radio change
-                const radios = $$('input[name="listeningQ"]');
-                radios.forEach(r => {
-                    r.addEventListener('change', () => {
-                        state.answers.listening[state.currentQuestionIndex] = parseInt(r.value);
-                        renderNavBar();
-                    });
-                });
-            }
+function nextReadingPartOrSection(){
+    saveCurrentAnswer();
+    if(state.readingPart < 3){
+        state.readingPart++;
+        renderReadingContent();
+        updateNavAndButtons();
+    } else {
+        // finish reading -> translation
+        clearInterval(state.timerInterval);
+        state.section = 'translation';
+        state.currentQuestionIndex = 0;
+        startTimer('translation');
+        render();
+    }
+}
 
-            function renderReading() {
-                const q = readingQuestions[state.currentQuestionIndex];
-                const existingAnswer = state.answers.reading[state.currentQuestionIndex];
-                questionContainer.innerHTML = `
-                <div class="question-card">
-                  <span class="q-number">📖 Question ${state.currentQuestionIndex + 1} of ${readingQuestions.length}</span>
-                  <div class="passage-text">${q.passage}</div>
-                  <p class="q-prompt">${q.question}</p>
-                  <div class="options">
-                    ${q.options.map((opt, i) => `
-                      <label class="option">
-                        <input type="radio" name="readingQ" value="${i}" ${existingAnswer === i ? 'checked' : ''}>
-                        ${escapeHTML(opt)}
-                      </label>
-                    `).join('')}
-                  </div>
-                </div>`;
-                const radios = $$('input[name="readingQ"]');
-                radios.forEach(r => {
-                    r.addEventListener('change', () => {
-                        state.answers.reading[state.currentQuestionIndex] = parseInt(r.value);
-                        renderNavBar();
-                    });
-                });
-            }
+function nextSection(){
+    clearInterval(state.timerInterval);
+    const order = ['writing','listening','reading','translation'];
+    const idx = order.indexOf(state.section);
+    if(idx < order.length-1){
+        state.section = order[idx+1];
+        state.currentQuestionIndex = 0;
+        state.readingPart = 0;
+        startTimer(state.section);
+        render();
+    } else {
+        finishExam();
+    }
+}
 
-            function renderTranslation() {
-                questionContainer.innerHTML = `
-                <div class="question-card">
-                  <span class="q-number">🌐 Translation</span>
-                  <p style="margin:0.5rem 0;font-weight:600;">Translate the following Chinese passage into English:</p>
-                  <div style="background:#f9fefb;border:1px solid var(--border);border-radius:var(--radius-sm);padding:1rem;margin:0.6rem 0;font-size:1.05rem;line-height:1.8;">
-                    ${translationTask.chinese}
-                  </div>
-                  <textarea id="translationInput" class="translation-area" rows="6" placeholder="Type your English translation here...">${escapeHTML(state.answers.translation)}</textarea>
-                  <p class="word-count" id="transWordCount">0 words</p>
-                </div>`;
-                const ta = $('#translationInput');
-                const wc = $('#transWordCount');
-                const updateWC = () => {
-                    const words = ta.value.split(/\s+/).filter(w => w.length > 0);
-                    wc.textContent = words.length + ' word' + (words.length !== 1 ? 's' : '');
-                };
-                ta.addEventListener('input', updateWC);
-                ta.addEventListener('input', () => {
-                    state.answers.translation = ta.value;
-                });
-                updateWC();
-            }
+function finishExam(){
+    clearInterval(state.timerInterval);
+    state.examFinished = true;
+    examArea.classList.add('hidden');
+    resultArea.classList.remove('hidden');
+    const lScore = state.answers.listening.filter((a,i)=> a===listeningQuestions[i].correct).length;
+    // Reading score: banked cloze (10), matching (10), passages (10)
+    let rScore = 0;
+    state.answers.reading.bankedCloze.forEach((v,i)=>{ if(v === readingData.bankedCloze.correct[i]) rScore++; });
+    state.answers.reading.matching.forEach((v,i)=>{ if(v === readingData.matching.correctParagraphs[i]) rScore++; });
+    const pass1 = state.answers.reading.passage1;
+    readingData.passages[0].questions.forEach((q,i)=>{ if(pass1[i] === q.correct) rScore++; });
+    const pass2 = state.answers.reading.passage2;
+    readingData.passages[1].questions.forEach((q,i)=>{ if(pass2[i] === q.correct) rScore++; });
+    const totalObj = lScore + rScore;
+    const totalMax = 25+30;
+    const pct = Math.round((totalObj/totalMax)*100);
+    resultArea.innerHTML = `
+    <div style="text-align:center;">
+      <h2>✅ Exam Finished</h2>
+      <div style="font-size:2rem;">${totalObj} / ${totalMax} (${pct}%)</div>
+      <div style="display:flex; flex-wrap:wrap; justify-content:center; gap:1rem; margin:1rem 0;">
+        <div><strong>Listening:</strong> ${lScore}/25</div>
+        <div><strong>Reading:</strong> ${rScore}/30</div>
+        <div><strong>Writing/Translation:</strong> manual</div>
+      </div>
+      <details style="max-width:500px; margin:1rem auto; text-align:left; background:#f0fdf4; padding:1rem; border-radius:1rem;">
+        <summary>📋 View your answers</summary>
+        <p>Essay: ${escapeHTML(state.answers.writing) || '—'}</p>
+        <p>Translation: ${escapeHTML(state.answers.translation) || '—'}</p>
+        <p>Listening choices: ${state.answers.listening.map((a,i)=>a!==undefined?listeningQuestions[i].options[a].charAt(0):'-').join(',')}</p>
+        <p>Reading banked: ${state.answers.reading.bankedCloze.map(v=>v!==null?String.fromCharCode(65+v):'-').join(',')}</p>
+        <p>Matching: ${state.answers.reading.matching.map(v=>v||'-').join(',')}</p>
+      </details>
+      <button class="btn" onclick="location.reload()"><i class="fas fa-redo"></i> Retake</button>
+    </div>`;
+}
 
-            function renderNavBar() {
-                const total = getTotalQuestions(state.section);
-                if (total <= 1) {
-                    navBar.innerHTML = '';
-                    return;
-                }
-                const answers = getAnswerArray(state.section);
-                let html = '';
-                for (let i = 0; i < total; i++) {
-                    let cls = 'nav-btn';
-                    if (i === state.currentQuestionIndex) cls += ' current';
-                    if (answers && answers[i] !== undefined) cls += ' answered';
-                    html +=
-                        `<button class="${cls}" data-index="${i}" title="Question ${i + 1}">${i + 1}</button>`;
-                }
-                navBar.innerHTML = html;
-                // Bind clicks
-                $$('#navBar .nav-btn').forEach(btn => {
-                    btn.addEventListener('click', () => {
-                        const idx = parseInt(btn.dataset.index);
-                        if (!isNaN(idx)) {
-                            saveCurrentAnswer();
-                            state.currentQuestionIndex = idx;
-                            render();
-                        }
-                    });
-                });
-            }
-
-            function saveCurrentAnswer() {
-                if (state.section === 'writing') {
-                    const ta = $('#essayInput');
-                    if (ta) state.answers.writing = ta.value;
-                } else if (state.section === 'listening') {
-                    const selected = document.querySelector('input[name="listeningQ"]:checked');
-                    if (selected) state.answers.listening[state.currentQuestionIndex] = parseInt(selected.value);
-                } else if (state.section === 'reading') {
-                    const selected = document.querySelector('input[name="readingQ"]:checked');
-                    if (selected) state.answers.reading[state.currentQuestionIndex] = parseInt(selected.value);
-                } else if (state.section === 'translation') {
-                    const ta = $('#translationInput');
-                    if (ta) state.answers.translation = ta.value;
-                }
-            }
-
-            function escapeHTML(str) {
-                const div = document.createElement('div');
-                div.textContent = str;
-                return div.innerHTML;
-            }
-
-            // ==================== TIMER LOGIC ====================
-            function startTimer(section) {
-                clearInterval(state.timerInterval);
-                state.timerInterval = setInterval(() => {
-                    if (state.paused) return;
-                    if (state.examFinished) {
-                        clearInterval(state.timerInterval);
-                        return;
-                    }
-                    if (state.timers[section] > 0) {
-                        state.timers[section]--;
-                        updateTimerDisplay();
-                        if (state.timers[section] <= 0) {
-                            clearInterval(state.timerInterval);
-                            handleSectionTimeout(section);
-                        }
-                    }
-                }, 1000);
-                updateTimerDisplay();
-            }
-
-            function handleSectionTimeout(section) {
-                saveCurrentAnswer();
-                // Auto-advance
-                const order = ['writing', 'listening', 'reading', 'translation'];
-                const idx = order.indexOf(section);
-                if (idx < order.length - 1) {
-                    alert(
-                        `⏰ Time's up for ${getSectionLabel(section)}! Moving to the next section.`);
-                    const nextSec = order[idx + 1];
-                    state.section = nextSec;
-                    state.currentQuestionIndex = 0;
-                    startTimer(nextSec);
-                    render();
-                } else {
-                    finishExam(true);
-                }
-            }
-
-            function nextSection() {
+function startTimer(section){
+    clearInterval(state.timerInterval);
+    state.timerInterval = setInterval(()=>{
+        if(state.paused || state.examFinished) return;
+        if(state.timers[section] > 0){
+            state.timers[section]--;
+            updateTimerUI();
+            if(state.timers[section] <= 0){
                 clearInterval(state.timerInterval);
                 saveCurrentAnswer();
-                const order = ['writing', 'listening', 'reading', 'translation'];
-                const idx = order.indexOf(state.section);
-                if (idx < order.length - 1) {
-                    const nextSec = order[idx + 1];
-                    state.section = nextSec;
-                    state.currentQuestionIndex = 0;
-                    startTimer(nextSec);
-                    render();
-                } else {
-                    finishExam(false);
-                }
+                if(section==='writing') nextSection();
+                else if(section==='listening') nextSection();
+                else if(section==='reading') nextSection();
+                else if(section==='translation') finishExam();
             }
+        }
+    }, 1000);
+}
 
-            function finishExam(timedOut) {
-                clearInterval(state.timerInterval);
-                state.examFinished = true;
-                saveCurrentAnswer();
-                examArea.classList.add('hidden');
-                resultArea.classList.remove('hidden');
-                // Scoring
-                const listeningScore = state.answers.listening.filter(
-                    (a, i) => a === listeningQuestions[i].correct
-                ).length;
-                const readingScore = state.answers.reading.filter(
-                    (a, i) => a === readingQuestions[i].correct
-                ).length;
-                const listeningMax = listeningQuestions.length;
-                const readingMax = readingQuestions.length;
-                const totalObj = listeningScore + readingScore;
-                const totalMax = listeningMax + readingMax;
-                const pct = Math.round((totalObj / totalMax) * 100);
+// Event binding
+startBtn.addEventListener('click', ()=>{
+    startScreen.classList.add('hidden');
+    examArea.classList.remove('hidden');
+    state.section = 'writing';
+    startTimer('writing');
+    render();
+});
 
-                let gradeEmoji = '📊';
-                let gradeText = '';
-                if (pct >= 85) { gradeEmoji = '🌟';
-                    gradeText = 'Excellent!'; } else if (pct >= 70) { gradeEmoji = '👍';
-                    gradeText = 'Good job!'; } else if (pct >= 50) { gradeEmoji = '📚';
-                    gradeText = 'Keep practicing!'; } else { gradeEmoji = '💪';
-                    gradeText = 'Needs improvement'; }
+nextBtn.addEventListener('click', ()=>{
+    saveCurrentAnswer();
+    if(state.section==='writing'){
+        const words = state.answers.writing.trim().split(/\s+/).filter(w=>w.length).length;
+        if(words<120 && !confirm(`Your essay has only ${words} words. Continue?`)) return;
+        nextSection();
+    } else if(state.section==='listening'){
+        if(state.currentQuestionIndex < 24){
+            state.currentQuestionIndex++;
+            render();
+        } else {
+            nextSection();
+        }
+    } else if(state.section==='reading'){
+        nextReadingPartOrSection();
+    } else if(state.section==='translation'){
+        finishExam();
+    }
+});
 
-                resultArea.innerHTML = `
-                <div style="text-align:center;">
-                  <h2>${timedOut ? '⏰ Time\'s Up!' : '✅'} Exam Submitted</h2>
-                  <div class="score-card">
-                    <span style="font-size:2.5rem;">${gradeEmoji}</span>
-                    <div class="big-score">${totalObj} / ${totalMax}</div>
-                    <p style="color:var(--text-secondary);">${gradeText} (${pct}%)</p>
-                  </div>
-                  <div class="score-breakdown">
-                    <div class="score-item">
-                      <div class="label">🎧 Listening</div>
-                      <div class="value">${listeningScore} / ${listeningMax}</div>
-                    </div>
-                    <div class="score-item">
-                      <div class="label">📖 Reading</div>
-                      <div class="value">${readingScore} / ${readingMax}</div>
-                    </div>
-                    <div class="score-item">
-                      <div class="label">✍️ Writing</div>
-                      <div class="value" style="font-size:0.9rem;">Manual review</div>
-                    </div>
-                    <div class="score-item">
-                      <div class="label">🌐 Translation</div>
-                      <div class="value" style="font-size:0.9rem;">Manual review</div>
-                    </div>
-                  </div>
-                  <p style="font-size:0.85rem;color:var(--text-secondary);margin:0.8rem 0;">
-                    <i class="fas fa-info-circle"></i> Writing and Translation require manual grading.<br>
-                    Review your essay (${state.answers.writing.split(/\\s+/).filter(w=>w.length).length} words) and translation in the answer summary below.
-                  </p>
-                  <details style="margin:1rem auto;max-width:500px;text-align:left;background:white;border-radius:var(--radius);padding:1rem;border:1px solid var(--border);">
-                    <summary style="cursor:pointer;font-weight:600;color:var(--accent);">📋 View Your Answers</summary>
-                    <div style="margin-top:0.8rem;font-size:0.9rem;line-height:1.6;">
-                      <p><strong>Essay:</strong><br>${escapeHTML(state.answers.writing) || '<em>No answer</em>'}</p>
-                      <hr style="margin:0.5rem 0;border-color:var(--border);">
-                      <p><strong>Translation:</strong><br>${escapeHTML(state.answers.translation) || '<em>No answer</em>'}</p>
-                      <hr style="margin:0.5rem 0;border-color:var(--border);">
-                      <p><strong>Listening answers:</strong> ${state.answers.listening.map((a,i)=>a!==undefined?`Q${i+1}: ${listeningQuestions[i].options[a].charAt(0)}`:`Q${i+1}: -`).join(', ')}</p>
-                      <p><strong>Reading answers:</strong> ${state.answers.reading.map((a,i)=>a!==undefined?`Q${i+1}: ${readingQuestions[i].options[a].charAt(0)}`:`Q${i+1}: -`).join(', ')}</p>
-                    </div>
-                  </details>
-                  <button class="btn" onclick="location.reload()" style="margin-top:0.8rem;">
-                    <i class="fas fa-redo"></i> Retake Exam
-                  </button>
-                </div>`;
-                // Scroll to results
-                resultArea.scrollIntoView({ behavior: 'smooth' });
-            }
+prevBtn.addEventListener('click', ()=>{
+    if(state.section==='listening' && state.currentQuestionIndex>0){
+        saveCurrentAnswer();
+        state.currentQuestionIndex--;
+        render();
+    }
+});
 
-            // ==================== EVENT LISTENERS ====================
-            startBtn.addEventListener('click', () => {
-                startScreen.classList.add('hidden');
-                examArea.classList.remove('hidden');
-                resultArea.classList.add('hidden');
-                state.section = 'writing';
-                state.currentQuestionIndex = 0;
-                state.paused = false;
-                state.examFinished = false;
-                pauseBtn.innerHTML = '<i class="fas fa-pause"></i> Pause';
-                pauseBtn.classList.remove('paused-state');
-                startTimer('writing');
-                render();
-                examArea.scrollIntoView({ behavior: 'smooth' });
-            });
+pauseBtn.addEventListener('click', ()=>{
+    state.paused = !state.paused;
+    pauseBtn.innerHTML = state.paused ? '<i class="fas fa-play"></i> Resume' : '<i class="fas fa-pause"></i> Pause';
+    pauseBtn.classList.toggle('paused-state', state.paused);
+});
 
-            nextBtn.addEventListener('click', () => {
-                saveCurrentAnswer();
-                const total = getTotalQuestions(state.section);
-                if (state.section === 'writing' || state.section === 'translation') {
-                    // Single-item section: go to next section
-                    if (state.section === 'writing') {
-                        const essayVal = state.answers.writing.trim();
-                        const wordCount = essayVal.split(/\s+/).filter(w => w.length > 0).length;
-                        if (wordCount < 120) {
-                            const proceed = confirm(
-                                `Your essay has only ${wordCount} words. The requirement is 120–180 words. Do you want to continue anyway?`
-                                );
-                            if (!proceed) return;
-                        }
-                    }
-                    nextSection();
-                } else if (state.section === 'listening') {
-                    if (state.currentQuestionIndex < total - 1) {
-                        state.currentQuestionIndex++;
-                        render();
-                    } else {
-                        nextSection();
-                    }
-                } else if (state.section === 'reading') {
-                    if (state.currentQuestionIndex < total - 1) {
-                        state.currentQuestionIndex++;
-                        render();
-                    } else {
-                        nextSection();
-                    }
-                }
-            });
-
-            prevBtn.addEventListener('click', () => {
-                saveCurrentAnswer();
-                if (state.currentQuestionIndex > 0) {
-                    state.currentQuestionIndex--;
-                    render();
-                }
-            });
-
-            pauseBtn.addEventListener('click', function() {
-                state.paused = !state.paused;
-                if (state.paused) {
-                    this.innerHTML = '<i class="fas fa-play"></i> Resume';
-                    this.classList.add('paused-state');
-                } else {
-                    this.innerHTML = '<i class="fas fa-pause"></i> Pause';
-                    this.classList.remove('paused-state');
-                }
-            });
-
-            // Warn before leaving
-            window.addEventListener('beforeunload', function(e) {
-                if (!state.examFinished && state.timers[state.section] > 0) {
-                    const msg = 'You have an exam in progress. Are you sure you want to leave?';
-                    e.returnValue = msg;
-                    return msg;
-                }
-            });
-
-            // Keyboard shortcuts
-            document.addEventListener('keydown', function(e) {
-                if (state.examFinished) return;
-                if (e.key === 'ArrowRight' && !e.ctrlKey && !e.metaKey && document.activeElement ===
-                    document.body) {
-                    e.preventDefault();
-                    nextBtn.click();
-                } else if (e.key === 'ArrowLeft' && !e.ctrlKey && !e.metaKey && document.activeElement ===
-                    document.body) {
-                    e.preventDefault();
-                    prevBtn.click();
-                } else if (e.key === ' ' && !e.ctrlKey && !e.metaKey && document.activeElement === document
-                    .body) {
-                    e.preventDefault();
-                    pauseBtn.click();
-                }
-            });
-
-            console.log('✅ CET‑4 Full Mock Exam ready.');
-            console.log('📋 Sections: Writing (30min) → Listening (25min, 10Q) → Reading (40min, 10Q) → Translation (30min)');
-            console.log('💡 Tip: Use arrow keys to navigate, spacebar to pause/resume.');
-        })();
-    </script>
+})();
+</script>
 </body>
 </html>
