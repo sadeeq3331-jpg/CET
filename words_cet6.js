@@ -929,7 +929,7 @@ window.CET6_WORDS = [
   { word: "negligible", phonetic: "/ˈneɡlɪdʒəbl/", meaning: "微不足道的，可忽略的", pos: "a.", headword: true, example: "A negligible amount." },
   { word: "negotiate", phonetic: "/nɪˈɡoʊʃieɪt/", meaning: "谈判，协商；顺利通过", pos: "vt. & vi.", headword: true, example: "Negotiate a deal." },
   { word: "nickel", phonetic: "/ˈnɪkl/", meaning: "镍；五分镍币", pos: "n.", headword: true, example: "A nickel coin." },
-  { word: "nickname", phonetic: "/ˈnɪkneɪm/", meaning: "绰号；给…起绰号", pos: "n. & vt.", headword: true, example: "His nickname is "Buddy"." },
+  { word: "nickname", phonetic: "/ˈnɪkneɪm/", meaning: "绰号；给…起绰号", pos: "n. & vt.", headword: true, example: "His nickname is Buddy." },
   { word: "nightmare", phonetic: "/ˈnaɪtmeər/", meaning: "噩梦；可怕的事物", pos: "n.", headword: true, example: "Waking nightmare." },
   { word: "nil", phonetic: "/nɪl/", meaning: "无，零；无得分", pos: "n.", headword: true, example: "The score was three-nil." },
   { word: "nominal", phonetic: "/ˈnɒmɪnl/", meaning: "名义上的；微不足道的", pos: "a.", headword: true, example: "A nominal fee." },
