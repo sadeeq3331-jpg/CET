@@ -1,313 +1,228 @@
 <!DOCTYPE html>
-<html lang="zh-CN">
+<html lang="en">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
-  <title>英语大师 · 尊享版 | 四六级考研词汇全能通</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>English Master · Premium Access</title>
   <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
   <meta http-equiv="Pragma" content="no-cache">
   <meta http-equiv="Expires" content="0">
-  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Ctext y='.9em' font-size='90'%3E🎓%3C/text%3E%3C/svg%3E">
-  <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,300;14..32,400;14..32,500;14..32,600;14..32,700&display=swap" rel="stylesheet">
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Ctext y='.9em' font-size='90'%3E📚%3C/text%3E%3C/svg%3E">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
   <style>
-    * {
-      margin: 0;
-      padding: 0;
-      box-sizing: border-box;
-    }
-
+    * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Inter', system-ui, sans-serif; }
     body {
-      background: linear-gradient(135deg, #eef8f0 0%, #c8f0e6 100%);
+      background: linear-gradient(145deg, #ecfdf5 0%, #d1fae5 100%);
       min-height: 100vh;
-      font-family: 'Inter', system-ui, -apple-system, sans-serif;
-      padding: 1.5rem;
       display: flex;
       align-items: center;
       justify-content: center;
+      padding: 2rem;
     }
-
-    /* 主容器 */
-    .premium-container {
-      max-width: 1280px;
+    .container {
+      max-width: 1200px;
       width: 100%;
-      background: rgba(255, 255, 255, 0.75);
+      background: rgba(255,255,255,0.6);
       backdrop-filter: blur(12px);
       border-radius: 3rem;
-      padding: 2rem 2rem 2.5rem;
-      box-shadow: 0 30px 45px rgba(0, 32, 32, 0.12);
-      border: 1px solid rgba(255, 255, 255, 0.8);
-      transition: all 0.2s;
+      padding: 3rem 2.5rem;
+      box-shadow: 0 30px 50px rgba(0,20,40,0.15);
+      border: 1px solid rgba(255,255,255,0.6);
+      text-align: center;
     }
-
-    /* 头部状态栏 */
-    .status-badge {
-      display: flex;
-      justify-content: flex-end;
-      margin-bottom: 1rem;
-    }
-    .premium-status {
-      background: #e0f2e9;
-      border-radius: 60px;
-      padding: 0.4rem 1rem;
-      font-size: 0.85rem;
-      font-weight: 500;
-      color: #0a5e4a;
-      border: 1px solid #b7e4cf;
-      display: inline-flex;
-      align-items: center;
-      gap: 0.5rem;
-    }
-    .premium-status i {
-      font-size: 0.9rem;
-    }
-
     h1 {
-      font-size: 2.8rem;
-      background: linear-gradient(120deg, #065a46, #0f766e, #0d9488);
+      font-size: 3.2rem;
+      background: linear-gradient(135deg, #064e3b, #0d9488);
       -webkit-background-clip: text;
       background-clip: text;
       color: transparent;
-      margin-bottom: 0.5rem;
-      letter-spacing: -0.3px;
+      margin-bottom: 1rem;
     }
-    .subhead {
-      color: #2c7a6e;
+    .sub {
+      color: #0d9488;
       font-size: 1.2rem;
-      margin-bottom: 2rem;
-      border-left: 4px solid #2dd4bf;
-      padding-left: 1rem;
-      font-weight: 500;
+      margin-bottom: 2.5rem;
     }
-
-    /* 卡片网格 */
     .card-grid {
       display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
-      gap: 1.8rem;
-      margin: 2.5rem 0 2rem;
+      grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+      gap: 1.5rem;
+      margin-top: 2rem;
     }
     .level-card {
       background: white;
       border-radius: 2rem;
       padding: 2rem 1rem;
-      text-align: center;
       text-decoration: none;
-      color: #115e59;
-      box-shadow: 0 15px 30px rgba(6, 78, 59, 0.08);
-      transition: transform 0.25s ease, box-shadow 0.2s;
-      border: 1px solid #cdf3e4;
+      color: #064e3b;
+      box-shadow: 0 12px 28px rgba(0,30,50,0.1);
+      transition: 0.2s;
+      border: 1px solid #a7f3d0;
       cursor: pointer;
-      backdrop-filter: blur(2px);
     }
     .level-card:hover {
-      transform: translateY(-6px);
-      box-shadow: 0 24px 40px rgba(6, 78, 59, 0.2);
-      border-color: #2dd4bf;
+      transform: translateY(-8px);
+      box-shadow: 0 25px 40px rgba(6,78,59,0.2);
+      border-color: #0d9488;
     }
     .level-card h2 {
-      font-size: 2.2rem;
-      font-weight: 700;
+      font-size: 2.4rem;
+      font-weight: 600;
       margin-bottom: 0.5rem;
-      color: #0f5c4b;
     }
     .level-card p {
-      font-size: 0.95rem;
-      background: #dcfce7;
-      display: inline-block;
-      padding: 0.25rem 1rem;
-      border-radius: 60px;
-      font-weight: 500;
-      color: #0b5e42;
-    }
-    .lock-icon {
-      margin-top: 1rem;
-      font-size: 1.2rem;
-      color: #f59e0b;
-      transition: 0.2s;
-    }
-    .level-card.unlocked .lock-icon {
-      color: #10b981;
-    }
-    .level-card.unlocked .lock-icon i {
-      font-weight: 900;
-    }
-
-    /* 功能标签 */
-    .features {
-      display: flex;
-      flex-wrap: wrap;
-      justify-content: center;
-      gap: 0.8rem;
-      margin: 2rem 0 1.2rem;
-    }
-    .features span {
-      background: white;
-      padding: 0.5rem 1.2rem;
+      font-size: 1rem;
+      background: #d1fae5;
+      padding: 0.3rem 1rem;
       border-radius: 40px;
-      font-size: 0.9rem;
-      font-weight: 500;
-      color: #1f5e55;
-      box-shadow: 0 2px 6px rgba(0,0,0,0.03);
-      border: 1px solid #bbe5d6;
-    }
-    .info-note {
-      background: #eef9f4;
-      border-radius: 3rem;
-      padding: 0.75rem 1.2rem;
       display: inline-block;
-      margin-top: 0.5rem;
-      color: #0b6b58;
-      font-weight: 500;
-      font-size: 0.9rem;
     }
-    .footer-links {
-      margin-top: 2.2rem;
-      padding-top: 1.2rem;
-      border-top: 1px solid #c7e6db;
+    .features {
+      margin-top: 3rem;
+      color: #4e6f86;
       display: flex;
       justify-content: center;
       gap: 2rem;
       flex-wrap: wrap;
     }
-    .footer-links a {
-      text-decoration: none;
-      color: #527a6e;
-      font-size: 0.85rem;
-      transition: 0.2s;
+    .features span {
+      background: white;
+      padding: 0.5rem 1.5rem;
+      border-radius: 40px;
+      font-size: 1rem;
     }
-    .footer-links a:hover { color: #0f766e; }
-
-    /* 模态窗 */
+    .lock-icon {
+      margin-top: 0.5rem;
+      color: #e76f51;
+    }
+    /* Modal Styles */
     .modal-overlay {
       position: fixed;
       top: 0;
       left: 0;
       width: 100%;
       height: 100%;
-      background: rgba(15, 40, 30, 0.5);
-      backdrop-filter: blur(8px);
+      background: rgba(0,0,0,0.3);
+      backdrop-filter: blur(6px);
       display: flex;
       align-items: center;
       justify-content: center;
       z-index: 10000;
       visibility: hidden;
       opacity: 0;
-      transition: visibility 0.2s, opacity 0.2s;
+      transition: 0.2s;
     }
     .modal-overlay.active {
       visibility: visible;
       opacity: 1;
     }
-    .modal-card {
-      background: #ffffffea;
-      backdrop-filter: blur(4px);
+    .modal {
+      background: white;
       border-radius: 2.5rem;
-      max-width: 480px;
-      width: 90%;
-      padding: 2rem 1.8rem;
-      box-shadow: 0 50px 70px rgba(0, 0, 0, 0.25);
-      transform: scale(0.96);
+      max-width: 460px;
+      width: 100%;
+      padding: 2rem;
+      box-shadow: 0 40px 60px rgba(0,0,0,0.2);
+      transform: scale(0.95);
       transition: transform 0.2s;
-      border: 1px solid #bbe5d6;
+      border: 1px solid rgba(13,148,136,0.2);
+      color: #064e3b;
     }
-    .modal-overlay.active .modal-card {
+    .modal-overlay.active .modal {
       transform: scale(1);
     }
     .modal-header {
       display: flex;
-      justify-content: space-between;
       align-items: center;
+      justify-content: space-between;
       margin-bottom: 1.5rem;
     }
     .modal-header h3 {
       font-size: 1.8rem;
+      color: #064e3b;
       font-weight: 700;
-      background: linear-gradient(135deg, #064e3b, #0d9488);
-      -webkit-background-clip: text;
-      background-clip: text;
-      color: transparent;
     }
     .close-modal {
       background: none;
       border: none;
-      font-size: 1.7rem;
+      font-size: 1.8rem;
       cursor: pointer;
-      color: #6b9a8a;
-      transition: 0.2s;
+      color: #6b8a9e;
     }
     .modal-tabs {
       display: flex;
-      gap: 0.6rem;
+      gap: 0.5rem;
       margin-bottom: 1.8rem;
-      border-bottom: 1px solid #d4ede4;
-      padding-bottom: 0.4rem;
+      border-bottom: 1px solid #dce7ef;
+      padding-bottom: 0.5rem;
     }
     .tab-btn {
       background: none;
       border: none;
-      padding: 0.5rem 1.3rem;
-      font-weight: 600;
+      padding: 0.5rem 1.2rem;
       font-size: 1rem;
-      border-radius: 60px;
-      color: #548c7a;
+      font-weight: 600;
+      color: #6b8a9e;
       cursor: pointer;
+      border-radius: 40px;
       transition: 0.2s;
     }
     .tab-btn.active {
       background: #d1fae5;
-      color: #0a5e4a;
-      box-shadow: 0 2px 6px rgba(0,0,0,0.05);
+      color: #064e3b;
     }
-    .tab-panel { display: none; }
-    .tab-panel.active { display: block; animation: fade 0.2s ease; }
-    @keyframes fade { from { opacity: 0; } to { opacity: 1; } }
-
+    .tab-panel {
+      display: none;
+    }
+    .tab-panel.active {
+      display: block;
+    }
     .code-input-group {
       margin: 1.5rem 0;
     }
     .code-input-group input {
       width: 100%;
       padding: 1rem 1.2rem;
-      border: 2px solid #bcddce;
+      border: 2px solid #a7f3d0;
       border-radius: 60px;
-      font-size: 1rem;
+      font-size: 1.1rem;
       text-align: center;
+      text-transform: uppercase;
       letter-spacing: 1px;
-      font-weight: 500;
       outline: none;
-      background: white;
     }
     .code-input-group input:focus {
       border-color: #0d9488;
-      box-shadow: 0 0 0 3px rgba(13,148,136,0.2);
     }
     .error-msg {
-      color: #e26d5c;
-      font-size: 0.85rem;
-      margin-top: 0.5rem;
-      min-height: 1.5rem;
+      color: #e63946;
+      font-size: 0.9rem;
+      margin-top: 0.4rem;
+      min-height: 1.2rem;
     }
-    .btn-primary {
-      background: linear-gradient(95deg, #0a5c4a, #0f766e);
+    .btn {
+      background: linear-gradient(135deg, #064e3b, #0d9488);
       border: none;
       color: white;
-      font-weight: 700;
-      padding: 0.9rem 1rem;
+      font-weight: 600;
+      padding: 1rem 1.5rem;
       border-radius: 60px;
       width: 100%;
-      font-size: 1rem;
+      font-size: 1.1rem;
       cursor: pointer;
       transition: 0.2s;
-      box-shadow: 0 4px 10px rgba(6,78,59,0.2);
+      box-shadow: 0 8px 18px rgba(6,78,59,0.2);
     }
-    .btn-primary:hover { transform: translateY(-2px); background: #0c6b58; box-shadow: 0 10px 18px rgba(6,78,59,0.25); }
-    .price-highlight {
-      font-size: 2.6rem;
+    .btn:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 12px 24px rgba(6,78,59,0.3);
+    }
+    .price-tag {
+      font-size: 2.2rem;
       font-weight: 800;
-      color: #e67e22;
+      color: #e76f51;
       text-align: center;
-      margin: 0.5rem 0;
+      margin: 0.8rem 0;
     }
     .contact-methods {
       display: flex;
@@ -316,131 +231,111 @@
       margin: 1.5rem 0;
     }
     .contact-item {
-      background: #f6fbf8;
       display: flex;
       align-items: center;
-      gap: 0.7rem;
-      padding: 0.7rem 1rem;
+      gap: 0.8rem;
+      background: #f2f7fa;
+      padding: 0.7rem 1.2rem;
       border-radius: 60px;
-      border: 1px solid #cde9df;
     }
-    .contact-item i:first-child { width: 28px; color: #0d9488; font-size: 1.2rem; }
-    .contact-item span { flex: 1; font-size: 0.9rem; font-weight: 500; color: #1e4a3e; }
-    .copy-btn {
+    .contact-item i {
+      width: 24px;
+      color: #0d9488;
+    }
+    .contact-item .copy-btn {
+      margin-left: auto;
       background: none;
       border: none;
-      color: #739e8c;
+      color: #6b8a9e;
       cursor: pointer;
       font-size: 1.2rem;
-      transition: 0.2s;
     }
     .payment-icons {
       display: flex;
+      gap: 1.5rem;
       justify-content: center;
-      gap: 1.8rem;
       font-size: 2rem;
-      margin: 1rem 0;
-      color: #218b72;
+      margin: 1.2rem 0;
+      color: #064e3b;
     }
-    .helper-text {
-      font-size: 0.8rem;
-      background: #eaf9f2;
-      border-radius: 24px;
-      padding: 0.7rem;
-      text-align: center;
-      color: #1f6c5a;
-      margin-top: 1rem;
+    .footer-links {
+      margin-top: 2rem;
+      padding-top: 1rem;
+      border-top: 1px solid #a7f3d0;
+      display: flex;
+      justify-content: center;
+      gap: 1.5rem;
+      flex-wrap: wrap;
     }
-    .toast-msg {
-      position: fixed;
-      bottom: 30px;
-      left: 50%;
-      transform: translateX(-50%);
-      background: #1e2f2a;
-      color: white;
-      padding: 0.6rem 1.5rem;
-      border-radius: 60px;
+    .footer-links a {
+      color: #6b8a9e;
+      text-decoration: none;
       font-size: 0.85rem;
-      z-index: 11000;
-      opacity: 0;
-      transition: 0.2s;
-      pointer-events: none;
-    }
-    button:disabled { opacity: 0.6; cursor: not-allowed; transform: none; }
-    @media (max-width: 640px) {
-      .premium-container { padding: 1.5rem; }
-      h1 { font-size: 2.1rem; }
-      .level-card h2 { font-size: 1.8rem; }
     }
   </style>
 </head>
 <body>
-<div class="premium-container">
-  <div class="status-badge" id="premiumStatusBadge">
-    <!-- 动态显示状态 -->
-  </div>
-  <h1>🎓 英语大师 · 尊享版</h1>
-  <div class="subhead">CET-4 / CET-6 / 考研英语 · 全科词汇 + AI智能训练 | 一次付费，永久解锁</div>
-
+<div class="container">
+  <h1>📚 English Master · Premium</h1>
+  <div class="sub">Full access to CET‑4 · CET‑6 · Postgrad English — one payment, forever</div>
+  
   <div class="card-grid">
-    <div class="level-card" data-level="CET-4" data-hub="cet4_hub.html">
-      <h2>CET-4</h2>
-      <p>四级核心 4,500词</p>
+    <div class="level-card" data-level="CET‑4" data-hub="cet4_hub.html">
+      <h2>CET‑4</h2>
+      <p>4,500 words</p>
       <div class="lock-icon"><i class="fas fa-lock"></i></div>
     </div>
-    <div class="level-card" data-level="CET-6" data-hub="cet6_hub.html">
-      <h2>CET-6</h2>
-      <p>六级进阶 5,500词</p>
+    <div class="level-card" data-level="CET‑6" data-hub="cet6_hub.html">
+      <h2>CET‑6</h2>
+      <p>5,500 words</p>
       <div class="lock-icon"><i class="fas fa-lock"></i></div>
     </div>
     <div class="level-card" data-level="考研英语" data-hub="kaoyan_hub.html">
       <h2>考研英语</h2>
-      <p>5,500+ 高频词库</p>
+      <p>5,500+ words</p>
       <div class="lock-icon"><i class="fas fa-lock"></i></div>
     </div>
   </div>
 
   <div class="features">
-    <span>🔊 真人发音</span><span>❤️ 生词收藏</span><span>🐧 智能闯关</span>
-    <span>⌨️ 拼写练习</span><span>📖 真题例句</span><span>📊 学习报告</span>
+    <span>🔊 Pronunciation</span>
+    <span>❤️ Favorites</span>
+    <span>🐧 Quiz buddy</span>
+    <span>⌨️ Typing practice</span>
+    <span>📝 Example sentences</span>
   </div>
-  <div style="text-align: center;">
-    <span class="info-note"><i class="fas fa-shield-alt"></i> 官方授权 · 永久更新 · 多端同步</span>
-  </div>
+  
+  <p style="margin-top: 2rem; color: #0d9488;">🔒 All content is premium — unlock with a one‑time code.</p>
+
   <div class="footer-links">
-    <a href="privacy.html"><i class="fas fa-lock"></i> 隐私政策</a>
-    <a href="terms.html"><i class="fas fa-gavel"></i> 服务条款</a>
-    <a href="#" id="showFakeFaq" style="cursor: pointer;"><i class="fas fa-question-circle"></i> 常见问题</a>
+    <a href="privacy.html"><i class="fas fa-shield-alt"></i> Privacy Policy</a>
+    <a href="terms.html"><i class="fas fa-file-contract"></i> Terms of Service</a>
   </div>
 </div>
 
-<!-- 模态窗 -->
+<!-- Modal -->
 <div class="modal-overlay" id="accessModal">
-  <div class="modal-card">
+  <div class="modal">
     <div class="modal-header">
-      <h3 id="modalLevelTitle">CET-4 尊享解锁</h3>
+      <h3 id="modalLevelTitle">CET‑4 Access</h3>
       <button class="close-modal" id="closeModalBtn"><i class="fas fa-times"></i></button>
     </div>
     <div class="modal-tabs">
-      <button class="tab-btn active" data-tab="code">🔑 使用激活码</button>
-      <button class="tab-btn" data-tab="buy">💰 获取激活码 (¥10)</button>
+      <button class="tab-btn active" data-tab="code">🔑 Enter Code</button>
+      <button class="tab-btn" data-tab="buy">🛒 Get Code (¥10)</button>
     </div>
-    <!-- 输入码面板 -->
     <div class="tab-panel active" id="codePanel">
-      <p style="margin-bottom: 0.2rem; color: #2c7a6e;">✅ 已有兑换码？输入后立即解锁全部等级。</p>
+      <p style="color: #064e3b;">Already have a code? Enter it below.</p>
       <div class="code-input-group">
-        <input type="text" id="accessCodeInput" placeholder="例：ENG-ABCD12" autocomplete="off">
+        <input type="text" id="accessCodeInput" placeholder="ENG-XXXXXX" autocomplete="off">
         <div class="error-msg" id="codeError"></div>
       </div>
-      <button class="btn-primary" id="submitCodeBtn">激活并进入学习 <i class="fas fa-arrow-right"></i></button>
-      <div class="helper-text" style="margin-top: 1rem;">
-        <i class="fas fa-info-circle"></i> 激活码全网通用，一个码解锁全部课程（四级/六级/考研）
-      </div>
+      <button class="btn" id="submitCodeBtn">Unlock & Continue</button>
+      <p style="font-size: 0.8rem; margin-top: 1rem; color: #6b8a9e;">Your code works for all test levels.</p>
     </div>
-    <!-- 购买面板 -->
     <div class="tab-panel" id="buyPanel">
-      <div class="price-highlight">¥10 <span style="font-size:1rem;">人民币</span></div>
-      <p style="text-align: center; margin-bottom: 0.5rem;">🎁 终身畅学 · 无广告 · 持续更新</p>
+      <div class="price-tag">¥10 RMB</div>
+      <p style="margin-bottom: 1.2rem; color: #064e3b;">One‑time payment · Lifetime access</p>
       <div class="contact-methods">
         <div class="contact-item">
           <i class="far fa-envelope"></i>
@@ -449,7 +344,7 @@
         </div>
         <div class="contact-item">
           <i class="fab fa-weixin"></i>
-          <span>微信号：Sadeeq331</span>
+          <span>Sadeeq331</span>
           <button class="copy-btn" data-copy="Sadeeq331"><i class="far fa-copy"></i></button>
         </div>
         <div class="contact-item">
@@ -459,292 +354,161 @@
         </div>
       </div>
       <div class="payment-icons">
-        <i class="fab fa-weixin"></i> <i class="fab fa-alipay"></i> <i class="fab fa-paypal"></i>
+        <i class="fab fa-weixin"></i>
+        <i class="fab fa-alipay"></i>
+        <i class="fab fa-paypal"></i>
       </div>
-      <div class="helper-text">
-        📌 请通过以上任一方式联系客服，支付后发送「付款截图+英语激活码」，
-        客服将在5分钟内发送专属激活码（人工在线 9:00-22:00）。
-      </div>
+      <p style="font-size: 0.9rem; color: #4e6f86;">Contact me with payment screenshot — you'll receive your personal code within minutes.</p>
     </div>
   </div>
 </div>
-<div id="toastMessage" class="toast-msg"></div>
 
 <script>
   (function() {
-    // ==================== 配置信息 ====================
+    // ========== JSONBIN.IO CONFIGURATION ==========
     const BIN_ID = "69f794a6856a682189a0ae0c";
     const MASTER_KEY = "$2a$10$OV7m1X11camle5ENh1AA5uFzDjzsDgKYKIz7bOuOLU/sBVocEALge";
     const API_URL = `https://api.jsonbin.io/v3/b/${BIN_ID}`;
 
-    // 本地备用激活码池 (仅离线/远程失败时使用)
+    // Fallback codes (if JSONBin is unreachable)
     const FALLBACK_CODES = {
       "ENG-ABC123": 1,
       "ENG-SADEEQ01": 1,
       "ENG-TEST001": 1,
-      "LXSL2025": 1,
-      "ABDULLAH": 1,
-      "STUDY888": 1
+      "LXSL": 1,
+      "ABDULLAH": 1
     };
 
-    const PREMIUM_KEY = 'eng_premium_active';      // 新标准存储键名
-    const LEGACY_KEY = 'hsk_premium_active';       // 历史兼容键名
-    const USED_CODES_STORAGE = 'eng_used_codes';
-
-    let currentTargetUrl = '';
-    let currentLevel = '';
-    let isProcessing = false;
-
-    // DOM 元素
+    const PREMIUM_KEY = 'hsk_premium_active';
+    
     const modal = document.getElementById('accessModal');
     const modalTitle = document.getElementById('modalLevelTitle');
-    const closeModalBtn = document.getElementById('closeModalBtn');
+    const closeBtn = document.getElementById('closeModalBtn');
     const levelCards = document.querySelectorAll('.level-card');
     const tabBtns = document.querySelectorAll('.tab-btn');
-    const codePanelDiv = document.getElementById('codePanel');
-    const buyPanelDiv = document.getElementById('buyPanel');
+    const codePanel = document.getElementById('codePanel');
+    const buyPanel = document.getElementById('buyPanel');
     const codeInput = document.getElementById('accessCodeInput');
-    const codeErrorSpan = document.getElementById('codeError');
+    const codeError = document.getElementById('codeError');
     const submitBtn = document.getElementById('submitCodeBtn');
-    const premiumStatusContainer = document.getElementById('premiumStatusBadge');
-    const toastMsgDiv = document.getElementById('toastMessage');
+    
+    let currentHubUrl = '';
 
-    // 辅助函数：显示浮动提示（中文）
-    function showToast(text, duration = 2500) {
-      toastMsgDiv.textContent = text;
-      toastMsgDiv.style.opacity = '1';
-      setTimeout(() => {
-        toastMsgDiv.style.opacity = '0';
-      }, duration);
-    }
-
-    // 检查并同步/迁移 premium 状态
-    function checkAndSyncPremium() {
-      let isPremium = localStorage.getItem(PREMIUM_KEY) === 'true';
-      if (!isPremium && localStorage.getItem(LEGACY_KEY) === 'true') {
-        // 迁移旧版解锁状态
-        localStorage.setItem(PREMIUM_KEY, 'true');
-        localStorage.removeItem(LEGACY_KEY);
-        isPremium = true;
-      }
-      updatePremiumUI(isPremium);
-      return isPremium;
-    }
-
-    function updatePremiumUI(isPremium) {
-      if (isPremium) {
-        premiumStatusContainer.innerHTML = `<div class="premium-status"><i class="fas fa-crown" style="color:#f59e0b;"></i> <strong>尊享已解锁</strong> · 全部课程畅学 <i class="fas fa-check-circle"></i></div>`;
-        // 更改每个卡片上的锁为开锁样式
-        document.querySelectorAll('.level-card').forEach(card => {
-          card.classList.add('unlocked');
-          const lockDiv = card.querySelector('.lock-icon');
-          if (lockDiv) lockDiv.innerHTML = '<i class="fas fa-unlock-alt"></i>';
-        });
-      } else {
-        premiumStatusContainer.innerHTML = `<div class="premium-status"><i class="fas fa-lock"></i> 未解锁 · 点击卡片获取权限</div>`;
-        document.querySelectorAll('.level-card').forEach(card => {
-          card.classList.remove('unlocked');
-          const lockDiv = card.querySelector('.lock-icon');
-          if (lockDiv) lockDiv.innerHTML = '<i class="fas fa-lock"></i>';
-        });
-      }
-    }
-
-    // 统一远程验证 + 消耗次数（带超时降级）
-    async function validateWithRemote(code) {
-      try {
-        const controller = new AbortController();
-        const timeoutId = setTimeout(() => controller.abort(), 5000);
-        const readRes = await fetch(API_URL, {
-          headers: { 'X-Master-Key': MASTER_KEY },
-          signal: controller.signal
-        });
-        clearTimeout(timeoutId);
-        if (!readRes.ok) throw new Error('远程数据读取失败');
-        const data = await readRes.json();
-        const codesRecord = data.record;
-        if (!codesRecord || typeof codesRecord !== 'object') throw new Error('无效的数据结构');
-
-        const remaining = codesRecord[code];
-        if (!remaining || remaining <= 0) return false;
-
-        // 剩余次数减一
-        codesRecord[code] = remaining - 1;
-        const updateRes = await fetch(API_URL, {
-          method: 'PUT',
-          headers: {
-            'X-Master-Key': MASTER_KEY,
-            'Content-Type': 'application/json'
-          },
-          body: JSON.stringify(codesRecord)
-        });
-        if (!updateRes.ok) throw new Error('更新库存失败');
-        return true;
-      } catch (err) {
-        console.warn('JSONBin 远程验证失败，降级使用本地备用激活码', err);
-        return false; // 降级到本地备用逻辑
-      }
-    }
-
-    function validateLocalFallback(code) {
-      let usedMap = JSON.parse(localStorage.getItem(USED_CODES_STORAGE) || '{}');
-      if (usedMap[code]) return false;
-      if (!FALLBACK_CODES[code] || FALLBACK_CODES[code] <= 0) return false;
-      usedMap[code] = true;
-      localStorage.setItem(USED_CODES_STORAGE, JSON.stringify(usedMap));
-      return true;
-    }
-
-    async function validateCodeGlobal(code) {
-      // 优先尝试远程验证，若远程返回 true 则直接成功
-      const remoteValid = await validateWithRemote(code);
-      if (remoteValid) return true;
-      // 远程失败或无效则回退到本地备用码验证
-      return validateLocalFallback(code);
-    }
-
-    // 解锁成功后全局设置并跳转
-    async function onUnlockSuccess(targetUrl) {
-      localStorage.setItem(PREMIUM_KEY, 'true');
-      updatePremiumUI(true);
-      showToast('🎉 解锁成功！尊享权限已生效，正在为你打开课程...', 1500);
-      if (targetUrl) {
-        setTimeout(() => {
-          window.location.href = targetUrl;
-        }, 600);
-      } else {
-        closeModal();
-        showToast('所有等级已解锁，点击卡片即可进入学习', 2000);
-      }
-    }
-
-    // 处理提交激活码
-    async function handleSubmitCode() {
-      if (isProcessing) return;
-      const codeRaw = codeInput.value.trim().toUpperCase();
-      if (!codeRaw) {
-        codeErrorSpan.textContent = '❌ 请输入激活码（示例：ENG-XXXXXX）';
-        return;
-      }
-      isProcessing = true;
-      submitBtn.disabled = true;
-      const originalBtnText = submitBtn.innerHTML;
-      submitBtn.innerHTML = '<i class="fas fa-spinner fa-pulse"></i> 验证中...';
-
-      try {
-        const isValid = await validateCodeGlobal(codeRaw);
-        if (isValid) {
-          codeErrorSpan.textContent = '';
-          await onUnlockSuccess(currentTargetUrl);
-        } else {
-          codeErrorSpan.textContent = '❌ 激活码无效、已过期或已被使用，请检查后重试或联系客服购买。';
-          showToast('激活码无效，请重新输入或获取正版码', 2000);
-        }
-      } catch (err) {
-        console.error(err);
-        codeErrorSpan.textContent = '网络异常，请稍后重试或直接联系客服获取帮助。';
-      } finally {
-        isProcessing = false;
-        submitBtn.disabled = false;
-        submitBtn.innerHTML = originalBtnText;
-      }
-    }
-
-    // 打开模态框
     function openModal(level, hubUrl) {
-      if (checkAndSyncPremium()) {
-        // 如果已经解锁，直接跳转
-        if (hubUrl) window.location.href = hubUrl;
-        return;
-      }
-      currentLevel = level;
-      currentTargetUrl = hubUrl;
-      modalTitle.textContent = `${level} · 解锁尊享权限`;
+      modalTitle.textContent = level + ' · Premium Access';
+      currentHubUrl = hubUrl;
       modal.classList.add('active');
       codeInput.value = '';
-      codeErrorSpan.textContent = '';
-      // 默认显示激活码面板
-      document.querySelectorAll('.tab-btn').forEach(btn => btn.classList.remove('active'));
+      codeError.textContent = '';
+      document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
       document.querySelector('[data-tab="code"]').classList.add('active');
-      codePanelDiv.classList.add('active');
-      buyPanelDiv.classList.remove('active');
+      codePanel.classList.add('active');
+      buyPanel.classList.remove('active');
     }
 
     function closeModal() {
       modal.classList.remove('active');
-      currentTargetUrl = '';
     }
 
-    // 绑定卡片点击
     levelCards.forEach(card => {
-      card.addEventListener('click', (e) => {
-        const level = card.dataset.level;
+      card.addEventListener('click', () => {
         const hub = card.dataset.hub;
-        if (checkAndSyncPremium()) {
+        if (localStorage.getItem(PREMIUM_KEY) === 'true') {
           window.location.href = hub;
         } else {
-          openModal(level, hub);
+          openModal(card.dataset.level, hub);
         }
       });
     });
 
-    // 关闭按钮 & 背景点击
-    closeModalBtn.addEventListener('click', closeModal);
+    closeBtn.addEventListener('click', closeModal);
     modal.addEventListener('click', (e) => { if (e.target === modal) closeModal(); });
 
-    // 选项卡切换
     tabBtns.forEach(btn => {
       btn.addEventListener('click', () => {
         const tab = btn.dataset.tab;
         tabBtns.forEach(b => b.classList.remove('active'));
         btn.classList.add('active');
         if (tab === 'code') {
-          codePanelDiv.classList.add('active');
-          buyPanelDiv.classList.remove('active');
+          codePanel.classList.add('active');
+          buyPanel.classList.remove('active');
         } else {
-          codePanelDiv.classList.remove('active');
-          buyPanelDiv.classList.add('active');
+          codePanel.classList.remove('active');
+          buyPanel.classList.add('active');
         }
       });
     });
 
-    // 复制功能 + 中文提示
     document.querySelectorAll('.copy-btn').forEach(btn => {
       btn.addEventListener('click', (e) => {
         e.stopPropagation();
-        const copyText = btn.dataset.copy;
-        if (copyText) {
-          navigator.clipboard.writeText(copyText).then(() => {
-            showToast(`✅ 已复制：${copyText}`, 1500);
-          }).catch(() => showToast('复制失败，手动复制即可', 1500));
-        }
+        navigator.clipboard.writeText(btn.dataset.copy).then(() => alert('Copied!'));
       });
     });
 
-    submitBtn.addEventListener('click', handleSubmitCode);
-    codeInput.addEventListener('keypress', (e) => { if (e.key === 'Enter') handleSubmitCode(); });
-    document.addEventListener('keydown', (e) => { if (e.key === 'Escape' && modal.classList.contains('active')) closeModal(); });
+    // ========== JSONBIN.IO VALIDATION ==========
+    async function validateCodeWithJsonBin(code) {
+      try {
+        // read current bin
+        const readRes = await fetch(API_URL, {
+          headers: { 'X-Master-Key': MASTER_KEY }
+        });
+        if (!readRes.ok) throw new Error('Read failed');
+        const data = await readRes.json();
+        const codes = data.record;
 
-    // 常见问题模拟（中文友好说明）
-    const faqLink = document.getElementById('showFakeFaq');
-    if (faqLink) {
-      faqLink.addEventListener('click', (e) => {
-        e.preventDefault();
-        alert('📘 常见问题\n\n1. 如何获取激活码？\n   请通过页面内微信/支付宝联系客服，支付10元人工发码。\n\n2. 激活码有效期多久？\n   永久有效，解锁全部等级并支持后续更新。\n\n3. 解锁后可以在其他设备使用吗？\n   可以，同一浏览器账号登录即可（基于本地存储）。\n\n4. 忘记激活码或者失效？\n   联系客服重新获取或购买新的激活码。\n\n5. 激活后点击课程没反应？\n   请确保网络通畅，刷新页面重试。');
-      });
+        if (!codes[code] || codes[code] <= 0) return false;
+
+        // decrease remaining
+        codes[code] -= 1;
+
+        // update bin
+        const updateRes = await fetch(API_URL, {
+          method: 'PUT',
+          headers: {
+            'X-Master-Key': MASTER_KEY,
+            'Content-Type': 'application/json'
+          },
+          body: JSON.stringify(codes)
+        });
+        if (!updateRes.ok) throw new Error('Update failed');
+        return true;
+      } catch (err) {
+        console.warn('JSONBin offline – using local fallback', err);
+        return validateCodeLocally(code);
+      }
     }
 
-    // 初始化: 同步 premium 状态并监听本地存储变动，若其他页面解锁则刷新 UI
-    window.addEventListener('storage', (e) => {
-      if (e.key === PREMIUM_KEY || e.key === LEGACY_KEY) {
-        checkAndSyncPremium();
+    function validateCodeLocally(code) {
+      let used = JSON.parse(localStorage.getItem('cet_used_codes') || '{}');
+      if (used[code]) return false;
+      if (!FALLBACK_CODES[code] || FALLBACK_CODES[code] <= 0) return false;
+      used[code] = true;
+      localStorage.setItem('cet_used_codes', JSON.stringify(used));
+      return true;
+    }
+
+    submitBtn.addEventListener('click', async () => {
+      const code = codeInput.value.trim().toUpperCase();
+      if (!code) { codeError.textContent = 'Please enter a code.'; return; }
+      const valid = await validateCodeWithJsonBin(code);
+      if (valid) {
+        localStorage.setItem(PREMIUM_KEY, 'true');
+        localStorage.setItem('hsk_premium_code', code);
+        if (currentHubUrl) {
+          window.location.href = currentHubUrl;
+        } else {
+          alert('✅ Premium unlocked!');
+          closeModal();
+        }
+      } else {
+        codeError.textContent = 'Invalid or already used code.';
       }
     });
-    checkAndSyncPremium();
-    
-    // 附加: 若之前锁定状态下跳转拦截，确保友好提示
-    window.showToast = showToast;
+
+    codeInput.addEventListener('keypress', e => { if (e.key === 'Enter') submitBtn.click(); });
+    document.addEventListener('keydown', e => { if (e.key === 'Escape' && modal.classList.contains('active')) closeModal(); });
   })();
 </script>
 </body>
-</html>
+</html> 
