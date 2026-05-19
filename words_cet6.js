@@ -96,7 +96,7 @@ window.CET6_WORDS = [
   { word: "avert", phonetic: "/əˈvɜːrt/", meaning: "避免，防止；转移(目光等)", pos: "vt.", headword: true, example: "Avert a crisis." },
   { word: "aviation", phonetic: "/ˌeɪviˈeɪʃn/", meaning: "航空；航空学", pos: "n.", headword: true, example: "Civil aviation." },
   { word: "axis", phonetic: "/ˈæksɪs/", meaning: "轴；轴线；坐标轴", pos: "n.", headword: true, example: "The earth rotates on its axis." },
-    { word: "bachelor", phonetic: "/ˈbætʃələr/", meaning: "学士；单身汉", pos: "n.", headword: true, example: "Bachelor's degree." },
+  { word: "bachelor", phonetic: "/ˈbætʃələr/", meaning: "学士；单身汉", pos: "n.", headword: true, example: "Bachelor's degree." },
   { word: "badge", phonetic: "/bædʒ/", meaning: "徽章，证章；象征", pos: "n.", headword: true, example: "A police badge." },
   { word: "baffle", phonetic: "/ˈbæfl/", meaning: "使困惑，难住", pos: "vt.", headword: true, example: "The question baffled me." },
   { word: "bald", phonetic: "/bɔːld/", meaning: "秃头的；光秃的", pos: "a.", headword: true, example: "A bald head." },
