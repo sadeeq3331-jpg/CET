@@ -1,0 +1,553 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+  <title>CET‑6 词汇大师</title>
+  <!-- 缓存控制 -->
+  <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+  <meta http-equiv="Pragma" content="no-cache">
+  <meta http-equiv="Expires" content="0">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+  <style>
+    * { margin:0; padding:0; box-sizing:border-box; font-family:'Inter',system-ui,sans-serif; transition:background 0.2s,color 0.2s,border-color 0.2s; }
+    body.light {
+      background:linear-gradient(145deg,#ecfdf5 0%,#d1fae5 100%);
+      --bg-card:#ffffff; --bg-header:rgba(255,255,255,0.7); --text-primary:#064e3b;
+      --text-secondary:#0d9488; --border-light:#a7f3d0; --shadow:0 20px 40px rgba(0,0,0,0.05);
+      --accent:#0d9488; --accent-hover:#0f766e;
+    }
+    body.dark {
+      background:linear-gradient(145deg,#0a1e1c 0%,#061210 100%);
+      --bg-card:#1e3a38; --bg-header:rgba(30,45,45,0.8); --text-primary:#d1fae5;
+      --text-secondary:#6ee7b7; --border-light:#2e5a56; --shadow:0 20px 40px rgba(0,0,0,0.3);
+      --accent:#34d399; --accent-hover:#10b981;
+    }
+    body { padding:1.2rem; display:flex; flex-direction:column; align-items:center; background:var(--bg-header); }
+    .app-container {
+      max-width:1400px; width:100%; background:var(--bg-header); backdrop-filter:blur(12px);
+      border-radius:2rem; padding:1.5rem; box-shadow:var(--shadow); border:1px solid rgba(255,255,255,0.2);
+      margin-bottom:5rem;
+    }
+    .header { display:flex; flex-wrap:wrap; align-items:center; justify-content:space-between; margin-bottom:1.5rem; gap:1rem; }
+    .title-section { display:flex; align-items:center; gap:1rem; flex-wrap:wrap; }
+    .title-section h1 {
+      font-size:2.2rem; background:linear-gradient(135deg,var(--text-secondary),var(--accent));
+      -webkit-background-clip:text; background-clip:text; color:transparent;
+    }
+    .badge { background:var(--accent); color:white; padding:0.3rem 1rem; border-radius:40px; font-size:0.85rem; font-weight:500; }
+    .search-box {
+      display:flex; background:var(--bg-card); border-radius:50px; padding:0.2rem 0.2rem 0.2rem 1.2rem;
+      border:1px solid var(--border-light); min-width:250px;
+    }
+    .search-box input {
+      flex:1; border:none; outline:none; font-size:1rem; padding:0.6rem 0;
+      background:transparent; color:var(--text-primary);
+    }
+    .search-box input::placeholder { color:var(--text-secondary); opacity:0.7; }
+    .search-box button {
+      background:var(--accent); border:none; color:white; padding:0.5rem 1.2rem; border-radius:40px; cursor:pointer; font-weight:600;
+    }
+    .search-box button:hover { background:var(--accent-hover); }
+    .settings-bar { display:flex; justify-content:flex-end; gap:1rem; margin-bottom:1rem; flex-wrap:wrap; }
+    .icon-btn {
+      background:var(--bg-card); border:1px solid var(--border-light); border-radius:30px; padding:0.4rem 0.8rem;
+      cursor:pointer; color:var(--text-primary); font-size:0.9rem; display:flex; align-items:center; gap:4px;
+    }
+    .icon-btn i { font-size:0.9rem; color:var(--accent); }
+    .stats-panel {
+      background:var(--bg-card); border-radius:1.5rem; padding:0.8rem 1rem; margin-bottom:1rem;
+      display:flex; flex-wrap:wrap; justify-content:space-between; align-items:center; gap:0.8rem;
+      border:1px solid var(--border-light);
+    }
+    .stats-panel.hidden { display:none; }
+    .stats-panel .stat { font-weight:500; color:var(--text-primary); }
+    .letter-filter { display:flex; flex-wrap:wrap; gap:0.4rem; margin:1rem 0 0.5rem; justify-content:center; }
+    .letter-btn {
+      background:var(--bg-card); border:1px solid var(--border-light); width:36px; height:36px;
+      border-radius:20px; font-weight:600; color:var(--text-secondary); cursor:pointer;
+      display:flex; align-items:center; justify-content:center;
+    }
+    .letter-btn.active { background:var(--accent); color:white; }
+    .categories { display:flex; flex-wrap:wrap; gap:0.5rem; margin:1rem 0; }
+    .cat-btn {
+      background:var(--bg-card); border:1px solid var(--border-light); padding:0.4rem 1rem;
+      border-radius:30px; font-weight:500; color:var(--text-secondary); cursor:pointer; font-size:0.85rem;
+    }
+    .cat-btn.active { background:var(--accent); color:white; }
+    .stats-bar { display:flex; justify-content:space-between; align-items:center; margin:1rem 0 1.2rem; flex-wrap:wrap; gap:0.5rem; }
+    .word-counter { background:var(--bg-card); padding:0.3rem 1rem; border-radius:40px; font-size:0.9rem; font-weight:500; color:var(--text-primary); }
+    .pagination-controls { display:flex; gap:0.3rem; flex-wrap:wrap; align-items:center; }
+    .page-btn {
+      background:var(--bg-card); border:1px solid var(--border-light); padding:0.3rem 0.6rem; border-radius:20px;
+      font-weight:600; color:var(--text-secondary); cursor:pointer; font-size:0.85rem; min-width:34px; text-align:center;
+    }
+    .page-btn.active { background:var(--accent); color:white; border-color:var(--accent); }
+    .page-btn.disabled { opacity:0.5; pointer-events:none; }
+    .bottom-pagination { margin-top:1rem; display:flex; justify-content:center; align-items:center; gap:1rem; }
+    .bottom-pagination button {
+      background:var(--bg-card); border:1px solid var(--border-light); padding:0.5rem 1rem; border-radius:30px; cursor:pointer; color:var(--text-primary);
+    }
+    .card-grid { display:grid; grid-template-columns:repeat(auto-fill,minmax(300px,1fr)); gap:1rem; margin:1rem 0; }
+    .vocab-card {
+      background:var(--bg-card); border-radius:1.5rem; padding:1.2rem 1rem; border:1px solid var(--border-light); transition:0.2s;
+    }
+    .vocab-card:hover { transform:translateY(-2px); box-shadow:0 8px 20px rgba(0,0,0,0.08); }
+    .word-header { display:flex; align-items:center; justify-content:space-between; }
+    .english-word { font-size:1.9rem; font-weight:600; color:var(--text-primary); }
+    .favorite-btn { background:none; border:none; font-size:1.5rem; cursor:pointer; color:#cbd5e0; }
+    .favorite-btn.active { color:#e53e3e; }
+    .speaker-btn {
+      background:rgba(13,148,136,0.1); border:none; width:40px; height:40px; border-radius:50%; cursor:pointer;
+      color:var(--text-secondary); font-size:1.2rem; margin-left:0.5rem;
+    }
+    .phonetic {
+      font-size:0.95rem; color:var(--text-secondary); background:rgba(13,148,136,0.1);
+      padding:0.2rem 0.8rem; border-radius:30px; display:inline-block; margin:0.6rem 0 0.4rem;
+    }
+    .meaning {
+      font-size:0.9rem; background:rgba(13,148,136,0.05); padding:0.4rem 0.8rem; border-radius:1rem;
+      border:1px dashed var(--border-light); color:var(--text-primary);
+    }
+    .example-container {
+      margin-top:0.6rem; display:flex; align-items:flex-start; gap:8px;
+      background:rgba(13,148,136,0.05); border-radius:1rem; padding:0.4rem 0.8rem; border-left:3px solid var(--accent);
+    }
+    .example-text { font-size:0.85rem; font-style:italic; flex:1; color:var(--text-primary); }
+    .example-speaker { background:none; border:none; color:var(--text-secondary); font-size:1rem; cursor:pointer; }
+    .study-mode-active .phonetic,
+    .study-mode-active .meaning,
+    .study-mode-active .example-container { display:none !important; }
+    .footer-note { text-align:center; font-size:0.75rem; color:var(--text-secondary); margin-top:1rem; }
+    .hidden { display:none; }
+
+    /* 悬浮学习模式按钮 */
+    .floating-study-btn {
+      position:fixed; bottom:150px; right:20px; z-index:1000;
+      background:var(--accent); color:white; border:none; border-radius:50%; width:50px; height:50px;
+      cursor:pointer; box-shadow:0 6px 16px rgba(0,0,0,0.2); display:flex; align-items:center; justify-content:center;
+      font-size:1.3rem;
+    }
+
+    @media (max-width:640px) {
+      .app-container { padding:1rem; }
+      .english-word { font-size:1.6rem; }
+      .title-section h1 { font-size:1.6rem; }
+      .letter-btn { width:32px; height:32px; font-size:0.8rem; }
+      .card-grid { grid-template-columns:1fr; }
+    }
+  </style>
+  <!-- 付费门禁 -->
+  <script src="premium-check.js"></script>
+</head>
+<body class="light">
+<div class="app-container">
+  <div class="header">
+    <div class="title-section">
+      <h1>📖 CET‑6 词汇大师</h1>
+      <div class="badge"><i class="fas fa-dharmachakra"></i> 5500+ 词</div>
+    </div>
+    <div class="search-box">
+      <input type="text" id="searchInput" placeholder="🔍 搜索单词或释义">
+      <button id="searchBtn">搜索</button>
+    </div>
+  </div>
+
+  <div class="settings-bar">
+    <button id="darkModeToggle" class="icon-btn"><i class="fas fa-moon"></i> 深色模式</button>
+    <button id="toggleStatsBtn" class="icon-btn"><i class="fas fa-chart-line"></i> 显示统计</button>
+    <button id="exportFavBtn" class="icon-btn"><i class="fas fa-download"></i> 导出收藏</button>
+    <button id="importFavBtn" class="icon-btn"><i class="fas fa-upload"></i> 导入收藏</button>
+    <input type="file" id="importFavFile" style="display:none" accept=".json">
+  </div>
+
+  <div id="statsPanel" class="stats-panel hidden">
+    <div class="stat"><i class="fas fa-heart"></i> 收藏：<span id="favCount">0</span></div>
+    <div class="stat"><i class="fas fa-eye"></i> 已学：<span id="studiedCount">0</span> / <span id="totalWordsStat">0</span></div>
+    <div class="stat"><i class="fas fa-check-circle"></i> 掌握度：<span id="masteryPercent">0</span>%</div>
+    <button id="resetProgressBtn" class="icon-btn" style="font-size:0.8rem;"><i class="fas fa-trash-alt"></i> 重置进度</button>
+  </div>
+
+  <div class="letter-filter" id="letterFilter"></div>
+  <div class="categories" id="categoryTabs">
+    <button class="cat-btn active" data-cat="all">全部</button>
+    <button class="cat-btn" data-cat="1-1000">1–1000</button>
+    <button class="cat-btn" data-cat="1001-2000">1001–2000</button>
+    <button class="cat-btn" data-cat="2001-3000">2001–3000</button>
+    <button class="cat-btn" data-cat="3001-4000">3001–4500+</button>
+    <button class="cat-btn" data-cat="favorites"><i class="fas fa-heart"></i> 收藏</button>
+  </div>
+
+  <div class="stats-bar">
+    <div class="word-counter">📄 显示 <span id="shownCount">0</span> / <span id="totalCount">0</span> 词</div>
+    <div class="pagination-controls" id="paginationContainer"></div>
+  </div>
+
+  <div id="vocabGrid" class="card-grid"></div>
+
+  <div class="bottom-pagination" id="bottomPagination">
+    <button id="prevPageBottom"><i class="fas fa-chevron-left"></i> 上一页</button>
+    <span id="pageInfo">第 1 / 1 页</span>
+    <button id="nextPageBottom">下一页 <i class="fas fa-chevron-right"></i></button>
+  </div>
+
+  <div id="premium-contact-container"></div>
+
+  <div class="footer-note">
+    <span><i class="fas fa-heart"></i> 收藏</span>
+    <span><i class="fas fa-volume-up"></i> 发音</span>
+    <span><i class="fas fa-eye-slash"></i> 学习模式</span>
+  </div>
+</div>
+
+<!-- 悬浮学习模式按钮 -->
+<button class="floating-study-btn" id="studyModeToggle" title="切换学习模式">
+  <i class="fas fa-eye"></i>
+</button>
+
+<!-- 付费系统脚本 -->
+<script src="premium.js"></script>
+<!-- CET‑6 词库 -->
+<script src="words_cet6.js"></script>
+<!-- 智能助手 -->
+<script>window.CET4_WORDS = window.CET6_WORDS;</script> <!-- 兼容助手 -->
+<script src="assistant.js"></script>
+
+<script>
+  (function() {
+    // TTS
+    if (!window.speechSynthesis) {
+      window.speakText = function(t) { console.log(t); };
+    } else {
+      window.speakText = function(text) {
+        if (!text) return;
+        try {
+          window.speechSynthesis.cancel();
+          const u = new SpeechSynthesisUtterance(text);
+          u.lang = 'en-US';
+          u.rate = 0.9;
+          window.speechSynthesis.speak(u);
+        } catch(e) { console.error(e); }
+      };
+    }
+
+    const wordList = window.CET6_WORDS || [];
+    if (wordList.length === 0) alert('words_cet6.js 未加载');
+
+    let currentFilter = 'all', currentLetter = null, filteredWords = [...wordList], currentPage = 1, pageSize = 20;
+    let favorites = new Set(JSON.parse(localStorage.getItem('cet6_favorites') || '[]'));
+    let studiedWords = new Set(JSON.parse(localStorage.getItem('cet6_studied') || '[]'));
+    let studyMode = localStorage.getItem('cet6_studyMode') === 'true';
+
+    const grid = document.getElementById('vocabGrid'),
+          searchInput = document.getElementById('searchInput'),
+          searchBtn = document.getElementById('searchBtn');
+    const shownSpan = document.getElementById('shownCount'),
+          totalSpan = document.getElementById('totalCount'),
+          paginationDiv = document.getElementById('paginationContainer');
+    const bottomPrev = document.getElementById('prevPageBottom'),
+          bottomNext = document.getElementById('nextPageBottom'),
+          pageInfoSpan = document.getElementById('pageInfo');
+    const categoryBtns = document.querySelectorAll('.cat-btn'),
+          favCountSpan = document.getElementById('favCount'),
+          studiedCountSpan = document.getElementById('studiedCount'),
+          totalWordsStatSpan = document.getElementById('totalWordsStat'),
+          masteryPercentSpan = document.getElementById('masteryPercent'),
+          statsPanel = document.getElementById('statsPanel');
+    const toggleStatsBtn = document.getElementById('toggleStatsBtn'),
+          exportFavBtn = document.getElementById('exportFavBtn'),
+          importFavBtn = document.getElementById('importFavBtn'),
+          importFavFile = document.getElementById('importFavFile'),
+          resetProgressBtn = document.getElementById('resetProgressBtn'),
+          darkModeToggle = document.getElementById('darkModeToggle');
+    const letterFilterDiv = document.getElementById('letterFilter'),
+          studyModeToggle = document.getElementById('studyModeToggle');
+
+    function updateStats() {
+      favCountSpan.innerText = favorites.size;
+      studiedCountSpan.innerText = studiedWords.size;
+      totalWordsStatSpan.innerText = wordList.length;
+      masteryPercentSpan.innerText = wordList.length ? Math.round((studiedWords.size / wordList.length) * 100) : 0;
+    }
+
+    function markWordsStudied(words) {
+      let changed = false;
+      words.forEach(w => {
+        if (!studiedWords.has(w.word)) { studiedWords.add(w.word); changed = true; }
+      });
+      if (changed) {
+        localStorage.setItem('cet6_studied', JSON.stringify([...studiedWords]));
+        updateStats();
+      }
+    }
+
+    function applyFilter() {
+      const searchTerm = searchInput.value.trim().toLowerCase();
+      let base = wordList;
+      if (currentFilter === 'favorites') {
+        base = wordList.filter(w => favorites.has(w.word));
+      } else if (currentFilter !== 'all') {
+        const [start, end] = currentFilter === '1-1000' ? [0,1000] :
+                             currentFilter === '1001-2000' ? [1000,2000] :
+                             currentFilter === '2001-3000' ? [2000,3000] : [3000, wordList.length];
+        base = wordList.slice(start, end);
+      }
+      if (currentLetter) {
+        base = base.filter(w => w.word.toLowerCase().charAt(0) === currentLetter);
+      }
+      filteredWords = searchTerm ? base.filter(w =>
+        w.word.toLowerCase().includes(searchTerm) ||
+        w.meaning.toLowerCase().includes(searchTerm)
+      ) : [...base];
+      currentPage = 1;
+    }
+
+    function saveFavorites() {
+      localStorage.setItem('cet6_favorites', JSON.stringify([...favorites]));
+      updateStats();
+    }
+
+    function toggleFavorite(word) {
+      if (favorites.has(word)) favorites.delete(word);
+      else favorites.add(word);
+      saveFavorites();
+      if (currentFilter === 'favorites') { applyFilter(); render(); }
+    }
+
+    function render() {
+      const pageWords = filteredWords.slice((currentPage-1)*pageSize, currentPage*pageSize);
+      if (pageWords.length === 0) {
+        grid.innerHTML = '<div style="text-align:center; padding:2rem; color:var(--text-secondary);">✨ 未找到单词</div>';
+      } else {
+        let html = '';
+        pageWords.forEach(item => {
+          const isFav = favorites.has(item.word);
+          const exampleHtml = item.example ? `<div class="example-container"><span class="example-text">📌 ${item.example}</span><button class="example-speaker" data-example="${item.example}"><i class="fas fa-volume-up"></i></button></div>` : '';
+          html += `<div class="vocab-card">
+            <div class="word-header">
+              <span class="english-word">${item.word}</span>
+              <div>
+                <button class="favorite-btn ${isFav ? 'active' : ''}" data-word="${item.word}">
+                  <i class="${isFav ? 'fas' : 'far'} fa-heart"></i>
+                </button>
+                <button class="speaker-btn" data-word="${item.word}">
+                  <i class="fas fa-volume-up"></i>
+                </button>
+              </div>
+            </div>
+            <div class="phonetic">${item.phonetic || ''}${item.pos ? ' · ' + item.pos : ''}</div>
+            <div class="meaning">${item.meaning}</div>
+            ${exampleHtml}
+          </div>`;
+        });
+        grid.innerHTML = html;
+        markWordsStudied(pageWords);
+      }
+      document.querySelectorAll('.speaker-btn').forEach(btn => {
+        btn.addEventListener('click', () => window.speakText(btn.dataset.word));
+      });
+      document.querySelectorAll('.example-speaker').forEach(btn => {
+        btn.addEventListener('click', () => window.speakText(btn.dataset.example));
+      });
+      document.querySelectorAll('.favorite-btn').forEach(btn => {
+        btn.addEventListener('click', () => {
+          toggleFavorite(btn.dataset.word);
+          const icon = btn.querySelector('i');
+          if (favorites.has(btn.dataset.word)) {
+            icon.classList.remove('far'); icon.classList.add('fas'); btn.classList.add('active');
+          } else {
+            icon.classList.remove('fas'); icon.classList.add('far'); btn.classList.remove('active');
+          }
+        });
+      });
+      shownSpan.innerText = filteredWords.length;
+      totalSpan.innerText = wordList.length;
+      renderPagination();
+      if (studyMode) document.body.classList.add('study-mode-active');
+      else document.body.classList.remove('study-mode-active');
+    }
+
+    function renderPagination() {
+      const totalPages = Math.ceil(filteredWords.length / pageSize);
+      if (totalPages <= 1) {
+        paginationDiv.innerHTML = '';
+        bottomPrev.disabled = true;
+        bottomNext.disabled = true;
+        pageInfoSpan.innerText = '第 1 / 1 页';
+        return;
+      }
+      let startPage = Math.max(1, currentPage - 2);
+      let endPage = Math.min(totalPages, startPage + 4);
+      if (endPage - startPage < 4) startPage = Math.max(1, endPage - 4);
+
+      let btns = '';
+      btns += `<button class="page-btn ${currentPage===1 ? 'disabled' : ''}" id="prevPageTop"><i class="fas fa-chevron-left"></i></button>`;
+      if (startPage > 1) {
+        btns += `<button class="page-btn" data-page="1">1</button>`;
+        if (startPage > 2) btns += `<span class="page-btn disabled">…</span>`;
+      }
+      for (let i = startPage; i <= endPage; i++) {
+        btns += `<button class="page-btn ${i===currentPage ? 'active' : ''}" data-page="${i}">${i}</button>`;
+      }
+      if (endPage < totalPages) {
+        if (endPage < totalPages - 1) btns += `<span class="page-btn disabled">…</span>`;
+        btns += `<button class="page-btn" data-page="${totalPages}">${totalPages}</button>`;
+      }
+      btns += `<button class="page-btn ${currentPage===totalPages ? 'disabled' : ''}" id="nextPageTop"><i class="fas fa-chevron-right"></i></button>`;
+
+      paginationDiv.innerHTML = btns;
+
+      document.querySelectorAll('.page-btn[data-page]').forEach(btn => {
+        btn.addEventListener('click', () => { currentPage = parseInt(btn.dataset.page); render(); });
+      });
+      document.getElementById('prevPageTop')?.addEventListener('click', () => {
+        if (currentPage > 1) { currentPage--; render(); }
+      });
+      document.getElementById('nextPageTop')?.addEventListener('click', () => {
+        if (currentPage < totalPages) { currentPage++; render(); }
+      });
+
+      bottomPrev.disabled = (currentPage === 1);
+      bottomNext.disabled = (currentPage === totalPages);
+      pageInfoSpan.innerText = `第 ${currentPage} / ${totalPages} 页`;
+    }
+
+    function buildLetterFilter() {
+      const letters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ'.split('');
+      letterFilterDiv.innerHTML = '<button class="letter-btn all-letters active" data-letter="">全部</button>';
+      letters.forEach(l => {
+        const btn = document.createElement('button');
+        btn.className = 'letter-btn';
+        btn.textContent = l;
+        btn.dataset.letter = l.toLowerCase();
+        btn.addEventListener('click', () => {
+          document.querySelectorAll('.letter-btn').forEach(b => b.classList.remove('active'));
+          btn.classList.add('active');
+          currentLetter = l.toLowerCase();
+          applyFilter();
+          render();
+        });
+        letterFilterDiv.appendChild(btn);
+      });
+      const allBtn = document.querySelector('.letter-btn.all-letters');
+      if (allBtn) {
+        allBtn.addEventListener('click', () => {
+          document.querySelectorAll('.letter-btn').forEach(b => b.classList.remove('active'));
+          allBtn.classList.add('active');
+          currentLetter = null;
+          applyFilter();
+          render();
+        });
+      }
+    }
+
+    categoryBtns.forEach(btn => {
+      btn.addEventListener('click', () => {
+        categoryBtns.forEach(b => b.classList.remove('active'));
+        btn.classList.add('active');
+        currentFilter = btn.dataset.cat;
+        applyFilter();
+        render();
+      });
+    });
+
+    function handleSearch() { applyFilter(); render(); }
+    searchBtn.addEventListener('click', handleSearch);
+    searchInput.addEventListener('keyup', e => e.key === 'Enter' && handleSearch());
+
+    bottomPrev.addEventListener('click', () => { if (currentPage > 1) { currentPage--; render(); } });
+    bottomNext.addEventListener('click', () => {
+      if (currentPage < Math.ceil(filteredWords.length / pageSize)) { currentPage++; render(); }
+    });
+
+    toggleStatsBtn.addEventListener('click', () => {
+      statsPanel.classList.toggle('hidden');
+      localStorage.setItem('cet6_stats_visible', (!statsPanel.classList.contains('hidden')).toString());
+    });
+    if (localStorage.getItem('cet6_stats_visible') === 'true') statsPanel.classList.remove('hidden');
+    else statsPanel.classList.add('hidden');
+
+    darkModeToggle.addEventListener('click', () => {
+      const isDark = document.body.classList.contains('dark');
+      if (isDark) {
+        document.body.classList.remove('dark'); document.body.classList.add('light');
+        localStorage.setItem('cet6_theme', 'light');
+        darkModeToggle.innerHTML = '<i class="fas fa-moon"></i> 深色模式';
+      } else {
+        document.body.classList.remove('light'); document.body.classList.add('dark');
+        localStorage.setItem('cet6_theme', 'dark');
+        darkModeToggle.innerHTML = '<i class="fas fa-sun"></i> 浅色模式';
+      }
+    });
+    const savedTheme = localStorage.getItem('cet6_theme');
+    if (savedTheme === 'dark') {
+      document.body.classList.add('dark'); document.body.classList.remove('light');
+      darkModeToggle.innerHTML = '<i class="fas fa-sun"></i> 浅色模式';
+    }
+
+    exportFavBtn.addEventListener('click', () => {
+      const data = JSON.stringify([...favorites], null, 2);
+      const blob = new Blob([data], {type:'application/json'});
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url; a.download = 'cet6_favorites.json'; a.click();
+      URL.revokeObjectURL(url);
+    });
+
+    importFavBtn.addEventListener('click', () => importFavFile.click());
+    importFavFile.addEventListener('change', e => {
+      const file = e.target.files[0];
+      if (!file) return;
+      const reader = new FileReader();
+      reader.onload = ev => {
+        try {
+          const imported = JSON.parse(ev.target.result);
+          if (Array.isArray(imported)) {
+            favorites = new Set(imported);
+            saveFavorites();
+            if (currentFilter === 'favorites') { applyFilter(); render(); }
+            else render();
+            updateStats();
+            alert('收藏导入成功！');
+          } else alert('无效文件');
+        } catch(err) { alert('解析错误'); }
+        importFavFile.value = '';
+      };
+      reader.readAsText(file);
+    });
+
+    resetProgressBtn.addEventListener('click', () => {
+      if (confirm('确定要重置所有学习进度吗？')) {
+        studiedWords.clear();
+        localStorage.setItem('cet6_studied', JSON.stringify([]));
+        updateStats();
+        alert('进度已重置');
+      }
+    });
+
+    // 学习模式切换
+    studyModeToggle.addEventListener('click', () => {
+      studyMode = !studyMode;
+      localStorage.setItem('cet6_studyMode', studyMode);
+      if (studyMode) {
+        document.body.classList.add('study-mode-active');
+        studyModeToggle.innerHTML = '<i class="fas fa-eye-slash"></i>';
+      } else {
+        document.body.classList.remove('study-mode-active');
+        studyModeToggle.innerHTML = '<i class="fas fa-eye"></i>';
+      }
+    });
+    if (localStorage.getItem('cet6_studyMode') === 'true') {
+      studyMode = true;
+      document.body.classList.add('study-mode-active');
+      studyModeToggle.innerHTML = '<i class="fas fa-eye-slash"></i>';
+    }
+
+    buildLetterFilter();
+    applyFilter();
+    render();
+    updateStats();
+  })();
+</script>
+</body>
+</html>
