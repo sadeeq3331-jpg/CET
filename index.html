@@ -472,12 +472,12 @@
 
 <script>
   (function() {
-    // ==================== 配置 ====================
+    // ==================== 配置信息 ====================
     const BIN_ID = "69f794a6856a682189a0ae0c";
     const MASTER_KEY = "$2a$10$OV7m1X11camle5ENh1AA5uFzDjzsDgKYKIz7bOuOLU/sBVocEALge";
     const API_URL = `https://api.jsonbin.io/v3/b/${BIN_ID}`;
 
-    // 本地备用激活码池 (仅离线/远程失败时)
+    // 本地备用激活码池 (仅离线/远程失败时使用)
     const FALLBACK_CODES = {
       "ENG-ABC123": 1,
       "ENG-SADEEQ01": 1,
@@ -487,8 +487,8 @@
       "STUDY888": 1
     };
 
-    const PREMIUM_KEY = 'eng_premium_active';      // 新标准
-    const LEGACY_KEY = 'hsk_premium_active';       // 历史兼容
+    const PREMIUM_KEY = 'eng_premium_active';      // 新标准存储键名
+    const LEGACY_KEY = 'hsk_premium_active';       // 历史兼容键名
     const USED_CODES_STORAGE = 'eng_used_codes';
 
     let currentTargetUrl = '';
@@ -509,7 +509,7 @@
     const premiumStatusContainer = document.getElementById('premiumStatusBadge');
     const toastMsgDiv = document.getElementById('toastMessage');
 
-    // 辅助函数：显示 toast 提示（中文）
+    // 辅助函数：显示浮动提示（中文）
     function showToast(text, duration = 2500) {
       toastMsgDiv.textContent = text;
       toastMsgDiv.style.opacity = '1';
@@ -560,15 +560,15 @@
           signal: controller.signal
         });
         clearTimeout(timeoutId);
-        if (!readRes.ok) throw new Error('远程读取失败');
+        if (!readRes.ok) throw new Error('远程数据读取失败');
         const data = await readRes.json();
         const codesRecord = data.record;
-        if (!codesRecord || typeof codesRecord !== 'object') throw new Error('无效数据结构');
+        if (!codesRecord || typeof codesRecord !== 'object') throw new Error('无效的数据结构');
 
         const remaining = codesRecord[code];
         if (!remaining || remaining <= 0) return false;
 
-        // 剩余次数减1
+        // 剩余次数减一
         codesRecord[code] = remaining - 1;
         const updateRes = await fetch(API_URL, {
           method: 'PUT',
@@ -581,8 +581,8 @@
         if (!updateRes.ok) throw new Error('更新库存失败');
         return true;
       } catch (err) {
-        console.warn('JSONBin 远程失败，降级本地备用码', err);
-        return false; // 降级到本地
+        console.warn('JSONBin 远程验证失败，降级使用本地备用激活码', err);
+        return false; // 降级到本地备用逻辑
       }
     }
 
@@ -596,10 +596,10 @@
     }
 
     async function validateCodeGlobal(code) {
-      // 先尝试远程，若远程返回 true 则直接成功
+      // 优先尝试远程验证，若远程返回 true 则直接成功
       const remoteValid = await validateWithRemote(code);
       if (remoteValid) return true;
-      // 远程失败或无效则走本地备用码机制
+      // 远程失败或无效则回退到本地备用码验证
       return validateLocalFallback(code);
     }
 
@@ -734,7 +734,7 @@
       });
     }
 
-    // 初始化: 同步premium状态以及监听本地存储变动，若其他页面解锁刷新UI(简单处理)
+    // 初始化: 同步 premium 状态并监听本地存储变动，若其他页面解锁则刷新 UI
     window.addEventListener('storage', (e) => {
       if (e.key === PREMIUM_KEY || e.key === LEGACY_KEY) {
         checkAndSyncPremium();
