@@ -1684,5 +1684,4 @@ window.CET6_WORDS = [
   { word: "youngster", phonetic: "/ˈjʌŋstər/", meaning: "年轻人；少年", pos: "n.", headword: true, example: "A promising youngster." },
   { word: "zinc", phonetic: "/zɪŋk/", meaning: "锌；镀锌于", pos: "n. & vt.", headword: true, example: "Zinc coating." }
 ];
-];
-];
+
