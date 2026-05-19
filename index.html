@@ -1,9 +1,9 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="zh">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>English Master · Premium Access</title>
+  <title>英语大师 · 付费入口</title>
   <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
   <meta http-equiv="Pragma" content="no-cache">
   <meta http-equiv="Expires" content="0">
@@ -65,11 +65,7 @@
       box-shadow: 0 25px 40px rgba(6,78,59,0.2);
       border-color: #0d9488;
     }
-    .level-card h2 {
-      font-size: 2.4rem;
-      font-weight: 600;
-      margin-bottom: 0.5rem;
-    }
+    .level-card h2 { font-size: 2.4rem; font-weight: 600; margin-bottom: 0.5rem; }
     .level-card p {
       font-size: 1rem;
       background: #d1fae5;
@@ -91,225 +87,107 @@
       border-radius: 40px;
       font-size: 1rem;
     }
-    .lock-icon {
-      margin-top: 0.5rem;
-      color: #e76f51;
-    }
-    /* Modal Styles */
+    .lock-icon { margin-top: 0.5rem; color: #e76f51; }
+    /* Modal */
     .modal-overlay {
-      position: fixed;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 100%;
-      background: rgba(0,0,0,0.3);
-      backdrop-filter: blur(6px);
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      z-index: 10000;
-      visibility: hidden;
-      opacity: 0;
-      transition: 0.2s;
+      position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+      background: rgba(0,0,0,0.3); backdrop-filter: blur(6px);
+      display: flex; align-items: center; justify-content: center;
+      z-index: 10000; visibility: hidden; opacity: 0; transition: 0.2s;
     }
-    .modal-overlay.active {
-      visibility: visible;
-      opacity: 1;
-    }
+    .modal-overlay.active { visibility: visible; opacity: 1; }
     .modal {
-      background: white;
-      border-radius: 2.5rem;
-      max-width: 460px;
-      width: 100%;
-      padding: 2rem;
-      box-shadow: 0 40px 60px rgba(0,0,0,0.2);
-      transform: scale(0.95);
-      transition: transform 0.2s;
-      border: 1px solid rgba(13,148,136,0.2);
-      color: #064e3b;
+      background: white; border-radius: 2.5rem; max-width: 460px; width: 100%;
+      padding: 2rem; box-shadow: 0 40px 60px rgba(0,0,0,0.2);
+      transform: scale(0.95); transition: transform 0.2s;
+      border: 1px solid rgba(13,148,136,0.2); color: #064e3b;
     }
-    .modal-overlay.active .modal {
-      transform: scale(1);
-    }
+    .modal-overlay.active .modal { transform: scale(1); }
     .modal-header {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      margin-bottom: 1.5rem;
+      display: flex; align-items: center; justify-content: space-between; margin-bottom: 1.5rem;
     }
-    .modal-header h3 {
-      font-size: 1.8rem;
-      color: #064e3b;
-      font-weight: 700;
-    }
-    .close-modal {
-      background: none;
-      border: none;
-      font-size: 1.8rem;
-      cursor: pointer;
-      color: #6b8a9e;
-    }
+    .modal-header h3 { font-size: 1.8rem; color: #064e3b; font-weight: 700; }
+    .close-modal { background: none; border: none; font-size: 1.8rem; cursor: pointer; color: #6b8a9e; }
     .modal-tabs {
-      display: flex;
-      gap: 0.5rem;
-      margin-bottom: 1.8rem;
-      border-bottom: 1px solid #dce7ef;
-      padding-bottom: 0.5rem;
+      display: flex; gap: 0.5rem; margin-bottom: 1.8rem;
+      border-bottom: 1px solid #dce7ef; padding-bottom: 0.5rem;
     }
     .tab-btn {
-      background: none;
-      border: none;
-      padding: 0.5rem 1.2rem;
-      font-size: 1rem;
-      font-weight: 600;
-      color: #6b8a9e;
-      cursor: pointer;
-      border-radius: 40px;
-      transition: 0.2s;
+      background: none; border: none; padding: 0.5rem 1.2rem; font-size: 1rem;
+      font-weight: 600; color: #6b8a9e; cursor: pointer; border-radius: 40px; transition: 0.2s;
     }
-    .tab-btn.active {
-      background: #d1fae5;
-      color: #064e3b;
-    }
-    .tab-panel {
-      display: none;
-    }
-    .tab-panel.active {
-      display: block;
-    }
-    .code-input-group {
-      margin: 1.5rem 0;
-    }
+    .tab-btn.active { background: #d1fae5; color: #064e3b; }
+    .tab-panel { display: none; }
+    .tab-panel.active { display: block; }
+    .code-input-group { margin: 1.5rem 0; }
     .code-input-group input {
-      width: 100%;
-      padding: 1rem 1.2rem;
-      border: 2px solid #a7f3d0;
-      border-radius: 60px;
-      font-size: 1.1rem;
-      text-align: center;
-      text-transform: uppercase;
-      letter-spacing: 1px;
-      outline: none;
+      width: 100%; padding: 1rem 1.2rem; border: 2px solid #a7f3d0; border-radius: 60px;
+      font-size: 1.1rem; text-align: center; text-transform: uppercase; letter-spacing: 1px; outline: none;
     }
-    .code-input-group input:focus {
-      border-color: #0d9488;
-    }
-    .error-msg {
-      color: #e63946;
-      font-size: 0.9rem;
-      margin-top: 0.4rem;
-      min-height: 1.2rem;
-    }
+    .code-input-group input:focus { border-color: #0d9488; }
+    .error-msg { color: #e63946; font-size: 0.9rem; margin-top: 0.4rem; min-height: 1.2rem; }
     .btn {
-      background: linear-gradient(135deg, #064e3b, #0d9488);
-      border: none;
-      color: white;
-      font-weight: 600;
-      padding: 1rem 1.5rem;
-      border-radius: 60px;
-      width: 100%;
-      font-size: 1.1rem;
-      cursor: pointer;
-      transition: 0.2s;
-      box-shadow: 0 8px 18px rgba(6,78,59,0.2);
+      background: linear-gradient(135deg, #064e3b, #0d9488); border: none; color: white;
+      font-weight: 600; padding: 1rem 1.5rem; border-radius: 60px; width: 100%;
+      font-size: 1.1rem; cursor: pointer; transition: 0.2s; box-shadow: 0 8px 18px rgba(6,78,59,0.2);
     }
-    .btn:hover {
-      transform: translateY(-2px);
-      box-shadow: 0 12px 24px rgba(6,78,59,0.3);
-    }
-    .price-tag {
-      font-size: 2.2rem;
-      font-weight: 800;
-      color: #e76f51;
-      text-align: center;
-      margin: 0.8rem 0;
-    }
-    .contact-methods {
-      display: flex;
-      flex-direction: column;
-      gap: 0.8rem;
-      margin: 1.5rem 0;
-    }
+    .btn:hover { transform: translateY(-2px); box-shadow: 0 12px 24px rgba(6,78,59,0.3); }
+    .price-tag { font-size: 2.2rem; font-weight: 800; color: #e76f51; text-align: center; margin: 0.8rem 0; }
+    .contact-methods { display: flex; flex-direction: column; gap: 0.8rem; margin: 1.5rem 0; }
     .contact-item {
-      display: flex;
-      align-items: center;
-      gap: 0.8rem;
-      background: #f2f7fa;
-      padding: 0.7rem 1.2rem;
-      border-radius: 60px;
+      display: flex; align-items: center; gap: 0.8rem; background: #f2f7fa;
+      padding: 0.7rem 1.2rem; border-radius: 60px;
     }
-    .contact-item i {
-      width: 24px;
-      color: #0d9488;
-    }
+    .contact-item i { width: 24px; color: #0d9488; }
     .contact-item .copy-btn {
-      margin-left: auto;
-      background: none;
-      border: none;
-      color: #6b8a9e;
-      cursor: pointer;
-      font-size: 1.2rem;
+      margin-left: auto; background: none; border: none; color: #6b8a9e; cursor: pointer; font-size: 1.2rem;
     }
     .payment-icons {
-      display: flex;
-      gap: 1.5rem;
-      justify-content: center;
-      font-size: 2rem;
-      margin: 1.2rem 0;
-      color: #064e3b;
+      display: flex; gap: 1.5rem; justify-content: center; font-size: 2rem; margin: 1.2rem 0; color: #064e3b;
     }
     .footer-links {
-      margin-top: 2rem;
-      padding-top: 1rem;
-      border-top: 1px solid #a7f3d0;
-      display: flex;
-      justify-content: center;
-      gap: 1.5rem;
-      flex-wrap: wrap;
+      margin-top: 2rem; padding-top: 1rem; border-top: 1px solid #a7f3d0;
+      display: flex; justify-content: center; gap: 1.5rem; flex-wrap: wrap;
     }
-    .footer-links a {
-      color: #6b8a9e;
-      text-decoration: none;
-      font-size: 0.85rem;
-    }
+    .footer-links a { color: #6b8a9e; text-decoration: none; font-size: 0.85rem; }
   </style>
 </head>
 <body>
 <div class="container">
-  <h1>📚 English Master · Premium</h1>
-  <div class="sub">Full access to CET‑4 · CET‑6 · Postgrad English — one payment, forever</div>
+  <h1>📚 英语大师 · 付费入口</h1>
+  <div class="sub">一次性付费 · 永久访问 CET‑4、CET‑6、考研英语全部内容</div>
   
   <div class="card-grid">
     <div class="level-card" data-level="CET‑4" data-hub="cet4_hub.html">
       <h2>CET‑4</h2>
-      <p>4,500 words</p>
+      <p>4500 词</p>
       <div class="lock-icon"><i class="fas fa-lock"></i></div>
     </div>
     <div class="level-card" data-level="CET‑6" data-hub="cet6_hub.html">
       <h2>CET‑6</h2>
-      <p>5,500 words</p>
+      <p>5500 词</p>
       <div class="lock-icon"><i class="fas fa-lock"></i></div>
     </div>
     <div class="level-card" data-level="考研英语" data-hub="kaoyan_hub.html">
       <h2>考研英语</h2>
-      <p>5,500+ words</p>
+      <p>5500+ 词</p>
       <div class="lock-icon"><i class="fas fa-lock"></i></div>
     </div>
   </div>
 
   <div class="features">
-    <span>🔊 Pronunciation</span>
-    <span>❤️ Favorites</span>
-    <span>🐧 Quiz buddy</span>
-    <span>⌨️ Typing practice</span>
-    <span>📝 Example sentences</span>
+    <span>🔊 真人发音</span>
+    <span>❤️ 收藏单词</span>
+    <span>🐧 智能助手</span>
+    <span>⌨️ 打字练习</span>
+    <span>📝 例句讲解</span>
   </div>
   
-  <p style="margin-top: 2rem; color: #0d9488;">🔒 All content is premium — unlock with a one‑time code.</p>
+  <p style="margin-top: 2rem; color: #0d9488;">🔒 全部内容需输入一次性授权码解锁</p>
 
   <div class="footer-links">
-    <a href="privacy.html"><i class="fas fa-shield-alt"></i> Privacy Policy</a>
-    <a href="terms.html"><i class="fas fa-file-contract"></i> Terms of Service</a>
+    <a href="privacy.html"><i class="fas fa-shield-alt"></i> 隐私政策</a>
+    <a href="terms.html"><i class="fas fa-file-contract"></i> 服务条款</a>
   </div>
 </div>
 
@@ -317,25 +195,25 @@
 <div class="modal-overlay" id="accessModal">
   <div class="modal">
     <div class="modal-header">
-      <h3 id="modalLevelTitle">CET‑4 Access</h3>
+      <h3 id="modalLevelTitle">CET‑4 授权</h3>
       <button class="close-modal" id="closeModalBtn"><i class="fas fa-times"></i></button>
     </div>
     <div class="modal-tabs">
-      <button class="tab-btn active" data-tab="code">🔑 Enter Code</button>
-      <button class="tab-btn" data-tab="buy">🛒 Get Code (¥10)</button>
+      <button class="tab-btn active" data-tab="code">🔑 输入授权码</button>
+      <button class="tab-btn" data-tab="buy">🛒 获取授权码 (¥10)</button>
     </div>
     <div class="tab-panel active" id="codePanel">
-      <p style="color: #064e3b;">Already have a code? Enter it below.</p>
+      <p style="color: #064e3b;">如果您已经购买，请在下方输入授权码。</p>
       <div class="code-input-group">
         <input type="text" id="accessCodeInput" placeholder="ENG-XXXXXX" autocomplete="off">
         <div class="error-msg" id="codeError"></div>
       </div>
-      <button class="btn" id="submitCodeBtn">Unlock & Continue</button>
-      <p style="font-size: 0.8rem; margin-top: 1rem; color: #6b8a9e;">Your code works for all test levels.</p>
+      <button class="btn" id="submitCodeBtn">解锁并继续</button>
+      <p style="font-size: 0.8rem; margin-top: 1rem; color: #6b8a9e;">同一个授权码可用于所有级别。</p>
     </div>
     <div class="tab-panel" id="buyPanel">
-      <div class="price-tag">¥10 RMB</div>
-      <p style="margin-bottom: 1.2rem; color: #064e3b;">One‑time payment · Lifetime access</p>
+      <div class="price-tag">¥10 元</div>
+      <p style="margin-bottom: 1.2rem; color: #064e3b;">一次性付费 · 永久访问</p>
       <div class="contact-methods">
         <div class="contact-item">
           <i class="far fa-envelope"></i>
@@ -358,19 +236,19 @@
         <i class="fab fa-alipay"></i>
         <i class="fab fa-paypal"></i>
       </div>
-      <p style="font-size: 0.9rem; color: #4e6f86;">Contact me with payment screenshot — you'll receive your personal code within minutes.</p>
+      <p style="font-size: 0.9rem; color: #4e6f86;">付款后发送截图给我，几分钟内即可收到您的专属授权码。</p>
     </div>
   </div>
 </div>
 
 <script>
   (function() {
-    // ========== JSONBIN.IO CONFIGURATION ==========
+    // ========== JSONBIN.IO 配置 ==========
     const BIN_ID = "69f794a6856a682189a0ae0c";
     const MASTER_KEY = "$2a$10$OV7m1X11camle5ENh1AA5uFzDjzsDgKYKIz7bOuOLU/sBVocEALge";
     const API_URL = `https://api.jsonbin.io/v3/b/${BIN_ID}`;
 
-    // Fallback codes (if JSONBin is unreachable)
+    // 备用码 (当 JSONBin 不可用时使用)
     const FALLBACK_CODES = {
       "ENG-ABC123": 1,
       "ENG-SADEEQ01": 1,
@@ -395,7 +273,7 @@
     let currentHubUrl = '';
 
     function openModal(level, hubUrl) {
-      modalTitle.textContent = level + ' · Premium Access';
+      modalTitle.textContent = level + ' · 授权码验证';
       currentHubUrl = hubUrl;
       modal.classList.add('active');
       codeInput.value = '';
@@ -442,39 +320,30 @@
     document.querySelectorAll('.copy-btn').forEach(btn => {
       btn.addEventListener('click', (e) => {
         e.stopPropagation();
-        navigator.clipboard.writeText(btn.dataset.copy).then(() => alert('Copied!'));
+        navigator.clipboard.writeText(btn.dataset.copy).then(() => alert('已复制'));
       });
     });
 
-    // ========== JSONBIN.IO VALIDATION ==========
+    // ========== JSONBIN.IO 验证 ==========
     async function validateCodeWithJsonBin(code) {
       try {
-        // read current bin
-        const readRes = await fetch(API_URL, {
-          headers: { 'X-Master-Key': MASTER_KEY }
-        });
-        if (!readRes.ok) throw new Error('Read failed');
+        const readRes = await fetch(API_URL, { headers: { 'X-Master-Key': MASTER_KEY } });
+        if (!readRes.ok) throw new Error('读取失败');
         const data = await readRes.json();
         const codes = data.record;
 
         if (!codes[code] || codes[code] <= 0) return false;
 
-        // decrease remaining
         codes[code] -= 1;
-
-        // update bin
         const updateRes = await fetch(API_URL, {
           method: 'PUT',
-          headers: {
-            'X-Master-Key': MASTER_KEY,
-            'Content-Type': 'application/json'
-          },
+          headers: { 'X-Master-Key': MASTER_KEY, 'Content-Type': 'application/json' },
           body: JSON.stringify(codes)
         });
-        if (!updateRes.ok) throw new Error('Update failed');
+        if (!updateRes.ok) throw new Error('更新失败');
         return true;
       } catch (err) {
-        console.warn('JSONBin offline – using local fallback', err);
+        console.warn('JSONBin 连接失败，使用本地备用码', err);
         return validateCodeLocally(code);
       }
     }
@@ -490,7 +359,7 @@
 
     submitBtn.addEventListener('click', async () => {
       const code = codeInput.value.trim().toUpperCase();
-      if (!code) { codeError.textContent = 'Please enter a code.'; return; }
+      if (!code) { codeError.textContent = '请输入授权码'; return; }
       const valid = await validateCodeWithJsonBin(code);
       if (valid) {
         localStorage.setItem(PREMIUM_KEY, 'true');
@@ -498,11 +367,11 @@
         if (currentHubUrl) {
           window.location.href = currentHubUrl;
         } else {
-          alert('✅ Premium unlocked!');
+          alert('✅ 授权成功！您已解锁全部内容。');
           closeModal();
         }
       } else {
-        codeError.textContent = 'Invalid or already used code.';
+        codeError.textContent = '授权码无效或已被使用。请检查或购买新码。';
       }
     });
 
@@ -511,4 +380,4 @@
   })();
 </script>
 </body>
-</html> 
+</html>
