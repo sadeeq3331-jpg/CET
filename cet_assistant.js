@@ -1,21 +1,37 @@
-// cet_assistant.js – CET English Tutor v2.2 (Fetch interceptor + fallback)
+// cet_assistant.js – CET English Tutor v2.3 (XHR + Fetch interceptors)
 (function() {
     'use strict';
 
-    // ----- FETCH INTERCEPTOR: Remove unsafe "Origin" header for puter.ai -----
+    // ----- INTERCEPT FETCH: Remove unsafe "Origin" header -----
     const originalFetch = window.fetch;
     window.fetch = function(url, options) {
         if (typeof url === 'string' && url.includes('api.puter.com')) {
             if (options && options.headers) {
-                // Remove the forbidden "Origin" header
                 delete options.headers.Origin;
-                // Also remove if it's in the headers object as a string key
-                if (options.headers['Origin']) {
-                    delete options.headers['Origin'];
-                }
+                delete options.headers['Origin'];
             }
         }
         return originalFetch.call(this, url, options);
+    };
+
+    // ----- INTERCEPT XMLHttpRequest: Remove unsafe "Origin" header -----
+    const originalXHROpen = XMLHttpRequest.prototype.open;
+    const originalXHRSetRequestHeader = XMLHttpRequest.prototype.setRequestHeader;
+
+    XMLHttpRequest.prototype.open = function(method, url, async, user, password) {
+        this._url = url;
+        this._headers = {};
+        return originalXHROpen.call(this, method, url, async !== false, user, password);
+    };
+
+    XMLHttpRequest.prototype.setRequestHeader = function(header, value) {
+        if (this._url && this._url.includes('api.puter.com')) {
+            if (header.toLowerCase() === 'origin') {
+                // Silently ignore
+                return;
+            }
+        }
+        return originalXHRSetRequestHeader.call(this, header, value);
     };
 
     // ---------- Configuration ----------
@@ -678,7 +694,7 @@
         const chatMessages = [{ role: 'system', content: systemPrompt }, ...history];
 
         try {
-            // ---- Try puter.ai (with fetch interceptor already active) ----
+            // ---- Try puter.ai (with XHR/fetch interceptors already active) ----
             if (typeof puter !== 'undefined' && puter.ai) {
                 const models = await puter.ai.listModels();
                 let modelId = 'google/gemini-3.1-flash-lite';
