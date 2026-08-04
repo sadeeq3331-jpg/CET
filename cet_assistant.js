@@ -1,6 +1,22 @@
-// cet_assistant.js – CET English Tutor v2.0 (Fully Responsive + puter.ai)
+// cet_assistant.js – CET English Tutor v2.2 (Fetch interceptor + fallback)
 (function() {
     'use strict';
+
+    // ----- FETCH INTERCEPTOR: Remove unsafe "Origin" header for puter.ai -----
+    const originalFetch = window.fetch;
+    window.fetch = function(url, options) {
+        if (typeof url === 'string' && url.includes('api.puter.com')) {
+            if (options && options.headers) {
+                // Remove the forbidden "Origin" header
+                delete options.headers.Origin;
+                // Also remove if it's in the headers object as a string key
+                if (options.headers['Origin']) {
+                    delete options.headers['Origin'];
+                }
+            }
+        }
+        return originalFetch.call(this, url, options);
+    };
 
     // ---------- Configuration ----------
     const STORAGE_KEY = 'cet_tutor_conversations';
@@ -26,7 +42,7 @@
     let lastActiveDate = '';
     let lastFlashcardAdd = '';
 
-    // ---------- DOM refs (will be set later) ----------
+    // ---------- DOM refs ----------
     let container, panel, bubble, sidebar, messagesDiv, inputTextarea, sendBtn, statsEl;
 
     // ---------- Helper Functions ----------
@@ -630,17 +646,11 @@
         showToast('🎤 Speak English...');
     }
 
-    // ---------- Send Message (with puter.ai) ----------
+    // ---------- Send Message (with puter.ai + fallback) ----------
     async function sendMessage(initialText, isRegenerate) {
         const input = document.getElementById('cet-input');
         const text = initialText || (input ? input.value.trim() : '');
         if (!text || isWaiting) return;
-
-        // Check if puter.ai is available
-        if (typeof puter === 'undefined' || !puter.ai) {
-            addMessage('assistant', '⚠️ The AI tutor is not available. Please make sure the puter.ai library is loaded.');
-            return;
-        }
 
         if (input) input.value = '';
         if (!isRegenerate) addMessage('user', text);
@@ -668,21 +678,45 @@
         const chatMessages = [{ role: 'system', content: systemPrompt }, ...history];
 
         try {
-            // Use a simple model selection
-            const models = await puter.ai.listModels();
-            let modelId = 'google/gemini-3.1-flash-lite';
-            if (models.some(m => m.id === modelId)) {
-                // use it
-            } else if (models.length > 0) {
-                modelId = models[0].id;
+            // ---- Try puter.ai (with fetch interceptor already active) ----
+            if (typeof puter !== 'undefined' && puter.ai) {
+                const models = await puter.ai.listModels();
+                let modelId = 'google/gemini-3.1-flash-lite';
+                if (models.some(m => m.id === modelId)) {
+                    // use it
+                } else if (models.length > 0) {
+                    modelId = models[0].id;
+                }
+                const raw = await puter.ai.chat(chatMessages, { model: modelId });
+                const clean = raw?.message?.content || raw?.content || JSON.stringify(raw);
+                isWaiting = false;
+                addMessage('assistant', clean);
+            } else {
+                throw new Error('puter.ai not available');
             }
-            const raw = await puter.ai.chat(chatMessages, { model: modelId });
-            const clean = raw?.message?.content || raw?.content || JSON.stringify(raw);
-            isWaiting = false;
-            addMessage('assistant', clean);
         } catch (e) {
+            // ---- Fallback: mock response ----
+            console.warn('AI error, using fallback:', e.message);
+            let fallback = '';
+            if (languageMode === 'chinese') {
+                fallback = `⚠️ AI 服务暂时不可用 (错误: ${e.message})。\n\n` +
+                    `💡 请确保您通过 HTTPS 或 localhost 访问此页面。\n\n` +
+                    `同时，您可以尝试以下简单练习：\n` +
+                    `- 区分 "affect" 和 "effect"：affect 是动词(影响)，effect 是名词(效果)。\n` +
+                    `- 练习 "although" 用法：Although it rained, we went out. (虽然下雨了，我们还是出去了。)\n` +
+                    `- 常用 CET-4 词汇：significant (重要的), benefit (益处), challenge (挑战)。\n\n` +
+                    `如果您想继续使用 AI，请刷新页面或检查网络连接。`;
+            } else {
+                fallback = `⚠️ AI service is temporarily unavailable (error: ${e.message}).\n\n` +
+                    `💡 Please make sure you are accessing this page via HTTPS or localhost.\n\n` +
+                    `Meanwhile, try these simple exercises:\n` +
+                    `- Difference between "affect" and "effect": affect is a verb, effect is a noun.\n` +
+                    `- Practice "although": Although it rained, we went out.\n` +
+                    `- Common CET-4 vocabulary: significant, benefit, challenge.\n\n` +
+                    `If you want to continue using AI, please refresh or check your network.`;
+            }
             isWaiting = false;
-            addMessage('assistant', 'Tutor error: ' + e.message);
+            addMessage('assistant', fallback);
         }
     }
 
@@ -1206,7 +1240,6 @@
         modeToggle.addEventListener('change', function(e) {
             languageMode = this.checked ? 'english' : 'chinese';
             showToast('Switched to ' + (languageMode === 'english' ? 'English' : 'Chinese') + ' mode');
-            // No need to re-render, just update the system prompt for future messages.
         });
 
         // Minimize / close
