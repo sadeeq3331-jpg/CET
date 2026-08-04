@@ -1,12 +1,16 @@
-// cet_assistant.js – Chinese-to-English Learning Assistant v1.0
+// cet_assistant.js – CET English Tutor v2.0 (Fully Responsive + puter.ai)
 (function() {
-    const STORAGE_KEY = 'cet_assistant_conversations';
-    const FLASHCARD_KEY = 'cet_assistant_flashcards';
-    const STREAK_KEY = 'cet_assistant_streak';
-    const LAST_ADD_KEY = 'cet_assistant_last_flashcard_add';
+    'use strict';
+
+    // ---------- Configuration ----------
+    const STORAGE_KEY = 'cet_tutor_conversations';
+    const FLASHCARD_KEY = 'cet_tutor_flashcards';
+    const STREAK_KEY = 'cet_tutor_streak';
+    const LAST_ADD_KEY = 'cet_tutor_last_flashcard_add';
     const MAX_MESSAGE_LENGTH = 1000;
     const MAX_HISTORY_MESSAGES = 20;
 
+    // ---------- State ----------
     let conversations = [];
     let currentConvId = null;
     let isWaiting = false;
@@ -15,102 +19,25 @@
     let fontSize = 18;
     let panelDarkMode = false;
     let languageMode = 'chinese'; // 'chinese' or 'english'
+    let personality = 'general';
     let sidebarOpen = false;
-    let currentModelId = null;
     let flashcards = [];
     let streak = 0;
     let lastActiveDate = '';
     let lastFlashcardAdd = '';
 
-    // ---------- CET Level Segments ----------
-    const CET_SEGMENTS = {
-        1: { label: 'CET-4', focus: 'Essential Vocabulary & Grammar', segments: ['🎧 Listening Practice', '📖 Reading Comprehension', '✍️ Basic Writing'], writing: true },
-        2: { label: 'CET-6', focus: 'Advanced Vocabulary & Academic English', segments: ['🎧 Academic Listening', '📖 Advanced Reading', '✍️ Essay Writing'], writing: true },
-        3: { label: 'Daily Conversation', focus: 'Practical Speaking & Listening', segments: ['🎧 Everyday Dialogues', '📖 Real-world Phrases', '💬 Speaking Practice'], writing: false }
-    };
+    // ---------- DOM refs (will be set later) ----------
+    let container, panel, bubble, sidebar, messagesDiv, inputTextarea, sendBtn, statsEl;
 
-    function getCETSegments(level) {
-        return CET_SEGMENTS[level] || CET_SEGMENTS[1];
-    }
-
-    // ---------- Theme Colors (Futuristic Blue/Teal) ----------
-    const CET_THEMES = {
-        accent: '#2dd4bf',
-        accentHover: '#14b8a6',
-        gradient: 'linear-gradient(145deg, #0f172a, #1e293b)',
-        glow: 'rgba(45,212,191,0.3)',
-        darkAccent: '#5eead4'
-    };
-
-    function getTheme() { return CET_THEMES; }
-
-    function applyThemeToPanel() {
-        const panel = document.querySelector('.cet-panel');
-        if (!panel) return;
-        const theme = getTheme();
-        const isDark = document.body.classList.contains('dark') || panelDarkMode;
-        const accent = isDark ? theme.darkAccent : theme.accent;
-        const accentHover = isDark ? theme.accent : theme.accentHover;
-        panel.style.setProperty('--cet-accent', accent);
-        panel.style.setProperty('--cet-accent-hover', accentHover);
-        panel.style.setProperty('--cet-gradient', theme.gradient);
-        panel.style.setProperty('--cet-glow', theme.glow);
-        const header = panel.querySelector('.cet-panel-header');
-        if (header) header.style.background = theme.gradient;
-        const sendBtn = panel.querySelector('#cet-send');
-        if (sendBtn) sendBtn.style.background = accent;
-        const quizBtn = panel.querySelector('#quiz-btn');
-        if (quizBtn) quizBtn.style.background = accent;
-        document.querySelectorAll('.cet-toast').forEach(el => el.style.background = accent);
-        updateLevelBadge();
-    }
-
-    function updateLevelBadge() {
-        const badge = document.getElementById('level-badge');
-        if (!badge) return;
-        const segments = getCETSegments(1);
-        badge.textContent = segments.segments.join(' · ');
-        badge.style.color = getTheme().accent;
-    }
-
-    // ---------- Language Mode Toggle ----------
+    // ---------- Helper Functions ----------
     function getLanguageModePrompt() {
         if (languageMode === 'chinese') {
-            return `You are an English tutor for Chinese students. Your main job is to help Chinese students learn English, especially for CET (College English Test) preparation.
-
-IMPORTANT: Respond in CHINESE for all explanations, grammar points, corrections, and instructions. Chinese students should understand everything clearly.
-
-Guidelines:
-- Provide clear, accurate, and useful answers in Chinese.
-- When explaining vocabulary, give the English word, its pronunciation (IPA or phonetic), and a detailed Chinese explanation.
-- ALWAYS provide example sentences in ENGLISH, followed by a Chinese translation in parentheses.
-- Example format: "I go to school every day. (我每天去学校。)"
-- Focus on CET-4 and CET-6 vocabulary, common phrases, and daily conversation.
-- Help students understand English grammar through Chinese explanations.
-- Provide memory techniques: roots, prefixes, suffixes, associations.
-- Keep a friendly, encouraging tone.
-
-CRITICAL: All explanations MUST be in Chinese. Only example sentences and their Chinese translations should contain English.`;
+            return `You are an English tutor for Chinese students. Respond in CHINESE for all explanations, grammar points, and instructions. Provide English example sentences with Chinese translations in parentheses.`;
         } else {
-            return `You are an English tutor for Chinese students. Your main job is to help Chinese students learn English, especially for CET (College English Test) preparation.
-
-IMPORTANT: Respond in ENGLISH for all explanations, grammar points, corrections, and instructions. Chinese students should improve their English comprehension through exposure.
-
-Guidelines:
-- Provide clear, accurate, and useful answers in English.
-- When explaining vocabulary, give the English word, its pronunciation (IPA or phonetic), and a detailed English explanation.
-- ALWAYS provide example sentences in ENGLISH, followed by a Chinese translation in parentheses.
-- Example format: "I go to school every day. (我每天去学校。)"
-- Focus on CET-4 and CET-6 vocabulary, common phrases, and daily conversation.
-- Help students understand English grammar through English explanations with simple language.
-- Provide memory techniques: roots, prefixes, suffixes, associations.
-- Keep a friendly, encouraging tone.
-
-CRITICAL: All explanations MUST be in English. Only example sentences and their Chinese translations should contain Chinese.`;
+            return `You are an English tutor for Chinese students. Respond in ENGLISH for all explanations, grammar points, and instructions. Provide English example sentences with Chinese translations in parentheses.`;
         }
     }
 
-    // ---------- Text Formatting ----------
     function formatText(text) {
         if (!text) return text;
         let html = text;
@@ -130,47 +57,134 @@ CRITICAL: All explanations MUST be in English. Only example sentences and their 
         return html;
     }
 
-    // ---------- Tips ----------
-    const TIPS = [
-        "Tip: 'Affect' is usually a verb (影响), 'Effect' is usually a noun (效果).",
-        "Tip: Use 'a' before consonant sounds (a university), 'an' before vowel sounds (an hour).",
-        "Tip: 'I look forward to' + noun/gerund, not infinitive: 'I look forward to seeing you.'",
-        "Tip: 'Although' and 'but' cannot be used together in the same sentence.",
-        "Tip: 'Since' can mean 'because' or 'from that time'. Context matters!",
-        "Tip: 'Lay' means 'to put down' (放置) – it takes an object. 'Lie' means 'to recline' (躺) – it doesn't.",
-        "Tip: 'Fewer' is for countable nouns (fewer apples), 'Less' is for uncountable (less water).",
-        "Tip: 'The number of' takes a singular verb. 'A number of' takes a plural verb.",
-        "Tip: 'Who' is for people, 'That' is for things or people, 'Which' is for things only.",
-        "Tip: 'Its' is possessive (它的), 'It's' is a contraction of 'it is'.",
-        "Tip: 'There', 'Their', 'They're' – learn the difference for CET writing.",
-        "Tip: Use 'into' for movement toward the inside, 'in' for location.",
-        "Tip: 'Between' is for two items, 'Among' is for three or more.",
-        "Tip: 'Farther' is for physical distance, 'Further' is for metaphorical distance.",
-        "Tip: 'Who' is for subjects, 'Whom' is for objects (rarely used in casual speech).",
-        "Tip: 'Prevent' is followed by 'from' + gerund: 'Prevent me from going'.",
-        "Tip: 'Suggest' is followed by a gerund, not infinitive: 'I suggest studying'.",
-        "Tip: 'Enjoy' is always followed by a gerund: 'I enjoy swimming', not 'I enjoy to swim'.",
-        "Tip: 'Used to' = past habit. 'Be used to' = accustomed to.",
-        "Tip: 'Would rather' is followed by a bare infinitive: 'I would rather go'.",
-        "Tip: 'Had better' is followed by a bare infinitive: 'You had better leave'.",
-        "Tip: 'So...that' shows result, 'Such...that' shows degree.",
-        "Tip: 'Too...to' means 'so...that not': 'too tired to continue'.",
-        "Tip: 'Enough' comes before nouns but after adjectives: 'enough time' but 'big enough'.",
-        "Tip: 'All' can be singular or plural depending on context: 'All is well' vs 'All are here'.",
-        "Tip: 'Each' is always singular: 'Each student is responsible'.",
-        "Tip: 'Neither' and 'Either' are singular: 'Neither is correct'.",
-        "Tip: 'One of the' + plural noun + singular verb: 'One of the students is late'.",
-        "Tip: 'By the time' requires perfect tense: 'By the time he arrived, she had left'.",
-        "Tip: 'No sooner...than' is used with inversion: 'No sooner had I left than it rained'."
-    ];
-
-    function getDailyTip() {
-        const today = new Date();
-        const dayOfYear = Math.floor((today - new Date(today.getFullYear(), 0, 0)) / (1000 * 60 * 60 * 24));
-        return TIPS[dayOfYear % TIPS.length];
+    function escapeHtml(str) {
+        return String(str).replace(/[&<>]/g, function(m) {
+            if (m === '&') return '&amp;';
+            if (m === '<') return '&lt;';
+            if (m === '>') return '&gt;';
+            return m;
+        });
     }
 
-    // ---------- Streak & Flashcard ----------
+    function truncateText(text, maxLen) {
+        if (text.length <= maxLen) return text;
+        return text.substring(0, maxLen) + '…';
+    }
+
+    function showToast(msg) {
+        const toast = document.createElement('div');
+        toast.className = 'cet-toast';
+        toast.textContent = msg;
+        document.body.appendChild(toast);
+        setTimeout(() => toast.remove(), 2000);
+    }
+
+    // ---------- Storage ----------
+    function loadConversations() {
+        const stored = localStorage.getItem(STORAGE_KEY);
+        if (stored) {
+            try {
+                conversations = JSON.parse(stored);
+                conversations.forEach(c => { if (!c.id) c.id = Date.now() + Math.random(); if (!c.name) c.name = 'Chat'; if (!c.messages) c.messages = []; });
+            } catch(e) { conversations = []; }
+        }
+        if (conversations.length === 0) {
+            conversations.push({
+                id: Date.now(),
+                name: 'New Chat',
+                messages: [{ role: 'assistant', content: '👋 Hi! I\'m your CET English tutor. Ask me about vocabulary, grammar, or anything about learning English!', timestamp: Date.now() }]
+            });
+        }
+        if (!currentConvId) currentConvId = conversations[0].id;
+        const storedPinned = localStorage.getItem('cet_tutor_pinned');
+        if (storedPinned) pinnedMessages = JSON.parse(storedPinned);
+    }
+
+    function saveConversations() {
+        localStorage.setItem(STORAGE_KEY, JSON.stringify(conversations));
+    }
+
+    function getCurrentConv() {
+        return conversations.find(c => c.id === currentConvId);
+    }
+
+    function addMessage(role, content) {
+        const conv = getCurrentConv();
+        if (!conv) return;
+        conv.messages.push({ role, content, timestamp: Date.now() });
+        saveConversations();
+        renderMessages();
+        renderSidebar();
+        updateStats();
+        if (role === 'user') { updateStreak(); renderSidebar(); }
+    }
+
+    function deleteMessage(index) {
+        const conv = getCurrentConv();
+        if (!conv) return;
+        pinnedMessages = pinnedMessages.filter(p => p.convId !== currentConvId || p.idx !== index);
+        conv.messages.splice(index, 1);
+        saveConversations();
+        savePinned();
+        renderMessages();
+        renderSidebar();
+        updateStats();
+    }
+
+    function editUserMessage(index, newContent) {
+        if (!newContent) return;
+        const conv = getCurrentConv();
+        if (!conv || conv.messages[index]?.role !== 'user') return;
+        conv.messages[index].content = newContent;
+        if (index + 1 < conv.messages.length && conv.messages[index+1].role === 'assistant') conv.messages.splice(index+1, 1);
+        saveConversations();
+        renderMessages();
+        sendMessage(newContent, true);
+    }
+
+    function togglePinMessage(idx) {
+        const conv = getCurrentConv();
+        const msg = conv.messages[idx];
+        if (!msg || msg.role !== 'assistant') return;
+        const existingIdx = pinnedMessages.findIndex(p => p.convId === currentConvId && p.idx === idx);
+        if (existingIdx !== -1) pinnedMessages.splice(existingIdx, 1);
+        else pinnedMessages.push({ convId: currentConvId, idx, content: msg.content });
+        savePinned();
+        renderSidebar();
+        renderMessages();
+    }
+
+    function savePinned() { localStorage.setItem('cet_tutor_pinned', JSON.stringify(pinnedMessages)); }
+    function isPinned(idx) { return pinnedMessages.some(p => p.convId === currentConvId && p.idx === idx); }
+
+    // ---------- Flashcard ----------
+    function loadFlashcards() {
+        try { flashcards = JSON.parse(localStorage.getItem(FLASHCARD_KEY)) || []; } catch(e) { flashcards = []; }
+        lastFlashcardAdd = localStorage.getItem(LAST_ADD_KEY) || '';
+    }
+    function saveFlashcards() { localStorage.setItem(FLASHCARD_KEY, JSON.stringify(flashcards)); renderSidebar(); }
+    function addFlashcard(word) {
+        if (!word || word.trim().length === 0) return;
+        const trimmed = word.trim();
+        if (!flashcards.includes(trimmed)) {
+            flashcards.push(trimmed);
+            localStorage.setItem(LAST_ADD_KEY, new Date().toISOString());
+            lastFlashcardAdd = localStorage.getItem(LAST_ADD_KEY);
+            saveFlashcards();
+            showToast('✅ Added "' + trimmed + '" to flashcards');
+        } else showToast('"' + trimmed + '" already in flashcards');
+    }
+    function removeFlashcard(word) {
+        flashcards = flashcards.filter(w => w !== word);
+        saveFlashcards();
+        renderSidebar();
+    }
+    function daysSinceLastFlashcard() {
+        if (!lastFlashcardAdd) return Infinity;
+        return (Date.now() - new Date(lastFlashcardAdd).getTime()) / (1000 * 60 * 60 * 24);
+    }
+
+    // ---------- Streak ----------
     function updateStreak() {
         const today = new Date().toDateString();
         if (lastActiveDate !== today) {
@@ -217,129 +231,11 @@ CRITICAL: All explanations MUST be in English. Only example sentences and their 
         }
     }
 
-    function loadFlashcards() {
-        try { flashcards = JSON.parse(localStorage.getItem(FLASHCARD_KEY)) || []; } catch(e) { flashcards = []; }
-        lastFlashcardAdd = localStorage.getItem(LAST_ADD_KEY) || '';
-    }
-    function saveFlashcards() { localStorage.setItem(FLASHCARD_KEY, JSON.stringify(flashcards)); renderSidebar(); }
-    function addFlashcard(word) {
-        if (!word || word.trim().length === 0) return;
-        const trimmed = word.trim();
-        if (!flashcards.includes(trimmed)) {
-            flashcards.push(trimmed);
-            localStorage.setItem(LAST_ADD_KEY, new Date().toISOString());
-            lastFlashcardAdd = localStorage.getItem(LAST_ADD_KEY);
-            saveFlashcards();
-            showToast('✅ Added "' + trimmed + '" to flashcards');
-        } else showToast('"' + trimmed + '" already in flashcards');
-    }
-    function removeFlashcard(word) {
-        flashcards = flashcards.filter(w => w !== word);
-        saveFlashcards();
-        renderSidebar();
-    }
-    function daysSinceLastFlashcard() {
-        if (!lastFlashcardAdd) return Infinity;
-        return (Date.now() - new Date(lastFlashcardAdd).getTime()) / (1000 * 60 * 60 * 24);
-    }
-
-    // ---------- Core Helpers ----------
-    function extractPuterMessage(raw) {
-        if (typeof raw === 'string') {
-            try { return JSON.parse(raw).message?.content || raw; } catch { return raw; }
-        }
-        return raw?.message?.content || raw?.content || JSON.stringify(raw);
-    }
-    function truncateText(text, maxLen) {
-        if (text.length <= maxLen) return text;
-        return text.substring(0, maxLen) + '…';
-    }
-    function escapeHtml(str) {
-        return String(str).replace(/[&<>]/g, function(m) {
-            if (m === '&') return '&amp;';
-            if (m === '<') return '&lt;';
-            if (m === '>') return '&gt;';
-            return m;
-        });
-    }
-    function showToast(msg) {
-        const toast = document.createElement('div');
-        toast.className = 'cet-toast';
-        toast.textContent = msg;
-        document.body.appendChild(toast);
-        setTimeout(() => toast.remove(), 2000);
-    }
-
-    function loadConversations() {
-        const stored = localStorage.getItem(STORAGE_KEY);
-        if (stored) {
-            try {
-                conversations = JSON.parse(stored);
-                conversations.forEach(c => { if (!c.id) c.id = Date.now() + Math.random(); if (!c.name) c.name = 'Chat'; if (!c.messages) c.messages = []; });
-            } catch(e) { conversations = []; }
-        }
-        if (conversations.length === 0) {
-            conversations.push({
-                id: Date.now(),
-                name: 'New Chat',
-                messages: [{ role: 'assistant', content: '👋 Hi! I\'m your CET English tutor. Ask me about vocabulary, grammar, or anything about learning English!', timestamp: Date.now() }]
-            });
-        }
-        if (!currentConvId) currentConvId = conversations[0].id;
-        const storedPinned = localStorage.getItem('cet_pinned');
-        if (storedPinned) pinnedMessages = JSON.parse(storedPinned);
-    }
-    function saveConversations() { localStorage.setItem(STORAGE_KEY, JSON.stringify(conversations)); }
-    function getCurrentConv() { return conversations.find(c => c.id === currentConvId); }
-    function addMessage(role, content) {
-        const conv = getCurrentConv();
-        if (!conv) return;
-        conv.messages.push({ role, content, timestamp: Date.now() });
-        saveConversations();
-        renderMessages();
-        renderSidebar();
-        updateStats();
-        if (role === 'user') { updateStreak(); renderSidebar(); }
-    }
-    function deleteMessage(index) {
-        const conv = getCurrentConv();
-        if (!conv) return;
-        pinnedMessages = pinnedMessages.filter(p => p.convId !== currentConvId || p.idx !== index);
-        conv.messages.splice(index, 1);
-        saveConversations();
-        savePinned();
-        renderMessages();
-        renderSidebar();
-        updateStats();
-    }
-    function editUserMessage(index, newContent) {
-        if (!newContent) return;
-        const conv = getCurrentConv();
-        if (!conv || conv.messages[index]?.role !== 'user') return;
-        conv.messages[index].content = newContent;
-        if (index + 1 < conv.messages.length && conv.messages[index+1].role === 'assistant') conv.messages.splice(index+1, 1);
-        saveConversations();
-        renderMessages();
-        sendMessage(newContent, true);
-    }
-    function togglePinMessage(idx) {
-        const conv = getCurrentConv();
-        const msg = conv.messages[idx];
-        if (!msg || msg.role !== 'assistant') return;
-        const existingIdx = pinnedMessages.findIndex(p => p.convId === currentConvId && p.idx === idx);
-        if (existingIdx !== -1) pinnedMessages.splice(existingIdx, 1);
-        else pinnedMessages.push({ convId: currentConvId, idx, content: msg.content });
-        savePinned();
-        renderSidebar();
-        renderMessages();
-    }
-    function savePinned() { localStorage.setItem('cet_pinned', JSON.stringify(pinnedMessages)); }
-    function isPinned(idx) { return pinnedMessages.some(p => p.convId === currentConvId && p.idx === idx); }
-
     // ---------- Render Sidebar ----------
     function renderSidebar() {
         const sidebar = document.getElementById('cet-sidebar');
         if (!sidebar) return;
+
         let html = '<div class="sidebar-section"><div class="section-title">📋 Chats</div><div class="conv-list">';
         conversations.forEach(c => {
             const active = c.id === currentConvId ? 'active' : '';
@@ -387,6 +283,7 @@ CRITICAL: All explanations MUST be in English. Only example sentences and their 
 
         sidebar.innerHTML = html;
 
+        // Event listeners
         document.querySelectorAll('.conv-item').forEach(item => {
             item.addEventListener('click', function(e) {
                 e.stopPropagation();
@@ -447,26 +344,7 @@ CRITICAL: All explanations MUST be in English. Only example sentences and their 
         if (overlay) overlay.style.display = isOpen ? 'block' : 'none';
     }
 
-    // ---------- Render Functions ----------
-    let renderScheduled = false;
-    function renderAll() {
-        if (renderScheduled) return;
-        renderScheduled = true;
-        requestAnimationFrame(() => {
-            renderSidebar();
-            renderMessages();
-            updateStats();
-            updateContextSuggestions();
-            updateWordOfDay();
-            updateBubbleReminders();
-            const modeToggle = document.getElementById('mode-toggle');
-            if (modeToggle) modeToggle.checked = (languageMode === 'english');
-            applyThemeToPanel();
-            updateLevelBadge();
-            renderScheduled = false;
-        });
-    }
-
+    // ---------- Render Messages ----------
     function renderMessages() {
         const msgsDiv = document.getElementById('cet-messages');
         if (!msgsDiv) return;
@@ -507,6 +385,7 @@ CRITICAL: All explanations MUST be in English. Only example sentences and their 
         }
         msgsDiv.innerHTML = html;
 
+        // Event listeners
         msgsDiv.querySelectorAll('.read-more').forEach(btn => {
             btn.addEventListener('click', function(e) { e.stopPropagation(); const idx = parseInt(this.dataset.idx); window.toggleReadMore(idx); });
         });
@@ -562,15 +441,16 @@ CRITICAL: All explanations MUST be in English. Only example sentences and their 
         }
     };
 
+    // ---------- Stats ----------
     function updateStats() {
         const conv = getCurrentConv();
         if (!conv) return;
         const msgCount = conv.messages.length;
         const wordCount = conv.messages.reduce((sum, m) => sum + m.content.split(/\s+/).length, 0);
-        const statsEl = document.getElementById('cet-stats');
         if (statsEl) statsEl.innerText = msgCount + ' msgs · ~' + wordCount + ' words · 🔥 ' + streak + 'd streak';
     }
 
+    // ---------- Context Suggestions ----------
     function updateContextSuggestions() {
         const container = document.getElementById('suggestions');
         if (!container) return;
@@ -598,7 +478,6 @@ CRITICAL: All explanations MUST be in English. Only example sentences and their 
     }
 
     // ---------- Word of the Day ----------
-    let wordOfDay = '', wordOfDayMeaning = '';
     function updateWordOfDay() {
         const wodEl = document.getElementById('word-of-day');
         if (!wodEl) return;
@@ -616,8 +495,6 @@ CRITICAL: All explanations MUST be in English. Only example sentences and their 
         ];
         const idx = new Date().getDate() % words.length;
         const chosen = words[idx];
-        wordOfDay = chosen.word;
-        wordOfDayMeaning = chosen.meaning;
         wodEl.innerHTML = `📖 Word of the Day: <strong>${chosen.word}</strong> (${chosen.meaning}) <button class="wod-ask">❓</button>`;
         wodEl.querySelector('.wod-ask')?.addEventListener('click', function() {
             document.getElementById('cet-input').value = 'Explain the word "' + chosen.word + '" with examples';
@@ -679,44 +556,43 @@ CRITICAL: All explanations MUST be in English. Only example sentences and their 
         bubble.appendChild(reminder);
     }
 
-    // ---------- Language Mode Toggle Animation ----------
-    function animateModeToggle() {
-        const toggle = document.getElementById('mode-toggle');
-        if (!toggle) return;
-        toggle.style.transition = 'all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1)';
-        toggle.style.boxShadow = '0 0 30px var(--cet-glow, rgba(45,212,191,0.6))';
-        setTimeout(() => { toggle.style.boxShadow = 'none'; }, 500);
-        const modeText = languageMode === 'english' ? 'English Mode' : '中文模式';
-        showToast('📚 Switched to ' + modeText);
-    }
+    // ---------- Tips ----------
+    const TIPS = [
+        "Tip: 'Affect' is usually a verb (影响), 'Effect' is usually a noun (效果).",
+        "Tip: Use 'a' before consonant sounds, 'an' before vowel sounds.",
+        "Tip: 'I look forward to' + noun/gerund, not infinitive: 'I look forward to seeing you.'",
+        "Tip: 'Although' and 'but' cannot be used together.",
+        "Tip: 'Since' can mean 'because' or 'from that time'.",
+        "Tip: 'Lay' means 'to put down' – it takes an object. 'Lie' means 'to recline' – it doesn't.",
+        "Tip: 'Fewer' is for countable nouns, 'Less' is for uncountable.",
+        "Tip: 'The number of' takes singular verb; 'A number of' takes plural.",
+        "Tip: 'Who' is for people, 'That' for things/people, 'Which' for things.",
+        "Tip: 'Its' is possessive, 'It's' is 'it is'.",
+        "Tip: 'There', 'Their', 'They're' – learn the difference.",
+        "Tip: 'Into' for movement, 'in' for location.",
+        "Tip: 'Between' for two, 'Among' for three or more.",
+        "Tip: 'Farther' for physical distance, 'Further' for metaphorical.",
+        "Tip: 'Prevent' is followed by 'from' + gerund.",
+        "Tip: 'Suggest' is followed by a gerund, not infinitive.",
+        "Tip: 'Enjoy' is always followed by a gerund.",
+        "Tip: 'Used to' = past habit; 'Be used to' = accustomed to.",
+        "Tip: 'Would rather' is followed by bare infinitive.",
+        "Tip: 'Had better' is followed by bare infinitive.",
+        "Tip: 'So...that' shows result, 'Such...that' shows degree.",
+        "Tip: 'Too...to' means 'so...that not'.",
+        "Tip: 'Enough' comes before nouns but after adjectives.",
+        "Tip: 'All' can be singular or plural depending on context.",
+        "Tip: 'Each' is always singular.",
+        "Tip: 'Neither' and 'Either' are singular.",
+        "Tip: 'One of the' + plural noun + singular verb.",
+        "Tip: 'By the time' requires perfect tense.",
+        "Tip: 'No sooner...than' is used with inversion."
+    ];
 
-    // ---------- Quick Quiz ----------
-    function startQuickQuiz() {
-        let quizText = '🎯 **Quick English Quiz**\n\n';
-
-        const questions = [
-            { q: 'What is the past tense of "go"?', options: ['A. goed', 'B. went', 'C. gone', 'D. going'], correct: 1 },
-            { q: 'Choose the correct sentence:', options: ['A. I am agree.', 'B. I agree.', 'C. I am agreeing.', 'D. I agrees.'], correct: 1 },
-            { q: 'What does "challenge" mean?', options: ['A. 挑战', 'B. 变化', 'C. 机会', 'D. 成功'], correct: 0 },
-            { q: 'Fill in the blank: "She is ____ than her sister."', options: ['A. tall', 'B. taller', 'C. tallest', 'D. most tall'], correct: 1 },
-            { q: 'What is the opposite of "expensive"?', options: ['A. cheap', 'B. costly', 'C. pricey', 'D. valuable'], correct: 0 },
-        ];
-
-        const shuffled = questions.sort(() => Math.random() - 0.5);
-        const selected = shuffled.slice(0, 5);
-
-        selected.forEach((q, i) => {
-            quizText += (i+1) + '. ' + q.q + '\n';
-            q.options.forEach(opt => {
-                quizText += '   ' + opt + '\n';
-            });
-            quizText += '   ✅ Answer: ' + q.options[q.correct] + '\n\n';
-        });
-
-        quizText += '💡 Keep practicing! Ask me for more quizzes.';
-
-        addMessage('user', '🎯 Quick English Quiz');
-        addMessage('assistant', quizText);
+    function getDailyTip() {
+        const today = new Date();
+        const dayOfYear = Math.floor((today - new Date(today.getFullYear(), 0, 0)) / (1000 * 60 * 60 * 24));
+        return TIPS[dayOfYear % TIPS.length];
     }
 
     // ---------- Quote / Copy / Speech ----------
@@ -754,41 +630,18 @@ CRITICAL: All explanations MUST be in English. Only example sentences and their 
         showToast('🎤 Speak English...');
     }
 
-    // ---------- Model Selection ----------
-    async function getBestModel() {
-        if (currentModelId) return currentModelId;
-        try {
-            const models = await puter.ai.listModels();
-            const preferred = ['google/gemini-3.1-flash-lite', 'google/gemini-2.5-flash-lite-001', 'google/gemini-2.0-flash-lite-001', 'gpt-5.4-nano'];
-            for (const preferredId of preferred) {
-                if (models.some(m => m.id === preferredId)) { currentModelId = preferredId; return currentModelId; }
-            }
-            const geminiModel = models.find(m => m.id.toLowerCase().includes('gemini'));
-            if (geminiModel) { currentModelId = geminiModel.id; return currentModelId; }
-            if (models.length > 0) { currentModelId = models[0].id; return currentModelId; }
-            throw new Error('No chat models available');
-        } catch (err) {
-            console.warn('Model listing failed, using safe default', err);
-            currentModelId = 'google/gemini-3.1-flash-lite';
-            return currentModelId;
-        }
-    }
-
-    // ---------- Send Message ----------
+    // ---------- Send Message (with puter.ai) ----------
     async function sendMessage(initialText, isRegenerate) {
         const input = document.getElementById('cet-input');
         const text = initialText || (input ? input.value.trim() : '');
         if (!text || isWaiting) return;
 
-        let puterReady = false;
-        for (let i = 0; i < 5; i++) {
-            if (window.puter && window.puter.ai) { puterReady = true; break; }
-            await new Promise(r => setTimeout(r, 1000));
-        }
-        if (!puterReady) {
-            addMessage('assistant', 'Tutor is not ready. Please refresh the page.');
+        // Check if puter.ai is available
+        if (typeof puter === 'undefined' || !puter.ai) {
+            addMessage('assistant', '⚠️ The AI tutor is not available. Please make sure the puter.ai library is loaded.');
             return;
         }
+
         if (input) input.value = '';
         if (!isRegenerate) addMessage('user', text);
         isWaiting = true;
@@ -815,9 +668,16 @@ CRITICAL: All explanations MUST be in English. Only example sentences and their 
         const chatMessages = [{ role: 'system', content: systemPrompt }, ...history];
 
         try {
-            const modelId = await getBestModel();
+            // Use a simple model selection
+            const models = await puter.ai.listModels();
+            let modelId = 'google/gemini-3.1-flash-lite';
+            if (models.some(m => m.id === modelId)) {
+                // use it
+            } else if (models.length > 0) {
+                modelId = models[0].id;
+            }
             const raw = await puter.ai.chat(chatMessages, { model: modelId });
-            const clean = extractPuterMessage(raw);
+            const clean = raw?.message?.content || raw?.content || JSON.stringify(raw);
             isWaiting = false;
             addMessage('assistant', clean);
         } catch (e) {
@@ -906,24 +766,75 @@ CRITICAL: All explanations MUST be in English. Only example sentences and their 
         }
         const toggleInput = document.getElementById('sidebar-dark-toggle');
         if (toggleInput) toggleInput.checked = panelDarkMode;
-        applyThemeToPanel();
     }
 
-    // ---------- Create Widget (Full UI) ----------
+    // ---------- Quick Quiz ----------
+    function startQuickQuiz() {
+        let quizText = '🎯 **Quick English Quiz**\n\n';
+
+        const questions = [
+            { q: 'What is the past tense of "go"?', options: ['A. goed', 'B. went', 'C. gone', 'D. going'], correct: 1 },
+            { q: 'Choose the correct sentence:', options: ['A. I am agree.', 'B. I agree.', 'C. I am agreeing.', 'D. I agrees.'], correct: 1 },
+            { q: 'What does "challenge" mean?', options: ['A. 挑战', 'B. 变化', 'C. 机会', 'D. 成功'], correct: 0 },
+            { q: 'Fill in the blank: "She is ____ than her sister."', options: ['A. tall', 'B. taller', 'C. tallest', 'D. most tall'], correct: 1 },
+            { q: 'What is the opposite of "expensive"?', options: ['A. cheap', 'B. costly', 'C. pricey', 'D. valuable'], correct: 0 },
+        ];
+
+        const shuffled = questions.sort(() => Math.random() - 0.5);
+        const selected = shuffled.slice(0, 5);
+
+        selected.forEach((q, i) => {
+            quizText += (i+1) + '. ' + q.q + '\n';
+            q.options.forEach(opt => {
+                quizText += '   ' + opt + '\n';
+            });
+            quizText += '   ✅ Answer: ' + q.options[q.correct] + '\n\n';
+        });
+
+        quizText += '💡 Keep practicing! Ask me for more quizzes.';
+
+        addMessage('user', '🎯 Quick English Quiz');
+        addMessage('assistant', quizText);
+    }
+
+    // ---------- Render All ----------
+    function renderAll() {
+        renderSidebar();
+        renderMessages();
+        updateStats();
+        updateContextSuggestions();
+        updateWordOfDay();
+        updateBubbleReminders();
+        const modeToggle = document.getElementById('mode-toggle');
+        if (modeToggle) modeToggle.checked = (languageMode === 'english');
+    }
+
+    // ---------- Create Widget ----------
     function createWidget() {
-        const container = document.createElement('div');
+        // Build the container with full UI
+        container = document.createElement('div');
         container.id = 'cet-container';
         container.innerHTML = `
 <style>
     #cet-container * { box-sizing: border-box; font-family: 'Inter', 'Segoe UI', system-ui, -apple-system, sans-serif; }
     :root {
-        --cet-primary: #2dd4bf; --bg-glass: rgba(255,255,255,0.7); --bg-sidebar: rgba(248,252,255,0.85);
-        --border-light: rgba(0,0,0,0.08); --shadow-lg: 0 25px 60px rgba(0,0,0,0.15);
-        --text-primary: #1a202c; --text-secondary: #4a5568; --text-muted: #718096;
-        --radius: 16px;
+        --cet-accent: #2dd4bf;
+        --cet-bg-glass: rgba(255,255,255,0.7);
+        --cet-bg-sidebar: rgba(248,252,255,0.85);
+        --cet-border-light: rgba(0,0,0,0.08);
+        --cet-shadow: 0 25px 60px rgba(0,0,0,0.15);
+        --cet-text-primary: #1a202c;
+        --cet-text-secondary: #4a5568;
+        --cet-text-muted: #718096;
     }
-    .dark { --bg-glass: rgba(20,20,30,0.9); --bg-sidebar: rgba(15,15,25,0.95); --border-light: rgba(255,255,255,0.08);
-        --text-primary: #e2e8f0; --text-secondary: #a0aec0; --text-muted: #718096; }
+    .dark {
+        --cet-bg-glass: rgba(20,20,30,0.9);
+        --cet-bg-sidebar: rgba(15,15,25,0.95);
+        --cet-border-light: rgba(255,255,255,0.08);
+        --cet-text-primary: #e2e8f0;
+        --cet-text-secondary: #a0aec0;
+        --cet-text-muted: #718096;
+    }
     .cet-bubble {
         position: fixed; bottom: 20px; left: 20px; width: 60px; height: 60px; border-radius: 50%;
         background: linear-gradient(145deg, #0f172a, #1e293b);
@@ -943,7 +854,7 @@ CRITICAL: All explanations MUST be in English. Only example sentences and their 
     .cet-bubble:hover .tooltip { opacity: 1; }
     .cet-panel {
         position: fixed; top: 0; left: 0; width: 100%; height: 100%;
-        background: var(--bg-glass); backdrop-filter: blur(20px);
+        background: var(--cet-bg-glass); backdrop-filter: blur(20px);
         display: none; flex-direction: column; z-index: 10001;
         overflow: hidden; border: none;
         transition: background 0.3s;
@@ -969,8 +880,8 @@ CRITICAL: All explanations MUST be in English. Only example sentences and their 
     .cet-body { display: flex; flex: 1; overflow: hidden; position: relative; }
     .cet-sidebar {
         position: absolute; top: 0; left: 0; height: 100%;
-        width: 280px; background: var(--bg-sidebar); backdrop-filter: blur(12px);
-        border-right: 1px solid var(--border-light);
+        width: 280px; background: var(--cet-bg-sidebar); backdrop-filter: blur(12px);
+        border-right: 1px solid var(--cet-border-light);
         display: flex; flex-direction: column;
         overflow-y: auto; z-index: 50;
         transform: translateX(-100%);
@@ -986,14 +897,14 @@ CRITICAL: All explanations MUST be in English. Only example sentences and their 
         position: absolute; top: 0; left: 0; width: 100%; height: 100%;
         background: rgba(0,0,0,0.2); z-index: 40; display: none;
     }
-    .sidebar-section { padding: 14px 12px; border-bottom: 1px solid var(--border-light); }
-    .section-title { font-weight: 600; opacity: 0.6; margin-bottom: 10px; font-size: 0.65rem; text-transform: uppercase; letter-spacing: 0.5px; color: var(--text-secondary); }
+    .sidebar-section { padding: 14px 12px; border-bottom: 1px solid var(--cet-border-light); }
+    .section-title { font-weight: 600; opacity: 0.6; margin-bottom: 10px; font-size: 0.65rem; text-transform: uppercase; letter-spacing: 0.5px; color: var(--cet-text-secondary); }
     .conv-list { display: flex; flex-direction: column; gap: 3px; }
     .conv-item {
         display: flex; align-items: center; justify-content: space-between;
         padding: 8px 10px; border-radius: var(--radius-sm); cursor: pointer;
         transition: all 0.15s; font-size: 0.82rem;
-        color: var(--text-primary); min-height: 40px;
+        color: var(--cet-text-primary); min-height: 40px;
     }
     .conv-item:hover { background: rgba(0,0,0,0.04); }
     .dark .conv-item:hover { background: rgba(255,255,255,0.04); }
@@ -1008,16 +919,16 @@ CRITICAL: All explanations MUST be in English. Only example sentences and their 
         font-weight: 600; transition: all 0.2s; font-size: 0.85rem;
     }
     .new-chat-sidebar:hover { background: #2dd4bf; color: white; }
-    .flashcard-item { display: flex; align-items: center; gap: 4px; padding: 4px 0; font-size: 0.8rem; border-bottom: 1px solid var(--border-light); color: var(--text-primary); }
+    .flashcard-item { display: flex; align-items: center; gap: 4px; padding: 4px 0; font-size: 0.8rem; border-bottom: 1px solid var(--cet-border-light); color: var(--cet-text-primary); }
     .flashcard-item .flashcard-word { flex:1; cursor:pointer; font-weight:500; }
     .flashcard-item .flashcard-word:hover { color: #2dd4bf; }
     .flashcard-item button { background: none; border: none; cursor: pointer; font-size: 0.8rem; opacity: 0.5; padding: 4px 6px; }
     .flashcard-item button:hover { opacity: 1; }
-    .pinned-note-item { padding: 4px 0; cursor: pointer; font-size: 0.75rem; border-bottom: 1px solid var(--border-light); color: var(--text-primary); }
+    .pinned-note-item { padding: 4px 0; cursor: pointer; font-size: 0.75rem; border-bottom: 1px solid var(--cet-border-light); color: var(--cet-text-primary); }
     .pinned-note-item:hover { color: #2dd4bf; }
     .setting-row { display: flex; align-items: center; justify-content: space-between; margin-bottom: 10px; }
-    .setting-row label { font-size: 0.8rem; color: var(--text-secondary); }
-    .setting-row select { background: var(--bg-glass); border: 1px solid var(--border-light); border-radius: 20px; padding: 4px 10px; font-size: 0.8rem; color: var(--text-primary); }
+    .setting-row label { font-size: 0.8rem; color: var(--cet-text-secondary); }
+    .setting-row select { background: var(--cet-bg-glass); border: 1px solid var(--cet-border-light); border-radius: 20px; padding: 4px 10px; font-size: 0.8rem; color: var(--cet-text-primary); }
     .toggle-switch { position: relative; display: inline-block; width: 36px; height: 20px; }
     .toggle-switch input { opacity: 0; width: 0; height: 0; }
     .slider { position: absolute; cursor: pointer; top:0; left:0; right:0; bottom:0; background: #ccc; border-radius: 20px; transition: 0.3s; }
@@ -1029,23 +940,23 @@ CRITICAL: All explanations MUST be in English. Only example sentences and their 
     .cet-main { flex: 1; display: flex; flex-direction: column; overflow: hidden; min-width: 0; }
     .chat-header {
         padding: 8px 12px; display: flex; align-items: center; gap: 6px;
-        border-bottom: 1px solid var(--border-light); flex-shrink: 0; flex-wrap: wrap;
-        background: var(--bg-glass); color: var(--text-primary); min-height: 50px;
+        border-bottom: 1px solid var(--cet-border-light); flex-shrink: 0; flex-wrap: wrap;
+        background: var(--cet-bg-glass); color: var(--cet-text-primary); min-height: 50px;
     }
-    .chat-header .wod { font-size: 0.65rem; color: var(--text-secondary); flex-shrink:0; display: none; }
+    .chat-header .wod { font-size: 0.65rem; color: var(--cet-text-secondary); flex-shrink:0; display: none; }
     @media (min-width: 600px) { .chat-header .wod { display: inline; } }
     .chat-header input {
-        flex: 1; padding: 6px 12px; border-radius: 30px; border: 1px solid var(--border-light);
-        background: rgba(255,255,255,0.5); min-width: 60px; font-size:0.8rem; outline:none; color: var(--text-primary);
+        flex: 1; padding: 6px 12px; border-radius: 30px; border: 1px solid var(--cet-border-light);
+        background: rgba(255,255,255,0.5); min-width: 60px; font-size:0.8rem; outline:none; color: var(--cet-text-primary);
         min-height: 36px;
     }
-    .dark .chat-header input { background: rgba(255,255,255,0.05); color: var(--text-primary); }
+    .dark .chat-header input { background: rgba(255,255,255,0.05); color: var(--cet-text-primary); }
     .chat-header .mode-toggle-container {
         display: flex; align-items: center; gap: 4px;
-        flex-shrink: 0; background: var(--bg-glass);
-        border: 1px solid var(--border-light); border-radius: 30px;
+        flex-shrink: 0; background: var(--cet-bg-glass);
+        border: 1px solid var(--cet-border-light); border-radius: 30px;
         padding: 2px 8px; font-size: 0.6rem; font-weight: 700;
-        color: var(--text-secondary); min-height: 36px;
+        color: var(--cet-text-secondary); min-height: 36px;
     }
     .chat-header .mode-toggle-container label { cursor: pointer; display: flex; align-items: center; }
     .mode-toggle-switch { position: relative; display: inline-block; width: 30px; height: 16px; flex-shrink: 0; }
@@ -1062,8 +973,8 @@ CRITICAL: All explanations MUST be in English. Only example sentences and their 
     input:checked + .mode-slider:before { transform: translateX(14px); }
     .mode-label { font-size: 0.55rem; font-weight: 700; min-width: 18px; }
     .level-badge {
-        font-size: 0.55rem; background: var(--bg-glass); border: 1px solid var(--border-light);
-        border-radius: 30px; padding: 1px 8px; color: var(--text-secondary);
+        font-size: 0.55rem; background: var(--cet-bg-glass); border: 1px solid var(--cet-border-light);
+        border-radius: 30px; padding: 1px 8px; color: var(--cet-text-secondary);
         white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
         max-width: 120px; flex-shrink: 1; min-height: 24px; display: flex; align-items: center;
     }
@@ -1078,7 +989,7 @@ CRITICAL: All explanations MUST be in English. Only example sentences and their 
         padding: 8px 14px; border-radius: 16px;
         background: rgba(255,255,255,0.85); backdrop-filter: blur(4px);
         box-shadow: 0 2px 6px rgba(0,0,0,0.03); line-height: 1.6; word-wrap: break-word;
-        color: var(--text-primary); font-size: 0.9rem;
+        color: var(--cet-text-primary); font-size: 0.9rem;
     }
     .dark .message-bubble { background: rgba(50,50,70,0.9); color: #e2e8f0; }
     .user .message-bubble { background: #2dd4bf; color: white; }
@@ -1092,26 +1003,26 @@ CRITICAL: All explanations MUST be in English. Only example sentences and their 
     .message:hover .message-actions { opacity: 1; transform: translateY(0); }
     .icon-btn { background: none; border: none; cursor: pointer; color: inherit; opacity: 0.6; font-size: 0.75rem; padding: 2px 4px; min-width: 28px; min-height: 28px; }
     .icon-btn:hover { opacity: 1; }
-    .timestamp { font-size: 0.55rem; opacity: 0.4; margin-top: 2px; text-align: right; color: var(--text-muted); }
+    .timestamp { font-size: 0.55rem; opacity: 0.4; margin-top: 2px; text-align: right; color: var(--cet-text-muted); }
     .read-more { background: none; border: none; color: #2dd4bf; cursor: pointer; font-size: 0.75rem; margin-top: 4px; font-weight:500; }
     .typing .message-bubble { background: #e6f0fa; display: flex; gap: 4px; padding: 10px 14px; }
     .dark .typing .message-bubble { background: rgba(50,50,70,0.9); }
     .typing-indicator span { animation: blink 1.4s infinite; font-size: 1rem; }
     @keyframes blink { 0% { opacity:0.2; } 20% { opacity:1; } 100% { opacity:0.2; } }
     .input-area {
-        padding: 8px 12px; border-top: 1px solid var(--border-light);
+        padding: 8px 12px; border-top: 1px solid var(--cet-border-light);
         display: flex; gap: 6px; align-items: flex-end;
-        background: var(--bg-glass); backdrop-filter: blur(4px);
+        background: var(--cet-bg-glass); backdrop-filter: blur(4px);
         flex-shrink: 0; flex-wrap: wrap;
     }
     .input-area textarea {
         flex: 1; padding: 8px 14px; border-radius: 30px;
-        border: 1px solid var(--border-light); background: rgba(255,255,255,0.6);
+        border: 1px solid var(--cet-border-light); background: rgba(255,255,255,0.6);
         resize: none; font-size: 0.85rem; outline: none; max-height: 100px;
-        transition: border-color 0.2s; min-height: 40px; color: var(--text-primary);
+        transition: border-color 0.2s; min-height: 40px; color: var(--cet-text-primary);
     }
-    .dark .input-area textarea { background: rgba(255,255,255,0.05); color: var(--text-primary); }
-    .input-area textarea::placeholder { color: var(--text-muted); }
+    .dark .input-area textarea { background: rgba(255,255,255,0.05); color: var(--cet-text-primary); }
+    .input-area textarea::placeholder { color: var(--cet-text-muted); }
     .input-area textarea:focus { border-color: #2dd4bf; }
     .input-area button {
         border: none; border-radius: 50%; width: 40px; height: 40px;
@@ -1127,19 +1038,19 @@ CRITICAL: All explanations MUST be in English. Only example sentences and their 
     .quiz-btn { background: #2dd4bf; color: white; }
     .suggestions {
         display: flex; gap: 6px; padding: 4px 12px; overflow-x: auto;
-        white-space: nowrap; flex-wrap: nowrap; border-top: 1px solid var(--border-light);
-        background: var(--bg-glass); scrollbar-width: none; -ms-overflow-style: none;
+        white-space: nowrap; flex-wrap: nowrap; border-top: 1px solid var(--cet-border-light);
+        background: var(--cet-bg-glass); scrollbar-width: none; -ms-overflow-style: none;
         flex-shrink: 0; min-height: 32px;
     }
     .suggestions::-webkit-scrollbar { display: none; }
     .suggestion-chip {
         flex-shrink: 0; background: rgba(0,0,0,0.04); border-radius: 30px;
         padding: 3px 12px; font-size: 0.7rem; cursor: pointer; transition: all 0.2s;
-        border: 1px solid transparent; color: var(--text-primary); min-height: 28px; display: flex; align-items: center;
+        border: 1px solid transparent; color: var(--cet-text-primary); min-height: 28px; display: flex; align-items: center;
     }
     .dark .suggestion-chip { background: rgba(255,255,255,0.04); }
     .suggestion-chip:hover { background: #2dd4bf; color: white; border-color: #2dd4bf; transform: scale(1.02); }
-    .cet-stats { font-size: 0.55rem; opacity: 0.4; padding: 2px 12px 4px; text-align: right; color: var(--text-muted); flex-shrink: 0; }
+    .cet-stats { font-size: 0.55rem; opacity: 0.4; padding: 2px 12px 4px; text-align: right; color: var(--cet-text-muted); flex-shrink: 0; }
     .cet-toast {
         position: fixed; bottom: 80px; left: 50%; transform: translateX(-50%);
         background: #2dd4bf; color: white; padding: 8px 20px; border-radius: 30px;
@@ -1147,11 +1058,10 @@ CRITICAL: All explanations MUST be in English. Only example sentences and their 
         font-size: 0.85rem; max-width: 90vw; text-align: center;
     }
     @keyframes fadeInUp { from { opacity:0; transform:translate(-50%,20px); } to { opacity:1; transform:translate(-50%,0); } }
-    @keyframes cetTooltipPop { 0% { opacity:0; transform:translateX(-50%) scale(0.8); } 100% { opacity:1; transform:translateX(-50%) scale(1); } }
-    .muted { opacity: 0.5; font-size: 0.75rem; color: var(--text-muted); }
+    .muted { opacity: 0.5; font-size: 0.75rem; color: var(--cet-text-muted); }
     .bullet-list, ol { margin: 4px 0 4px 20px; padding: 0; }
     .bullet-list li, ol li { margin-bottom: 2px; }
-    h2, h3, h4 { margin: 6px 0 4px; color: var(--text-primary); }
+    h2, h3, h4 { margin: 6px 0 4px; color: var(--cet-text-primary); }
     h2 { font-size: 1.2rem; }
     h3 { font-size: 1.05rem; }
     h4 { font-size: 0.95rem; }
@@ -1241,16 +1151,23 @@ CRITICAL: All explanations MUST be in English. Only example sentences and their 
 
         document.body.appendChild(container);
 
-        const panel = container.querySelector('.cet-panel');
-        const bubble = container.querySelector('.cet-bubble');
+        panel = container.querySelector('.cet-panel');
+        bubble = container.querySelector('.cet-bubble');
+        sidebar = document.getElementById('cet-sidebar');
+        messagesDiv = document.getElementById('cet-messages');
+        inputTextarea = document.getElementById('cet-input');
+        sendBtn = document.getElementById('cet-send');
+        statsEl = document.getElementById('cet-stats');
 
         // Force bubble visibility
         if (bubble) {
             bubble.style.display = 'flex';
             bubble.style.zIndex = '999999';
-            console.log('✅ CET Tutor bubble fixed');
         }
 
+        // ----- Event Listeners -----
+
+        // Bubble click
         bubble.addEventListener('click', function(e) {
             e.stopPropagation();
             if (panel.style.display === 'flex') {
@@ -1262,6 +1179,7 @@ CRITICAL: All explanations MUST be in English. Only example sentences and their 
             }
         });
 
+        // Close panel on outside click
         document.addEventListener('click', function(e) {
             if (panel.style.display === 'flex' &&
                 !panel.contains(e.target) &&
@@ -1287,10 +1205,11 @@ CRITICAL: All explanations MUST be in English. Only example sentences and their 
         const modeToggle = document.getElementById('mode-toggle');
         modeToggle.addEventListener('change', function(e) {
             languageMode = this.checked ? 'english' : 'chinese';
-            animateModeToggle();
-            renderAll();
+            showToast('Switched to ' + (languageMode === 'english' ? 'English' : 'Chinese') + ' mode');
+            // No need to re-render, just update the system prompt for future messages.
         });
 
+        // Minimize / close
         document.getElementById('minimize-panel').onclick = function() {
             panel.style.display = 'none';
             if (window.innerWidth < 768) toggleSidebar(false);
@@ -1299,24 +1218,33 @@ CRITICAL: All explanations MUST be in English. Only example sentences and their 
             panel.style.display = 'none';
             if (window.innerWidth < 768) toggleSidebar(false);
         };
+
+        // Export / Share
         document.getElementById('export-chat').onclick = exportConversation;
         document.getElementById('share-conv').onclick = shareConversation;
-        document.getElementById('cet-send').onclick = function() { sendMessage(); };
+
+        // Send button
+        sendBtn.addEventListener('click', function() { sendMessage(); });
+
+        // Voice input
         document.getElementById('mic-btn').onclick = startPronunciationCheck;
+
+        // Quiz button
         document.getElementById('quiz-btn').onclick = startQuickQuiz;
 
-        const textarea = document.getElementById('cet-input');
-        textarea.addEventListener('keypress', function(e) {
+        // Textarea
+        inputTextarea.addEventListener('keypress', function(e) {
             if (e.key === 'Enter' && !e.shiftKey) {
                 e.preventDefault();
                 sendMessage();
             }
         });
-        textarea.addEventListener('input', function() {
+        inputTextarea.addEventListener('input', function() {
             this.style.height = 'auto';
             this.style.height = Math.min(100, this.scrollHeight) + 'px';
         });
 
+        // Search
         document.getElementById('cet-search').addEventListener('input', function(e) {
             currentSearch = e.target.value.trim().toLowerCase();
             renderMessages();
@@ -1389,14 +1317,13 @@ CRITICAL: All explanations MUST be in English. Only example sentences and their 
         }
         bubble.addEventListener('click', hideSuggestion);
         panel.addEventListener('click', hideSuggestion);
-        document.getElementById('cet-input').addEventListener('focus', hideSuggestion);
-        document.getElementById('cet-send').addEventListener('click', hideSuggestion);
+        inputTextarea.addEventListener('focus', hideSuggestion);
+        sendBtn.addEventListener('click', hideSuggestion);
 
+        // Periodic reminders
         setInterval(() => updateBubbleReminders(), 30000);
 
-        applyThemeToPanel();
-        updateLevelBadge();
-
+        // Resize handler for sidebar
         window.addEventListener('resize', function() {
             const isMobile = window.innerWidth < 768;
             if (!isMobile) {
@@ -1409,6 +1336,9 @@ CRITICAL: All explanations MUST be in English. Only example sentences and their 
                 if (sidebar && !sidebarOpen) sidebar.style.transform = 'translateX(-100%)';
             }
         });
+
+        // Initial render
+        renderAll();
     }
 
     // ---------- Init ----------
@@ -1417,9 +1347,9 @@ CRITICAL: All explanations MUST be in English. Only example sentences and their 
         loadFlashcards();
         loadConversations();
         createWidget();
-        renderAll();
     }
 
+    // Expose functions globally
     window.sendMessage = sendMessage;
     window.scrollToMessage = function(idx) {
         const el = document.querySelector('.message[data-idx="' + idx + '"]');
@@ -1432,6 +1362,7 @@ CRITICAL: All explanations MUST be in English. Only example sentences and their 
     window.quoteMessage = quoteMessage;
     window.addFlashcard = addFlashcard;
 
+    // Start
     if (document.readyState === 'loading') {
         document.addEventListener('DOMContentLoaded', init);
     } else {
