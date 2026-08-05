@@ -1,4 +1,4 @@
-// cet_assistant.js – CET English Tutor v2.3 (XHR + Fetch interceptors)
+// cet_assistant.js – CET English Tutor v2.4 (Dr. Khan's model logic)
 (function() {
     'use strict';
 
@@ -662,7 +662,7 @@
         showToast('🎤 Speak English...');
     }
 
-    // ---------- Send Message (with puter.ai + fallback) ----------
+    // ---------- Send Message (Dr. Khan's model logic) ----------
     async function sendMessage(initialText, isRegenerate) {
         const input = document.getElementById('cet-input');
         const text = initialText || (input ? input.value.trim() : '');
@@ -694,15 +694,10 @@
         const chatMessages = [{ role: 'system', content: systemPrompt }, ...history];
 
         try {
-            // ---- Try puter.ai (with XHR/fetch interceptors already active) ----
+            // ---- Dr. Khan's exact model logic ----
             if (typeof puter !== 'undefined' && puter.ai) {
-                const models = await puter.ai.listModels();
-                let modelId = 'google/gemini-3.1-flash-lite';
-                if (models.some(m => m.id === modelId)) {
-                    // use it
-                } else if (models.length > 0) {
-                    modelId = models[0].id;
-                }
+                // Hardcode the model to avoid the listModels call (which might fail)
+                const modelId = 'google/gemini-3.1-flash-lite';
                 const raw = await puter.ai.chat(chatMessages, { model: modelId });
                 const clean = raw?.message?.content || raw?.content || JSON.stringify(raw);
                 isWaiting = false;
@@ -716,7 +711,8 @@
             let fallback = '';
             if (languageMode === 'chinese') {
                 fallback = `⚠️ AI 服务暂时不可用 (错误: ${e.message})。\n\n` +
-                    `💡 请确保您通过 HTTPS 或 localhost 访问此页面。\n\n` +
+                    `💡 请确保您通过 HTTPS 或 localhost 访问此页面 (例如使用 VS Code Live Server)。\n` +
+                    `💡 不要直接双击 HTML 文件打开 (file:// 协议不被支持)。\n\n` +
                     `同时，您可以尝试以下简单练习：\n` +
                     `- 区分 "affect" 和 "effect"：affect 是动词(影响)，effect 是名词(效果)。\n` +
                     `- 练习 "although" 用法：Although it rained, we went out. (虽然下雨了，我们还是出去了。)\n` +
@@ -724,7 +720,8 @@
                     `如果您想继续使用 AI，请刷新页面或检查网络连接。`;
             } else {
                 fallback = `⚠️ AI service is temporarily unavailable (error: ${e.message}).\n\n` +
-                    `💡 Please make sure you are accessing this page via HTTPS or localhost.\n\n` +
+                    `💡 Please make sure you are accessing this page via HTTPS or localhost (e.g., using VS Code Live Server).\n` +
+                    `💡 Do not open the HTML file directly (file:// protocol is not supported).\n\n` +
                     `Meanwhile, try these simple exercises:\n` +
                     `- Difference between "affect" and "effect": affect is a verb, effect is a noun.\n` +
                     `- Practice "although": Although it rained, we went out.\n` +
